@@ -1,0 +1,58 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}search{% endtrans %} | {{ parent() }}{% endblock %}
+{% block search_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}search{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}search{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="section-sm bg-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- RD Search-->
+                <form id="formSearchBox" class="form-search" action="{{path('search')}}" method="GET" data-search-live="rd-search-results-live">
+                    <div class="form-wrap form-wrap_icon linear-icon-magnifier">
+                        {#<label class="form-label" for="rd-search-form-input">{% trans %}search.products{% endtrans %} ...</label>#}
+						{{ form_widget(form.searchBox,{'attr': {'class':'form-input',"placeholder":"search.products"}})}}
+                    </div>
+                    <button class="button button-primary" type="submit">Go!</button>
+                </form>
+            </div>
+        </div>
+        <div class="rd-search-results">
+            <h4>
+				{% trans %}search.result{% endtrans %}
+				{#{% trans %}search.result.found{% endtrans %}#}
+			</h4>
+			<div class="row justify-content-sm-center row-70">
+				{% for data in paginated.currentpageresults %}
+					{% set item = data[0] %}
+					{% set price_data = getPriceData(data) %}
+					<div class="col-md-6 col-xl-4">
+						{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:item, price_data:price_data,section_name:"search_product"} %}
+					</div>
+				{% endfor %}
+			</div>
+        </div>
+    </div>
+</section>
+
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+{% if paginated.havetopaginate %}
+<!-- Pagination-->
+<section class="section-sm">
+	<!-- Classic Pagination-->
+	<nav>
+		{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+	</nav>
+</section>
+{% endif %}
+{% endblock %}

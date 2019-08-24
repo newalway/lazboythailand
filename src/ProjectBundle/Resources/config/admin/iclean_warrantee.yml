@@ -1,0 +1,12 @@
+admin_iclean_warrantee:
+  path:  /
+  defaults: { _controller: ProjectBundle:AdminIcleanWarrantee:index }
+  requirements:
+    _method: get
+
+admin_iclean_warrantee_update:
+  path: /update
+  defaults: {_controller: ProjectBundle:AdminIcleanWarrantee:update}
+  requirements:
+    _method: post
+    id: \d+

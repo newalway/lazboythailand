@@ -1,0 +1,22 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div ng-app="inspirationCategoryApp" ng-controller="inspirationCategoryController" ng-init="init_inspiration_ategory('{{data.lvl}}', '{{form.vars.value.id}}', '{{ arr_option_tree_persist_node|json_encode }}')" ng-cloak>
+
+	<div class="box-body icheck">
+		{% include 'ProjectBundle:AdminInspirationCategory:_content_position.html.twig'%}
+	</div>
+
+	<div class="box-footer">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-9">
+				{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+				{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+				{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+				<a href="{%if app.session.get('back_to_url')['admin_inspiration_category'] is defined%}{{app.session.get('back_to_url')['admin_inspiration_category']}}{%else%}{{path('admin_inspiration_category')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script src="{{ asset('javascripts/adminInspirationCategoryApp/app.js') }}"></script>

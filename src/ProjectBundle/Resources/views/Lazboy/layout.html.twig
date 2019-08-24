@@ -1,0 +1,645 @@
+{% extends 'ProjectBundle::base.html.twig' %}
+
+{% block title %}{{ render(controller('ProjectBundle:Main:_setting_web',{'title':'website_site_name'})) }}{% endblock %}
+{% block html_description %}{{ render(controller('ProjectBundle:Main:_setting_web',{'title':'website_description'})) }}{% endblock %}
+{% block html_keywords %}{{ render(controller('ProjectBundle:Main:_setting_web',{'title':'website_keyword'})) }}{% endblock %}
+
+{% block html_meta %}
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/png" href="{{ asset('lazboy/images/favicon.ico') }}"/>
+    <link rel="alternate" href="{{url('homepage')}}" hreflang="{{app.request.locale}}-{{app.request.locale}}"/>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Libre+Franklin:200,300,500,600,300italic%7CCormorant+Garamond:300,400,400i,600,700">
+
+    <link rel="stylesheet" href="{{ asset('lazboy/template/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('lazboy/template/css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-5.0.12/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('fontawesome-free-5.0.12/css/fa-brands.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('lazboy/template/css/style.css') }}">
+    {% if app.request.locale == "en" %}
+        <link rel="stylesheet" href="{{ asset('lazboy/stylesheet/style-lazboy.min.css') }}">
+    {% elseif app.request.locale == "th" %}
+        <link rel="stylesheet" href="{{ asset('lazboy/stylesheet/style-lazboy-th.min.css') }}">
+    {% endif %}
+    <!--[if lt IE 10]> <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img
+    src="{{asset('lazboy/template/images/ie8-panel/warning_bar_0000_us.jpg') }}" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div> <script src="{{
+    asset('lazboy/template/js/html5shiv.min.js') }}"></script> <![endif]-->
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output='js/complied/lazboy.js'
+		'@lazboy_template'
+		'@angular'
+        '@domwindow'
+        '@numeral'
+	%}
+	<script src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+    <!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyBHkPz5loN8xTTFRWES6TzFfhvguT33aCU&libraries=geometry"></script> -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% block breadcrumb %}{% endblock %}
+
+    <!-- Page-->
+    <div class="page">
+        <!--END PANEL-->
+        <div class="preloader">
+            <div class="cssload-container">
+                <div class="cssload-speeding-wheel"></div>
+            </div>
+        </div>
+        {#
+        <header class="page-header">
+            <!-- RD Navbar-->
+            <div class="rd-navbar-wrap">
+                <nav
+                    class="rd-navbar {% block navbar_class %}{% endblock %}"
+                    data-layout="rd-navbar-fixed"
+                    data-sm-layout="rd-navbar-fixed"
+                    data-sm-device-layout="rd-navbar-fixed"
+                    data-md-layout="rd-navbar-fixed"
+                    data-md-device-layout="rd-navbar-fixed"
+                    data-lg-layout="rd-navbar-static"
+                    data-lg-device-layout="rd-navbar-fixed"
+                    data-xl-device-layout="rd-navbar-static"
+                    data-xl-layout="rd-navbar-static"
+                    data-stick-up-clone="false"
+                    data-sm-stick-up="true"
+                    data-md-stick-up="true"
+                    data-lg-stick-up="true"
+                    data-xl-stick-up="true"
+                    data-xxl-stick-up="true"
+                    data-lg-stick-up-offset="120px"
+                    data-xl-stick-up-offset="35px"
+                    data-xxl-stick-up-offset="35px"
+                    data-body-class="{% block navbar_absolute_class %}{% endblock %}">
+                    <!-- RD Navbar Top Panel-->
+                    <div class="rd-navbar-top-panel">
+                        <div class="rd-navbar-top-panel__main">
+                            <div class="rd-navbar-top-panel__toggle rd-navbar-fixed__element-1 rd-navbar-static--hidden" data-rd-navbar-toggle=".rd-navbar-top-panel__main">
+                                <span></span>
+                            </div>
+                            <div class="rd-navbar-top-panel__content">
+                                <ul class="rd-navbar-items-list">
+                                    <li>
+                                        <ul class="list-inline-xxs" style="z-index: 1;">
+                                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                            {% if is_granted('ROLE_EDITOR') %}
+				                                <li><a href="{{path('admin')}}">For Admin</a></li>
+		                                    {% elseif is_granted('ROLE_CUSTOMER') or is_granted('ROLE_CLIENT') %}
+                                                <li class="lzb-dropdown lzb-member">
+                                                    <!-- <a href="{{path('fos_user_profile_show')}}">{% trans %}member.personal{% endtrans %}</a> -->
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        {% trans %}member.personal{% endtrans %}
+                                                        <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="{{path('fos_user_profile_show')}}" class="{% block member_profile_active %}{% endblock %}">{% trans %}member.personal{% endtrans %}</a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="{{path('address')}}" class="{% block member_address_active %}{% endblock %}">{% trans %}member.address.book{% endtrans %}</a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="{{path('member_orders')}}" class="{% block member_orders_active %}{% endblock %}">
+                                                              {% if is_granted('ROLE_CUSTOMER') %}
+                                                                  {% trans %}member.my.orders{% endtrans %}
+                                                              {% elseif is_granted('ROLE_CLIENT')  %}
+                                                                  {% trans %}member.my.rfq{% endtrans %}
+                                                              {% endif %}
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="{{path('member_wishlist')}}" class="{% block member_wishlist_active %}{% endblock %}">
+                                                                {% trans %}member.wishlist{% endtrans %}
+                                                                ({{ render(controller('ProjectBundle:Member:_wishlistCount')) }})
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                            <li><a href="{{path('fos_user_security_logout')}}">{% trans %}menu.logout{% endtrans %}</a></li>
+                                        {% else %}
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#modalLogin">{% trans %}menu.signin{% endtrans %}</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{path('fos_user_registration_register')}}">{% trans %}menu.create.account{% endtrans %}</a>
+                                            </li>
+                                        {% endif %}
+                                            <li class="lzb-dropdown lzb-flag">
+                                                <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    {% if app.request.locale == 'th'%}
+                                                        <img src="{{ asset('lazboy/images/flat-thailand.png')}}" alt="ภาษาไทย" />
+                                                    {% else %}
+                                                        <img src="{{ asset('lazboy/images/flat-united-states-of-america.png')}}" alt="ภาษาไทย" />
+                                                    {% endif %}
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|merge({'_locale': 'en'}))|merge(app.request.query.all))}}"><img src="{{ asset('lazboy/images/flat-united-states-of-america.png')}}" alt="English" /> English</a>
+                        							</li>
+                                                    <li>
+                                                        <a href="{{path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|merge({'_locale': 'th'}))|merge(app.request.query.all))}}"><img src="{{ asset('lazboy/images/flat-thailand.png')}}" alt="ภาษาไทย" /> ภาษาไทย</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <ul class="list-inline-xxs">
+                                            {{render(controller('ProjectBundle:Main:_follow_us',{'class_size':'icon-xxs','class_color':'icon-gray-4'}))}}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rd-navbar-inner rd-navbar-search-wrap">
+                        <!-- RD Navbar Panel-->
+                        <div class="rd-navbar-panel rd-navbar-search_collapsable">
+                            <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap">
+                                <span></span></button>
+                            <!-- RD Navbar Brand-->
+                            <div class="rd-navbar-brand">
+                                <a class="brand-name" href="{{path('homepage')}}"><img src="{{asset('lazboy/images/logo.png')}}" alt="" width="200"/></a>
+                            </div>
+                        </div>
+                        <!-- RD Navbar Nav-->
+                        <div class="rd-navbar-nav-wrap rd-navbar-search_not-collapsable">
+
+                            <ul class="rd-navbar-items-list rd-navbar-search_collapsable">
+                                <li>
+                                    <button class="rd-navbar-search__toggle rd-navbar-fixed--hidden" data-rd-navbar-toggle=".rd-navbar-search-wrap"></button>
+                                </li>
+
+                                {{ render(controller('ProjectBundle:Cart:blog_cart')) }}
+
+                            </ul>
+
+                            <!-- RD Search-->
+                            <div class="rd-navbar-search rd-navbar-search_toggled rd-navbar-search_not-collapsable">
+                                <form class="rd-search" action="{{path('search')}}" method="GET" data-search-live="rd-search-results-live">
+                                    <div class="form-wrap">
+                                        <input class="form-input" id="rd-navbar-search-form-input" type="text" name="s" autocomplete="off">
+                                        <label class="form-label" for="rd-navbar-search-form-input">{% trans %}search.products{% endtrans %} ...</label>
+                                        <div class="rd-search-results-live" id="rd-search-results-live"></div>
+                                    </div>
+                                    <button class="rd-search__submit" type="submit"></button>
+                                </form>
+                                <div class="rd-navbar-fixed--hidden">
+                                    <button class="rd-navbar-search__toggle" data-custom-toggle=".rd-navbar-search-wrap" data-custom-toggle-disable-on-blur="true"></button>
+                                </div>
+                            </div>
+                            <div class="rd-navbar-search_collapsable">
+                                {{ render(controller('ProjectBundle:Main:_menu_top')) }}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        #}
+
+        <header class="page-header lzb-header">
+            <!-- RD Navbar-->
+            <div class="rd-navbar-wrap">
+                <nav class="rd-navbar rd-navbar_creative" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed" data-sm-device-layout="rd-navbar-fixed" data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed" data-lg-layout="rd-navbar-static"
+                    data-lg-device-layout="rd-navbar-fixed" data-xl-device-layout="rd-navbar-static" data-xl-layout="rd-navbar-static" data-stick-up-clone="false" data-sm-stick-up="true" data-md-stick-up="true" data-lg-stick-up="true"
+                    data-xl-stick-up="true" data-xxl-stick-up="true" data-lg-stick-up-offset="190px" data-xl-stick-up-offset="190px" data-body-class="rd-navbar_creative">
+                    <!-- RD Navbar Top Panel-->
+                    <div class="rd-navbar-top-panel rd-navbar-search-wrap">
+                        <div class="rd-navbar-top-panel__aside">
+                            <ul class="rd-navbar-items-list">
+                                <li>
+                                    <div class="rd-navbar-fixed__element-2">
+                                        <button class="rd-navbar-search__toggle rd-navbar-search__toggle_additional" data-rd-navbar-toggle=".rd-navbar-search-wrap"></button>
+                                    </div>
+                                </li>
+                                {#<li>
+                                    <div class="rd-navbar-fixed__element-3"><a class="icon icon-md linear-icon-cart link-primary" href="cart.html"></a></div>
+                                </li>#}
+                                {#<li class="rd-navbar-nav-wrap__shop shopping-cart dropdown">
+                                    <div class="rd-navbar-fixed__element-3">
+                                        {{ render(controller('ProjectBundle:Cart:blog_cart')) }}
+                                    </div>
+                                </li>#}
+                            </ul>
+                        </div>
+                        <div class="rd-navbar-top-panel__brand">
+                            <div class="rd-navbar-brand">
+                                {#{{path('homepage')}}#}
+                                <a class="brand-name" href="https://www.lazboythailand.com/">
+                                    <img src="{{asset('lazboy/images/logo.png')}}" alt="" height="59" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="rd-navbar-top-panel__main">
+                            <div class="rd-navbar-top-panel__toggle rd-navbar-fixed__element-1 rd-navbar-static--hidden" data-rd-navbar-toggle=".rd-navbar-top-panel__main"><span></span></div>
+                            <div class="rd-navbar-top-panel__content">
+                                <div class="rd-navbar-top-panel__right">
+                                    <ul class="rd-navbar-items-list">
+                                        <li>
+                                            <ul class="list-inline-xxs" style="z-index: 1;">
+                                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+    		                                    {% if is_granted('ROLE_CUSTOMER') or is_granted('ROLE_CLIENT') %}
+                                                    <li class="lzb-dropdown lzb-member">
+                                                        <!-- <a href="{{path('fos_user_profile_show')}}">{% trans %}member.personal{% endtrans %}</a> -->
+                                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            {% trans %}member.personal{% endtrans %}
+                                                            <span class="caret"></span>
+                                                        </a>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a href="{{path('fos_user_profile_show')}}" class="{% block member_profile_active %}{% endblock %}">{% trans %}member.personal{% endtrans %}</a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="{{path('address')}}" class="{% block member_address_active %}{% endblock %}">{% trans %}member.address.book{% endtrans %}</a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="{{path('member_orders')}}" class="{% block member_orders_active %}{% endblock %}">
+                                                                  {% if is_granted('ROLE_CUSTOMER') %}
+                                                                      {% trans %}member.my.orders{% endtrans %}
+                                                                  {% elseif is_granted('ROLE_CLIENT')  %}
+                                                                      {% trans %}member.my.rfq{% endtrans %}
+                                                                  {% endif %}
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="{{path('member_wishlist')}}" class="{% block member_wishlist_active %}{% endblock %}">
+                                                                    {% trans %}member.wishlist{% endtrans %}
+                                                                    {#({{ render(controller('ProjectBundle:Member:_wishlistCount')) }})#}
+                                                                </a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </li>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_EDITOR') %}
+    				                                <li><a href="{{path('admin')}}">For Admin</a></li>
+                                                {% endif %}
+
+                                                <li><a href="{{path('fos_user_security_logout')}}">{% trans %}menu.logout{% endtrans %}</a></li>
+                                            {% else %}
+                                                <li>
+                                                    <a href="#" data-toggle="modal" data-target="#modalLogin">{% trans %}menu.signin{% endtrans %}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{path('fos_user_registration_register')}}">{% trans %}menu.create.account{% endtrans %}</a>
+                                                </li>
+                                            {% endif %}
+                                                <li class="lzb-dropdown lzb-flag">
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        {% if app.request.locale == 'th'%}
+                                                            <img src="{{ asset('lazboy/images/flat-thailand.png')}}" alt="ภาษาไทย" />
+                                                        {% else %}
+                                                            <img src="{{ asset('lazboy/images/flat-united-states-of-america.png')}}" alt="ภาษาไทย" />
+                                                        {% endif %}
+                                                        <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="{{path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|merge({'_locale': 'en'}))|merge(app.request.query.all))}}"><img src="{{ asset('lazboy/images/flat-united-states-of-america.png')}}" alt="English" /> English</a>
+                            							</li>
+                                                        <li>
+                                                            <a href="{{path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|merge({'_locale': 'th'}))|merge(app.request.query.all))}}"><img src="{{ asset('lazboy/images/flat-thailand.png')}}" alt="ภาษาไทย" /> ภาษาไทย</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rd-navbar-top-panel__aside">
+                            <ul class="rd-navbar-items-list">
+                                {#<li>
+                                    <div class="rd-navbar-fixed__element-2">
+                                        <button class="rd-navbar-search__toggle rd-navbar-search__toggle_additional" data-rd-navbar-toggle=".rd-navbar-search-wrap"></button>
+                                    </div>
+                                </li>#}
+                                {#<li>
+                                    <div class="rd-navbar-fixed__element-3"><a class="icon icon-md linear-icon-cart link-primary" href="cart.html"></a></div>
+                                </li>#}
+                                <li class="rd-navbar-nav-wrap__shop shopping-cart dropdown">
+                                    <div class="rd-navbar-fixed__element-3">
+                                        {{ render(controller('ProjectBundle:Cart:blog_cart')) }}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- RD Search-->
+                        <div class="rd-navbar-search rd-navbar-search_toggled rd-navbar-search_not-collapsable">
+                            <form class="rd-search" action="{{path('search')}}" method="GET">
+                                <div class="form-wrap">
+                                    <input class="form-input"  type="text" name="product_search[searchBox]" placeholder="{% trans %}search.products{% endtrans %} ...">
+                                    {#<label class="form-label" for="rd-navbar-search-form-input">{% trans %}search.products{% endtrans %} ...</label>#}
+
+                                </div>
+                                <button class="rd-search__submit" type="submit"></button>
+                            </form>
+                            <div class="rd-navbar-fixed--hidden">
+                                <button class="rd-navbar-search__toggle" data-custom-toggle=".rd-navbar-search-wrap" data-custom-toggle-disable-on-blur="true"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rd-navbar-inner">
+                        <!-- RD Navbar Panel-->
+                        <div class="rd-navbar-panel">
+                            <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
+                            <!-- RD Navbar Brand-->
+                            {# {{path('homepage')}} #}
+                            <div class="rd-navbar-brand rd-navbar-mobile lzb-brand"><a class="brand-name" href="https://www.lazboythailand.com/"><img src="{{asset('lazboy/images/logo-mobile.png')}}" alt=""  /></a></div>{#La-Z-Boy_logo.png#}
+                        </div>
+                        <!-- RD Navbar Nav-->
+                        <div class="rd-navbar-nav-wrap">
+                            {{ render(controller('ProjectBundle:Main:_menu_top')) }}
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        {% block breadcrumbs %}
+        <section class="breadcrumbs-custom">
+            <div class="container">
+                <div class="breadcrumbs-custom__inner">
+                    <p class="breadcrumbs-custom__title">{% block breadcrumbs_title %}{% endblock %}</p>
+                    <ul class="breadcrumbs-custom__path">
+                        <li><a href="{{path('homepage')}}">{% trans %}menu.home{% endtrans %}</a></li>
+                        {% block breadcrumbs_custom %}{% endblock %}
+                        {#<li><a href="#">Elements</a></li>
+                        <li class="active">Title</li>#}
+                    </ul>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+
+		{% block content %}{% endblock %}
+
+		<!-- Page Footer -->
+        <section class="pre-footer-corporate">
+            <div class="container">
+                <div class="row justify-content-sm-center justify-content-lg-start row-30 row-md-60">
+                    <div class="col-sm-10 col-md-6 col-lg-10 col-xl-3">
+                        <h6>{% trans %}menu.about.us{% endtrans %}</h6>
+
+                        {{render(controller('ProjectBundle:Main:_about_globiz_venture'))}}
+
+                        <p>
+                            <a href="{{path('homepage')}}"><img src="{{asset('lazboy/images/logo.png')}}" alt="" width="200"/></a>
+                        </p>
+                    </div>
+                    <div class="col-sm-10 col-md-6 col-lg-3 col-xl-3">
+                        <h6>{% trans %}get.know.us{% endtrans %}</h6>
+                        <ul class="list-xxs">
+                            <li><a href="{{path('about_us')}}">{% trans %}menu.about.us{% endtrans %}</a></li>
+                            <li><a href="{{path('history')}}">{% trans %}menu.history{% endtrans %}</a></li>
+                            <li><a href="{{path('terms_conditions')}}">{% trans %}menu.terms.conditions{% endtrans %}</a></li>
+                            <li><a href="{{path('privacy_policy')}}">{% trans %}menu.privacy.policy{% endtrans %}</a></li>
+                            <li><a href="{{path('contact')}}">{% trans %}menu.contact.us{% endtrans %}</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-10 col-md-6 col-lg-6 col-xl-3">
+                        <h6>{% trans %}shopping.online{% endtrans %}</h6>
+                        <ul class="list-xs">
+                            <li><a href="{{path('product')}}">{% trans %}menu.product{% endtrans %}</a></li>
+                            <li><a href="{{path('promotion')}}">{% trans %}menu.promotion{% endtrans %}</a></li>
+                            <li><a href="{{path('track')}}">{% trans %}menu.track.my.order{% endtrans %}</a></li>
+                            <li><a href="{{path('confirm_payment')}}">{% trans %}menu.confirm.payment{% endtrans %}</a></li>
+                            {#<li><a href="{{path('shipping_delivery')}}">{% trans %}menu.shipping.delivery{% endtrans %}</a></li>#}
+                        </ul>
+                    </div>
+                    <div class="col-sm-10 col-md-6 col-lg-4 col-xl-3">
+                        <h6>{% trans %}menu.contact.us{% endtrans %}</h6>
+
+                        {{render(controller('ProjectBundle:Main:_footer_contacts'))}}
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-corporate">
+            <div class="container">
+                <div class="footer-corporate__inner">
+                    <p class="rights">
+                        <span>© 2019 GLOBIZ VENTURE CO., LTD.</span> <span>&nbsp;</span>
+                        {#<span class="copyright-year"></span>#}
+                    </p>
+                    <ul class="list-inline-xxs">
+                        {{render(controller('ProjectBundle:Main:_follow_us',{'class_size':'icon-xxs','class_color':'icon-gray-4'}))}}
+                        {#<li>
+                            <a class="icon icon-xxs icon-gray-4 fab fa-facebook-f" href="https://www.facebook.com/LaZBoyofThailand" target="_blank"></a>
+                        </li>
+                        <li>
+                            <a class="icon icon-xxs icon-gray-4 fab fa-line" href="http://line.me/ti/p/@lazboy_th" target="_blank"></a>
+                        </li>
+                        <li>
+                            <a class="icon icon-xxs icon-gray-4 fab fa-instagram" href="https://www.instagram.com/lazboy_th/" target="_blank"></a>
+                        </li>
+                        <li>
+                            <a class="icon icon-xxs icon-gray-4 fab fa-youtube" href="https://www.youtube.com/channel/UCHuAyUwIZ_l_5Z6G1VmqXNQ/featured" target="_blank"></a>
+                        </li>#}
+                    </ul>
+                </div>
+            </div>
+        </footer>
+        <!-- Modal login window-->
+        <div class="modal fade" id="modalLogin" role="dialog">
+            <div class="modal-dialog modal-dialog_custom">
+                <!-- Modal content-->
+                <div class="modal-dialog__inner">
+                    <button class="close" type="button" data-dismiss="modal"></button>
+                    <div class="modal-dialog__content">
+                        <h5>Login Form</h5>
+                        <!-- RD Mailform-->
+                        <form action="{{ path("fos_user_security_check") }}" method="post" class="rd-mailform rd-mailform_responsive">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                            {#<input type="hidden" name="_return_path" value="{{ app.request.uri }}" />#}
+
+                            <div class="form-wrap form-wrap_icon linear-icon-envelope">
+                                <input class="form-input" id="modal-login-username" type="text" name="_username" data-constraints="@Required" required>
+                                <label class="form-label" for="modal-login-username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+                            </div>
+
+                            <div class="form-wrap form-wrap_icon linear-icon-lock">
+                                <input class="form-input" id="modal-login-password" type="password" name="_password" data-constraints="@Required" required>
+                                <label class="form-label" for="modal-login-password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col col-sm-5">
+                                    <button class="button button-primary" name="_submit" type="submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                                </div>
+                                <div class="col col-sm-7 text-right">
+                                    <a href="{{path('fos_user_resetting_request')}}" class="forget-pass">{{ 'security.login.forgot_password'|trans({}, 'FOSUserBundle')}} ?</a>
+                                </div>
+                            </div>
+
+                        </form>
+                        <br />
+                        <div class="login-social">
+                            <a class="facebook" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">
+                                <i class="fa fa-facebook"></i> {% trans %}login.with.facebook{% endtrans %}
+                            </a>
+                            <a class="google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
+                                <i class="fa fa-google"></i> {% trans %}login.with.google{% endtrans %}
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal register window-->
+        <div class="modal fade" id="modalRegister" role="dialog">
+            <div class="modal-dialog modal-dialog_custom">
+                <!-- Modal content-->
+                <div class="modal-dialog__inner">
+                    <button class="close" type="button" data-dismiss="modal"></button>
+                    <div class="modal-dialog__content">
+                        <h5>Register Form</h5>
+                        <!-- RD Mailform-->
+                        <form class="rd-mailform rd-mailform_responsive" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
+                            <div class="form-wrap form-wrap_icon linear-icon-envelope">
+                                <input class="form-input" id="modal-register-email" type="email" name="email" data-constraints="@Email @Required">
+                                <label class="form-label" for="modal-register-email">Your e-mail</label>
+                            </div>
+                            <div class="form-wrap form-wrap_icon linear-icon-lock">
+                                <input class="form-input" id="modal-register-password" type="password" name="password" data-constraints="@Required">
+                                <label class="form-label" for="modal-register-password">Your password</label>
+                            </div>
+                            <div class="form-wrap form-wrap_icon linear-icon-lock">
+                                <input class="form-input" id="modal-register-password2" type="password" name="password2" data-constraints="@Required">
+                                <label class="form-label" for="modal-register-password2">Confirm password</label>
+                            </div>
+                            <div class="form-wrap">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="remember">Remember me
+                                </label>
+                            </div>
+                            <button class="button button-primary" type="submit">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Global Mailform Output-->
+    <div class="snackbars" id="form-output-global"></div>
+    <!-- PhotoSwipe Gallery-->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__cent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+    <script src="{{ asset('lazboy/template/js/script.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.2/js.cookie.min.js"></script>
+    <script src="{{ asset('lazboy/javascripts/base.js') }}"></script>
+    <script type="text/javascript">
+    /////// register go to top all device
+        $().UItoTop({
+          easingType: 'easeOutQuart',
+          containerClass: 'ui-to-top',
+        });
+
+
+    ! function(o) {
+        o.fn.PhoneCall = function(n) {
+            var e = {
+                    text: "",
+                    min: 500,
+                    scrollSpeed: 800,
+                    containerID: "phone-call",
+                    containerClass: "phone-call fa fa-phone",
+                    easingType: "easeIn",
+                    telphoneNumber: "02-3760118",
+                    bubbleID: "bubble"
+                },
+                t = o.extend(e, n),
+                i = "#" + t.containerID;
+                bb = "#" + t.bubbleID;
+            o("body").append('<a href="tel:'+t.telphoneNumber+'" id="' + t.containerID + '" class="' + t.containerClass + '" >' + t.text + '</a><span class="bubble" id="' + t.bubbleID + '"></span>'), o(i).click(function() {
+                // return o("html, body").stop().animate({
+                //     // scrollTop: 0
+                // }, t.scrollSpeed, t.easingType), !1
+            })
+            , o(window).scroll(function() {
+                var n = o(window).scrollTop();
+                "undefined" == typeof document.body.style.maxHeight && o(i).css({
+                    position: "absolute",
+                    top: o(window).scrollTop() + o(window).height() - 50
+                }), n > t.min ? o(i).stop(!0, !0).addClass("active") : o(i).removeClass("active")
+
+                "undefined" == typeof document.body.style.maxHeight && o(bb).css({
+                    position: "absolute",
+                    top: o(window).scrollTop() + o(window).height() - 50
+                }), n > t.min ? o(bb).stop(!0, !0).addClass("active") : o(bb).removeClass("active")
+            })
+        }
+    }(jQuery);
+
+    $().PhoneCall({
+      easingType: 'easeOutQuart',
+      containerClass: 'phone-call',
+      telphoneNumber: "{{ render(controller('ProjectBundle:Main:_phoneCall')) }}",
+    });
+    </script>
+{% endblock %}

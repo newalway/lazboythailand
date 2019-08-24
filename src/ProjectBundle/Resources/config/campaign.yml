@@ -1,0 +1,3 @@
+campaign_minimal_collection:
+    path:     /minimal-collection
+    defaults: { _controller: ProjectBundle:Campaign:minimal_collection }

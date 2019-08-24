@@ -1,0 +1,1489 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{{data.getTitle}} | {% trans %}menu.product{% endtrans %} | {{ parent() }}{% endblock %}
+{% block html_description %}{{data.getTitle}} {{data.getShortDesc}} {{ parent() }}{% endblock %}
+{% block html_keywords %}{% if arr_tags|length > 0 %}{{ arr_tags|join(',') }},{% endif %}{{ parent() }}{% endblock %}
+
+{% block news_active %}active{% endblock %}
+{% block breadcrumbs_title %}{% trans %}menu.product{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li><a href="{{path('product')}}">{% trans %}menu.product{% endtrans %}</a></li>
+    <li class="active">{{data.getTitle}}</li>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+	<link rel="stylesheet" href="{{ asset('jk-rating-stars/jk-rating-stars.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('jk-rating-stars/material_icons.css') }}">
+	<link rel="stylesheet" href="{{ asset('jk-rating-stars/style.css') }}">
+	<link href="{{asset('rateyo/jquery.rateyo.min.css')}}" rel="stylesheet"/>
+	<link href="{{asset('jquery-magnify-js/css/magnify.css')}}" rel="stylesheet"/>
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+	<link rel="stylesheet" href="{{ asset('jquery.scrolling-tabs/jquery.scrolling-tabs.min.css') }}">
+	<style media="screen">
+	.tabs-custom .nav-custom-tabs .nav-item .nav-link {position: relative;padding: 0.5rem 1rem;}
+	.tabs-custom .nav-custom-tabs {display: flex;}
+	.tabs-custom .nav-custom-tabs .nav-item + .nav-item {margin-top: -1px;}
+	.scrtabs-tab-scroll-arrow {border: none !important;border-top: none;height: 35px;margin-bottom: -1px;padding-left: 5px;padding-top: 7px;}
+	.scrtabs-tab-container {height: 35px;}
+	.circle_text {
+    	text-align: center;
+    	position: relative;
+    	top: 36%;
+    	transform: translateY(-50%);
+	}
+	.magnify > .magnify-lens {cursor: pointer;}
+	</style>
+
+{% endblock %}
+
+{% block content %}
+<script src="{{asset('javascripts/angularpagination/dirPagination.js')}}"></script>
+<script src="{{ asset('jk-rating-stars/jk-rating-stars.min.js') }}"></script>
+<script src="{{ asset('rateyo/jquery.rateyo.min.js') }}"></script>
+
+<section class="section-sm bg-default" ng-app="productDetailApp" ng-controller="productDetailCtrl" ng-init="init('{{data.id}}', '{{is_variant}}', '{{data.variantType}}', {% if is_granted('ROLE_CLIENT') %}true{% else %}false{% endif %}, '{{app.request.get('v')}}' )">
+    <div class="container">
+        <div class="row row-60" ng-cloak>
+
+			{#<div style="position: fixed;z-index: 99;top: 0;"class="slick-slider carousel-parent" data-arrows="false" data-loop="false" data-dots="false" data-swipe="true" data-items="1" data-child="#child-carousel" data-for="#child-carousel" data-photo-swipe-gallery="gallery">
+				{% if data.image %}
+					{% set main_image = asset(data.image)|imagine_filter('img_w_533') %}
+					{% set main_image_large = asset(data.image)|imagine_filter('img_w_1500') %}
+					{% set main_image_thumb = asset(data.image)|imagine_filter('img_w_89') %}
+				{% else %}
+					{% set main_image = 'https://placehold.it/535x535' %}
+					{% set main_image_large = 'https://placehold.it/1000x1000' %}
+					{% set main_image_thumb = 'https://placehold.it/89x89' %}
+				{% endif %}
+				<div class="item" >
+					<a class="img-thumbnail-variant-2" id="main-image-large" href="{{main_image_large}}" data-photo-swipe-item="" data-size="1000x1000">
+						<figure>
+							<img id="main-image" src="{{main_image}}" alt="" width="535"/>
+						</figure>
+						<div class="caption">
+							<span class="icon icon-lg linear-icon-magnifier"></span>
+						</div>
+					</a>
+				</div>
+				{% set product_images = data.productImages %}
+				{% if product_images|length > 0 %}
+					{% for product_image in product_images %}
+						<div class="item">
+							<a class="img-thumbnail-variant-2" href="{{asset(product_image.image)|imagine_filter('img_w_1500')}}" data-photo-swipe-item="" data-size="1000x1000">
+								<figure>
+									<img src="{{asset(product_image.image)|imagine_filter('img_w_533')}}" alt="" width="535"/>
+								</figure>
+								<div class="caption">
+									<span class="icon icon-lg linear-icon-magnifier"></span>
+								</div>
+							</a>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>#}
+
+            <div class="col-md-6 col-lg-5">
+                <!-- Slick Carousel-->
+                <div class="slick-slider carousel-parent text-center" id="slider-main" data-arrows="false" data-loop="false" data-dots="false" data-swipe="true" data-items="1" data-child="#child-carousel" data-for="#child-carousel" data-photo-swipe-gallery="gallery">
+					{% if data.image %}
+						{% set main_image = asset(data.image)|imagine_filter('img_w_533') %}
+						{% set main_image_large = asset(data.image)|imagine_filter('img_w_1500') %}
+						{% set main_image_thumb = asset(data.image)|imagine_filter('img_w_89') %}
+					{% else %}
+						{% set main_image = 'https://placehold.it/535x535' %}
+						{% set main_image_large = 'https://placehold.it/1000x1000' %}
+						{% set main_image_thumb = 'https://placehold.it/89x89' %}
+					{% endif %}
+					<div class="item">
+
+						{# 360 html #}
+						{#<div class="content">
+							<div id="wr360PlayerId" class="wr360PlayerId wr360_player" style="background-color:#FFFFFF;"></div>
+						</div>#}
+
+						<a class="img-thumbnail-variant-2" id="main-image-large" href="{{main_image_large}}" data-photo-swipe-item="" data-size="1500x1500">
+							<figure>
+								<img id="main-image" class="images-gallery" src="{{main_image}}" alt="" width="535"/>
+							</figure>
+							<div class="caption">
+								<span class="icon icon-lg linear-icon-magnifier"></span>
+							</div>
+						</a>
+
+					</div>
+					{% set product_images = data.productImages %}
+					{% if product_images|length > 0 %}
+						{% for product_image in product_images %}
+							<div class="item">
+		                        <a class="img-thumbnail-variant-2" href="{{asset(product_image.image)|imagine_filter('img_w_1500')}}" class="mx-auto"data-photo-swipe-item="" data-size="1500x1500">
+		                            <figure>
+		                                <img class="images-gallery" src="{{asset(product_image.image)|imagine_filter('img_w_533')}}" alt="" width="535"/>
+		                            </figure>
+		                            <div class="caption">
+		                                <span class="icon icon-lg linear-icon-magnifier"></span>
+		                            </div>
+		                        </a>
+		                    </div>
+						{% endfor %}
+					{% endif %}
+                </div>
+                <div class="slick-slider" id="child-carousel" data-for=".carousel-parent" data-arrows="false" data-loop="false" data-dots="false" data-swipe="true" data-items="3" data-xs-items="4" data-sm-items="4" data-md-items="4" data-lg-items="4" data-xl-items="5" data-slide-to-scroll="1">
+					{% if data.image %}
+						<div class="item" >
+	                        <img id="main-image-thumb" src="{{main_image_thumb}}" alt="" width="89"/>
+	                    </div>
+					{% endif %}
+					{% if product_images|length > 0 %}
+						{% for product_image in product_images %}
+							<div class="item">
+		                        <img src="{{asset(product_image.image)|imagine_filter('img_w_89')}}" alt="" width="89"/>
+		                    </div>
+						{% endfor %}
+					{% endif %}
+                </div>
+            </div>
+
+			<div class="col-md-6 col-lg-7">
+                <div class="product-single">
+                    <h4>
+					{{getProductTypeAndStyleNumber(data)}} {{data.getTitle}}
+					  {% if data.isOnlineShopping %}
+						  <div class="circle_container">
+							<div class="circle_main">
+							  <div class="circle_text_container">
+								<div class = "circle_text">
+								  <i class="icon icon-md linear-icon-cart link-primary top-position"></i>
+								</div>
+							  </div>
+							</div>
+						  </div>
+					  {% endif %}
+					</h4>
+					{% if product_categories|length > 0 %}
+					<ul class="product-meta mt-2">
+						<li>
+							<dl class="list-terms-minimal">
+								<dt>{% trans %}category{% endtrans %} </dt>
+								<dd>
+									<ul class="product-categories">
+										{% for product_category in product_categories %}
+											<li><a href="#">{{product_category.getTitle}}</a></li>
+										{% endfor %}
+									</ul>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					{% endif %}
+					<p class="mt-2 font-size-16">{{data.getShortDesc|nl2br}}</p>
+
+					{% if arr_rating.enable %}
+						<ul class="list-inline text-uppercase mt-2">
+						  	<li class="list-inline-item mt-0"><small class="text-dark">Reviews</small></li>
+						  	<li class="list-inline-item mt-0">
+
+								<div class="cursor-pointer" id="average_rating_title"></div>
+								{# <ul class="rating-list cursor-pointer" onclick="clickReviews();">
+								   <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+								   <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+								   <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+								   <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+								   <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+							   </ul> #}
+						  	</li>
+						</ul>
+					{% endif %}
+
+					{% if data.isOnlineShopping %}
+						<div class="mt-3 mb-4" ng-cloak>
+							<span class="product-price" ng-class="{'sale-price': showprice.compare_at_price && showprice.compare_at_price > showprice.price}">
+								<span ng-if="showprice.price && showprice.price > 0">{{'{{showprice.total_price|currency:"":0}}'}}</span>
+								<span ng-if="showprice.compare_at_price && showprice.compare_at_price > showprice.price">{{'{{showprice.total_compare_at_price|currency:"":0}}'}}</span>
+							</span>
+							<text class="product-qty" ng-if="showprice.price && showprice.price > 0 && frm.quantity>1" style="font-size: 18px; !important">
+								(Qty {{'{{frm.quantity}}'}})
+                            </text>
+
+							<text class="product-status" ng-show="varian_option_selected.status=='off'" style="font-size: 24px; !important">
+								Unavailable
+							</text>
+
+							<text class="product-only-gallery" ng-show="varian_option_selected.is_only_gallery" style="font-size: 18px; !important">
+								Only@ Gallery
+							</text>
+						</div>
+					{% endif %}
+
+					{% if is_variant %}
+						{% if data.variantType == 'cover_variant' %}
+							<div class="card mb-4 border-radius-0 select-cover" ng-cloak>
+								<div class="card-body p-2 media">
+								  	<img width="60" class="align-self-center mr-3" ng-src="{{'{{varian_option_selected.pattern_image_s}}'}}" alt="{{'{{varian_option_selected.sku}}'}}">
+								  	<div class="media-body">
+									    <h6 class="mt-0">{% trans %}order.select_your_cover{% endtrans %}</h6>
+										{{'{{varian_option_selected.title}}'}} {{'{{varian_option_selected.sku}}'}}
+
+										{% if data.isOnlineShopping %}
+											<span ng-show="showprice.total_cover_price > 0" class="xs-only-text-right">฿{{'{{showprice.total_cover_price|currency:"":0}}'}}</span>
+										{% endif %}
+
+										<div ng-if="varian_option_selected.inventory_policy_status==1" style="color: #0070af; margin-top: -2px;">
+											<span ng-show="varian_option_selected.inventory_quantity>0">
+												{% trans %}order.instock{% endtrans %} :{{'{{varian_option_selected.inventory_quantity}}'}}
+											</span>
+											<span ng-show="varian_option_selected.inventory_quantity<=0">
+												{% trans %}order.pre_order{% endtrans %}
+											</span>
+
+											{#
+											{{'{{varian_option_selected.inventory_policy_status}}'}}
+											{{'{{varian_option_selected.inventory_quantity}}'}}
+											#}
+										</div>
+
+								  	</div>
+								</div>
+
+								{#<h6>Select Your Cover</h6>
+								<div class="mt-2">
+									<img width="50px" ng-src="{{'{{varian_option_selected.pattern_image_s}}'}}" alt="{{'{{varian_option_selected.sku}}'}}" class="mr-2" />
+									{{'{{varian_option_selected.title}}'}} {{'{{varian_option_selected.sku}}'}}
+									<span ng-show="showprice.total_cover_price > 0" class="xs-only-text-right">฿{{'{{showprice.total_cover_price|currency:"":0}}'}}</span>
+								</div>#}
+							</div>
+
+{#
+{{dump('{{varian_option_selected}}')}}
+{{dump('{{arr_sku_variant_data.variant_data}}')}}
+#}
+
+							{#<div ng-repeat="cover_group in arr_sku_variant_data.cover_selected_group_data" ng-cloak>
+								<h6 style="cursor: pointer;">
+									<span ng-class="{activeCover: arr_sku_variant_data.variant_data[0].material_selected == cover_group.title.toLowerCase()}" ng-click="setVariantSelectedMaterial(cover_group.title, cover_group.id)">{{'{{cover_group.title}}'}}</span>
+								</h6>
+							</div>#}
+							{#<ul class="nav nav-tabs" role="tablist">
+						       <li class="nav-custom nav-custom-tabs nav-custom__align-left nav nav-tabs" ng-repeat="cover_group in arr_sku_variant_data.cover_selected_group_data" ng-cloak>
+						         <a class="nav-link" ng-class="{active: arr_sku_variant_data.variant_data[0].material_selected == cover_group.title.toLowerCase()}" ng-click="setVariantSelectedMaterial(cover_group.title, cover_group.id)" data-toggle="tab" href="#home">{{'{{cover_group.title}}'}}</a>
+						       </li>
+						   	</ul>#}
+
+							<div class="tabs-custom tabs-horizontal cover-tabs" ng-cloak>
+								<!-- Nav tabs-->
+								<ul class="nav-custom nav-custom-tabs nav-custom__align-left nav nav-tabs" >
+									<li class="nav-item" role="presentation" ng-repeat="cover_group in arr_sku_variant_data.cover_selected_group_data">
+										<a class="nav-link" ng-class="{active: arr_sku_variant_data.variant_data[0].material_selected == cover_group.title.toLowerCase()}" ng-click="setVariantSelectedMaterial(cover_group.title, cover_group.id)" href="#tabs-1-1" data-toggle="tab"><span>{{'{{cover_group.title}}'}}</span></a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="tab-content pt-2 mb-2 cover-content" ng-cloak>
+								<div class="tab-pane fade show active" ng-repeat="cover_group in arr_sku_variant_data.cover_selected_group_data">
+									<div class="cover-row" ng-repeat="cover_group_data in cover_group.data" ng-show="arr_sku_variant_data.variant_data[0].material_selected == cover_group.title.toLowerCase()">
+										<b class="container">{{'{{cover_group_data.title}}'}}</b>
+										<div class="row container mt-1">
+											<div class="mb-2 px-2" ng-repeat="cover_group_data_color in cover_group_data.sub_child" ng-init="initSetDefaultMaterialMethod(cover_group.title, cover_group.id, cover_group_data.code.toLowerCase(), cover_group_data_color.title.toLowerCase())" >
+												<span class="color-v-text" ng-click="setVariantSelectedGroupData(cover_group.title, cover_group.id, cover_group_data.code, cover_group_data_color.title)">
+													<img class="cover_variant magnify-image" ng-class="{activeCoverColor: (arr_sku_variant_data.variant_data[1].selected == cover_group_data_color.title.toLowerCase()) && (arr_sku_variant_data.variant_data[0].selected == cover_group_data.code.toLowerCase()) }" width="49px" ng-src="{{'{{cover_group_data_color.pattern_image_small}}'}}" data-magnify-src="{{'{{cover_group_data_color.pattern_image}}'}}" alt="{{'{{cover_group_data_color.title}}'}}" />
+													{#<br>{{'{{cover_group_data_color.title}}'}}#}
+													{#{{dump('{{cover_group_data_color}}')}}#}
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						{% elseif data.variantType == 'option_variant' %}
+							<div ng-repeat="v in arr_sku_variant_data.variant_data" ng-cloak>
+								{#<span>{{'{{v.option_name}}'}}</span>#}
+								<span>
+									{#<!-- select option -->
+									<select ng-model="v.selected" ng-change="setVariantSelectedData()" name="variant_data[]">
+										<option ng-repeat="vo in v.option_value" value="{{'{{vo.toLowerCase()}}'}}">{{'{{vo}}'}}</option>
+									</select>#}
+
+									<!-- radio -->
+									<span class="boxed">
+										<label ng-repeat="vo in v.option_value" class="text-center" ng-class="{activeRadio: v.selected == vo.toLowerCase()}" style="cursor: pointer;">
+											<input type="radio" ng-model="v.selected" ng-change="setVariantSelectedData()" value="{{'{{vo.toLowerCase()}}'}}">
+											<span>{{'{{vo}}'}}</span>
+										</label>
+									</span>
+								</span>
+								<hr/>
+							</div>
+						{% endif %}
+					{% endif %} <!-- end if is_variant -->
+
+					{% if arr_product_options|length > 0 %}
+					<div id="accordion-main" class="p-0 card card-body ">
+
+						<div class="card card-body border-radius-0 " ng-cloak>
+							<div class="option-title accordion-toggle" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+
+							{#<div>
+								 <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+								<b>Add Your Options & Upgrades</b>
+									{% if data.isOnlineShopping %}
+										<span ng-if="showprice.total_product_option_price>0">
+											฿{{'{{showprice.total_product_option_price|currency:"":0}}'}}
+										</span>
+									{% endif %}
+								</a>
+							</div>#}
+
+							<p>
+								<b>Add Your Options & Upgrades</b>
+								{% if data.isOnlineShopping %}
+									<span ng-if="showprice.total_product_option_price>0">
+										[ ฿{{'{{showprice.total_product_option_price|currency:"":0}}'}} ]
+									</span>
+								{% endif %}
+							</p>
+
+						</a>
+						</div>
+						</div>
+
+						<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion-main">
+						<div id="accordion" class="">
+							<div ng-repeat="product_option_category in arr_product_options" class="card accordion-product-option">
+								<div class="card-header collapsed" id="pdc-{{'{{product_option_category.id}}'}}" data-toggle="collapse" data-target="#cat-{{'{{product_option_category.id}}'}}" aria-expanded="false" aria-controls="cat-{{'{{product_option_category.id}}'}}">
+									<div class="option-title">
+										<div class="col1" ng-show="product_option_category.selected.image">
+											<img ng-src="{{'{{product_option_category.selected.image}}'}}" alt="{{'{{product_option_category.title}}'}}">
+										</div>
+										<div class="col2">
+											{{'{{product_option_category.title}}'}} <br>
+											<small>
+												{{'{{product_option_category.selected.title}}'}} &nbsp;&nbsp;
+												{% if data.isOnlineShopping %}
+												<span ng-if="product_option_category.selected.price">฿{{'{{product_option_category.selected.price|currency:"":0}}'}}</span>
+												{% endif %}
+											</small>
+										</div>
+									</div>
+								</div>
+
+								<div id="cat-{{'{{product_option_category.id}}'}}" class="collapse" aria-labelledby="pdc-{{'{{product_option_category.id}}'}}" data-parent="#accordion">
+									<div class="mx-4 p-2 card-body">
+										<ul>
+											<li ng-repeat="product_option in product_option_category.options">
+												<div ng-click="setOptionSelected(product_option, product_option_category.id)" class="option-item" ng-class="{activeOption: product_option_category.selected.id == product_option.id}">
+													<img ng-src="{{'{{product_option.image}}'}}" alt="" width="60px">
+													{{'{{product_option.title}}'}}
+
+													{% if data.isOnlineShopping %}
+														<span ng-if="product_option.price">+฿{{'{{product_option.price|currency:"":0}}'}}</span>
+													{% endif %}
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+					{% endif %} <!-- end if arr_product_options -->
+
+					<!-- <p class="product-text">This lovely collection features tight back & seat cushions, and motion reclining mechanism for extra comfort.</p> -->
+
+					{% if data.isOnlineShopping %}
+						<form ng-submit="submitAddToCart(0)" method="post" enctype="multipart/form-data" class="mt-3">
+							{{form_widget(form._token)}}
+
+							{# <div class="form-wrap product-select">
+		                        <!--Select 2-->
+		                        <select class="form-input select-filter" data-placeholder="Choose an option" data-minimum-results-for-search="Infinity">
+		                            <option>Choose an option</option>
+		                            <option value="2">Energy Star Compliant</option>
+		                            <option value="3">Handmade</option>
+		                            <option value="4">UL Listed</option>
+		                            <option value="5">Clear</option>
+		                        </select>
+		                    </div> #}
+
+							{% if is_variant %}
+								<!-- variant -->
+								<div class="group group-middle input-number" ng-hide="varian_option_selected.status=='off' || varian_option_selected.is_only_gallery || varian_option_selected.price <= 0">
+									<input ng-model="frm.quantity" ng-change="setShowPriceData()" type="number" name="add_to_cart['quantity']" min="1" class="form-input">
+			                        <button type="submit" ng-disabled="getDataLoading()" class="button button-primary button-icon button-icon-left">
+										<span ng-hide="getDataLoading()">
+											<span class="icon icon-md linear-icon-cart"></span>
+											<span>{% trans %}product.add_to_cart{% endtrans %}</span>
+										</span>
+										<span class="fa fa-circle-o-notch fa-spin" ng-show="getDataLoading()"></span>
+									</button>
+									<span style="color:#ff596d;">{{'{{error_msg}}'}}</span>
+									<span style="color:#4CAF50;" ng-if="add_to_cart_message">{{getProductTypeAndStyleNumber(data)}} {{data.getTitle}} {{'{{add_to_cart_message}}'}}</span>
+									{#<input class="form-input" type="number" data-zeros="true" value="1" min="1" max="50">#}
+									{# <button ng-hide="varian_option_selected.status=='off' || varian_option_selected.is_only_gallery || varian_option_selected.price <= 0" type="button" ng-click="submitAddToCart(1)" class="button button-primary button-icon button-icon-left">{% trans %}product.buy_it_now{% endtrans %}</button> #}
+			                    </div>
+							{% else %}
+								<!-- no variant -->
+								<div class="group group-middle input-number" ng-show="showprice.price > 0">
+									<input ng-model="frm.quantity" ng-change="setShowPriceData()" type="number" name="add_to_cart['quantity']" min="1" class="form-input">
+									<button type="submit" ng-disabled="getDataLoading()" class="button button-primary button-icon button-icon-left">
+										<span ng-hide="getDataLoading()">
+											<span class="icon icon-md linear-icon-cart"></span>
+											<span>{% trans %}product.add_to_cart{% endtrans %}</span>
+										</span>
+										<span class="fa fa-circle-o-notch fa-spin ml-3" ng-show="getDataLoading()"></span>
+									</button>
+									<span style="color:#ff596d;">{{'{{error_msg}}'}}</span>
+									<span style="color:#4CAF50;" ng-if="add_to_cart_message">{{getProductTypeAndStyleNumber(data)}} {{data.getTitle}} {{'{{add_to_cart_message}}'}}</span>
+								</div>
+							{% endif %}
+						</form>
+					{% endif %}
+
+					<div class="product-icon-wrap mt-2">
+					{#<span class="icon icon-md linear-icon-balance" data-toggle="tooltip" data-original-title="Add to Compare"></span>#}
+
+						{% if app.user %}
+							{% set arr_product_wishlist_id = {} %}
+							{% for key,product_wishlist in  app.user.products %}
+								{% set arr_product_wishlist_id = arr_product_wishlist_id|merge({(key):product_wishlist.id})  %}
+							{% endfor %}
+							{% set section_name_id = 'product-detail' ~'-'~ data.id %}
+
+							<a class="wl" id="{{section_name_id}}">
+								<input type="hidden" class="input-item-value" name="id-{{data.id}}" id="id-{{data.id}}" value="{{data.id}}">
+								{% if  (data.id in arr_product_wishlist_id ) %}
+									<span class="icon icon-md fa fa-heart-o fa-heart active" id="active-{{data.id}}" data-toggle="tooltip" data-original-title="Remove to Wishlist"></span>
+								{% else %}
+									<span class="icon icon-md fa-heart-o" id="active-{{data.id}}" data-toggle="tooltip" data-original-title="Add to Wishlist"></span>
+								{% endif %}
+							</a>
+							<script type="text/javascript">
+								var allInputs = $( ":input" );
+								$('#'+ '{{section_name_id}}').on('click',$(":input"), function() {
+									var val = $(this).find("input").attr('value');
+									var el_icon = $(this).find("span.icon");
+									$.ajax({
+										type: "POST",
+										url: Routing.generate('member_wishlist_add',{id:val}),
+										data: $.param({ return_url: "{{ app.request.uri }}"}) ,
+										headers: {
+											"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+										},
+										success: function(data)
+										{
+											if(data.status == "remove success"){
+												el_icon.removeClass('fa-heart active');
+												el_icon.attr('data-original-title', 'Add to Wishlist');
+
+											}else{
+												el_icon.addClass('fa-heart active');
+												el_icon.attr('data-original-title', 'Remove to Wishlist');
+											}
+										},
+									});
+								});
+							</script>
+						{% else %}
+								{% set section_name_id_no_login = 'product-detail' ~'-'~ data.id ~'-no-login' %}
+								<a class="wl-no-login"  id="{{section_name_id_no_login}}">
+									<span class="icon icon-md fa-heart-o" id="active-{{data.id}}" data-toggle="tooltip" data-original-title="Add to Wishlist"></span>
+								</a>
+								<script type="text/javascript">
+									$('#'+ '{{section_name_id_no_login}}').click(function() {
+										$('#modalLogin').modal('show');
+									});
+								</script>
+						{% endif %}
+
+					</div>
+
+                    <ul class="product-meta mt-2">
+                        <li>
+                            <dl class="list-terms-minimal">
+                                <dt>SKU</dt>
+                                <dd>
+									<span ng-if="is_variant">{{'{{varian_option_selected.sku}}'}}</span>
+									<span ng-if="!is_variant">{{data.sku}}</span>
+								 </dd>
+                            </dl>
+                        </li>
+
+						{# {% if product_categories|length > 0 %}
+							<li>
+	                            <dl class="list-terms-minimal">
+	                                <dt>Category</dt>
+	                                <dd>
+	                                    <ul class="product-categories">
+											{% for product_category in product_categories %}
+	                                        	<li><a href="#">{{product_category.getTitle}}</a></li>
+	                                        {% endfor %}
+	                                    </ul>
+	                                </dd>
+	                            </dl>
+	                        </li>
+						{% endif %}#}
+						 {% if arr_tags|length > 0 %}
+							<li>
+	                            <dl class="list-terms-minimal">
+	                                <dt>Tags</dt>
+	                                <dd>
+	                                    <ul class="product-categories">
+											{% for tag in arr_tags %}
+	                                        	<li><a href="#">{{tag}}</a></li>
+											{% endfor %}
+	                                    </ul>
+	                                </dd>
+	                            </dl>
+	                        </li>
+						{% endif %}
+                    </ul>
+                </div>
+            </div>
+
+<!-- <table cellpadding="1" cellspacing="1" class="table table-bordered">
+<tbody>
+<tr style="background:#ccc">
+<td>สถานที่จัดส่ง</td>
+<td>สินค้าพร้อมส่ง</td>
+<td>สั่งจอง</td>
+</tr>
+<tr>
+<td>กรุงเทพฯ ปริมณฑล</td>
+<td>10 วัน</td>
+<td>35 วัน</td>
+</tr>
+<tr>
+<td>ต่างจังหวัด*</td>
+<td>20 วัน</td>
+<td>45 วัน</td>
+</tr>
+</tbody>
+</table> -->
+
+<!-- <div class="border border-left-0 border-right-0 text-center" style="padding:10px"><strong>เงื่อนไขการรับประกัน</strong></div>
+<div class="border  border-left-0 border-right-0 border-top-0">รับประกัน 10 ปี: ระบบกลไก</div>
+<div class="border  border-left-0 border-right-0 border-top-0">รับประกัน 5 ปี: โครงสร้่างไม้</div>
+<div class="border  border-left-0 border-right-0 border-top-0">รับประกัน 2 ปี: หนัง / ฟองน้ำ</div>
+<div class="border  border-left-0 border-right-0 border-top-0">รับประกัน 1 ปี: ผ้าและอุปกรณ์ไฟฟ้า</div>
+<p>&nbsp;</p> -->
+
+			{% if data.isOnlineShopping %}
+				{% if (delivery_information or warranty_condition or replacement_condition) %}
+				<div class="row">
+					<div class="col-md-6 col-lg-6 col-xl-6">
+						{% if delivery_information %}
+							<div class="col-md-12">
+								{{delivery_information.optionValue|raw}}
+							</div>
+						{% endif %}
+					</div>
+					<div class="col-md-6 col-lg-6 col-xl-6">
+						{% if warranty_condition %}
+							<div class="col-md-12 mb-3">
+								{{warranty_condition.optionValue|raw}}
+							</div>
+						{% endif %}
+
+						{% if replacement_condition %}
+							<div class="col-md-12">
+								{{replacement_condition.optionValue|raw}}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+
+            <div class="col-sm-12">
+				{% set is_description = false  %}
+				{% set is_dimension = false  %}
+				{% set is_resources = false  %}
+				{% if data.getDescription %}
+					{% set is_description = true  %}
+				{% endif %}
+				{% if ( data.dimBodyDepth or data.dimBodyHeight or data.dimBodyWidth or data.dimSeatDepth or data.dimSeatHeight or data.dimSeatWidth or data.dimFullExtension ) %}
+					{% set is_dimension = true  %}
+				{% endif %}
+				{% if data.getResources %}
+					{% set is_resources = true  %}
+				{% endif %}
+
+				{% set class_description = ''  %}
+				{% set class_dimension = ''  %}
+				{% set class_resources = ''  %}
+				{% set class_review = ''  %}
+				{% if data.getDescription %}
+					{% set class_description = 'show active' %}
+				{% elseif ( data.dimBodyDepth or data.dimBodyHeight or data.dimBodyWidth or data.dimSeatDepth or data.dimSeatHeight or data.dimSeatWidth or data.dimFullExtension ) %}
+					{% set class_dimension = 'show active' %}
+				{% elseif data.getResources %}
+					{% set class_resources = 'show active' %}
+				{% else %}
+					{% set class_review = 'show active' %}
+				{% endif %}
+
+                <!-- Bootstrap tabs-->
+                <div class="tabs-custom tabs-horizontal" id="tabs-1" >
+                    <!-- Nav tabs-->
+                    <ul class="nav-custom nav-custom-tabs nav-custom__align-left nav nav-tabs">
+						{% if is_description %}
+						<li class="nav-item" role="presentation">
+                            <a class="nav-link {{class_description}}" href="#tabs-1-1" data-toggle="tab">Overview</a>
+                        </li>
+						{% endif %}
+
+						{% if is_dimension %}
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{class_dimension}}" href="#tabs-1-2" data-toggle="tab">Dimensions</a>
+                        </li>
+						{% endif %}
+
+						{% if is_resources %}
+						<li class="nav-item" role="presentation">
+                            <a class="nav-link {{class_resources}}" href="#tabs-1-3" data-toggle="tab">Resources</a>
+                        </li>
+						{% endif %}
+						{% if arr_rating.enable %}
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{class_review}}" href="#tabs-1-4" data-toggle="tab">REVIEWS ({{arr_rating.count_review}})</a>
+                        </li>
+						{% endif %}
+                    </ul>
+                </div>
+
+				<div class="tab-content text-left" >
+					{% if is_description %}
+					<div class="tab-pane fade {{class_description}}" id="tabs-1-1">
+                        <h5>Description</h5>
+						{% if data.getDescription %}
+							{{data.getDescription|raw}}
+						{% endif %}
+
+						{#
+						<p>Style Number:  1PH512</p>
+						<p>To call the Pinnacle Platinum Luxury-Lift PowerReclineXR+ simply “a piece of furniture” would be an understatement. It gives you the power to sit, stand and recline by simply touching a button. A convenient hand-held remote raises and lowers the Pinnacle to help you sit or stand with ease and confidence. You can also independently adjust your back and legs all the way to zero gravity, as well as indulge in our power-tilt headrest and power lumbar support. And who can ignore its luxuriously cushioned high back, chaise seat and convenient storage pocket. As you can see, it’s more than “a piece of furniture." A comfortable engineering marvel, perhaps.
+						</p>
+						<p><b>Details</b></p>
+						<ul class="list-marked">
+                            <li>Body Depth : 39.0</li>
+                            <li>Body Height : 45.0</li>
+                            <li>Body Width : 33.5</li>
+						</ul>
+						<p>For additional details select the dimensions tab above.</p>
+						#}
+                    </div>
+					{% endif %}
+
+					{% if is_dimension %}
+                    <div class="tab-pane fade {{class_dimension}}" id="tabs-1-2">
+                    	<h5>Details</h5>
+						<div class="row row-60">
+							<div class="col-md-6 col-lg-5">
+								<table class="table-product-info">
+		                            <tbody>
+										<tr>
+		                                    <td>Body Width</td>
+		                                    <td>{% if data.dimBodyWidth > 0 %}{{ "%.2f"|format(data.dimBodyWidth) }}"{% endif %}</td>
+		                                </tr>
+		                                <tr>
+		                                    <td>Body Depth</td>
+		                                    <td>{% if data.dimBodyDepth > 0 %}{{ "%.2f"|format(data.dimBodyDepth) }}"{% endif %}</td>
+		                                </tr>
+		                                <tr>
+		                                    <td>Body Height</td>
+		                                    <td>{% if data.dimBodyHeight > 0 %}{{ "%.2f"|format(data.dimBodyHeight) }}"{% endif %}</td>
+		                                </tr>
+										<tr>
+		                                    <td>Seat Width</td>
+		                                    <td>{% if data.dimSeatWidth > 0 %}{{ "%.2f"|format(data.dimSeatWidth) }}"{% endif %}</td>
+		                                </tr>
+		                                <tr>
+		                                    <td>Seat Depth</td>
+		                                    <td>{% if data.dimSeatDepth > 0 %}{{ "%.2f"|format(data.dimSeatDepth) }}"{% endif %}</td>
+		                                </tr>
+										<tr>
+		                                    <td>Seat Height</td>
+		                                    <td>{% if data.dimSeatHeight > 0 %}{{ "%.2f"|format(data.dimSeatHeight) }}"{% endif %}</td>
+		                                </tr>
+										{% if data.dimFullExtension %}
+										<tr>
+		                                    <td>Full Extension</td>
+		                                    <td>{% if data.dimFullExtension > 0 %}{{ "%.2f"|format(data.dimFullExtension) }}"{% endif %}</td>
+		                                </tr>
+										{% endif %}
+		                            </tbody>
+		                        </table>
+							</div>
+
+							<div class="col-md-6 col-lg-7">
+								{% if data.productType %}
+									<img  src="/images/dimension/{{data.productType.dimentionType}}.jpg" alt="{{data.productType.dimentionType}} dimention" />
+								{% endif %}
+
+								{# <!-- get image from product.imageDimension -->
+								{% if data.imageDimension %}
+									<img src="{{data.imageDimension}}" alt="" />
+								{% endif %} #}
+							</div>
+						</div>
+						<p><small>Product image may differ from actual furniture item. La-Z-Boy products are hand crafted and variations from standard dimensions and appearance can occur. Constructions differences in upholstery covering (cloth and leather) can cause variances in dimensions.</small></p>
+                    </div>
+					{% endif %}
+
+					{% if is_resources %}
+					<div class="tab-pane fade {{class_resources}}" id="tabs-1-3">
+                        <h5>Resources</h5>
+						{% if data.getResources %}
+							{{data.getResources|raw}}
+						{% endif %}
+						{#
+                        <p>Located on the right outside arm, our convenient handle smoothly and easily releases the legrest allowing for customized reclining comfort. Available upgrade allows handle to be moved to the left outside arm, perfect for lefties.</p>
+						<p>Available on most recliners, upgrade to our easy to reach elongated handle with an added 2” for effortless reclining, or choose our sleek and ergonomic brushed nickel Arc handle design for a more modern look.</p>
+						<ul class="list-marked">
+                            <li>Independently recline the back without activating the legrest.</li>
+							<li>Patented La-Z-Boy® mechanism allows the seat and back to move together or independently for natural movement and the most reclining positions.</li>
+							<li>Personalize the effort needed to change reclining positions by adjusting the back and legrest tension settings to your individual body type.</li>
+							<li>Three-position locking mechanisms on both sides of legrest provides a choice of comfortable positions that lock in place for added safety, support and reliability.</li>
+                        </ul>
+						#}
+                    </div>
+					{% endif %}
+
+					{% if arr_rating.enable %}
+					<div class="tab-pane fade {{class_review}}" id="tabs-1-4">
+  	    				{% include 'ProjectBundle:'~ view_layout ~'/Product:_review.html.twig' %}
+                    </div>
+					{% endif %}
+                </div>
+            </div>
+
+
+        </div> <!-- end row60 -->
+    </div> <!-- end container -->
+</section>
+
+{#<section>
+	<div class="container">
+		<div class="row row-60">
+		</div>
+	</div>
+</section>#}
+
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+{% if products_relateds|length > 0 %}
+	<section class="section-sm bg-default">
+	    <div class="container text-center">
+	        <h5>Related Products</h5>
+	        <!-- Owl Carousel-->
+	        <div class="owl-carousel carousel-product" data-items="1" data-md-items="2" data-lg-items="3" data-xl-items="4" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+	            {% for data in products_relateds %}
+				{% set related = data[0] %}
+				{% set price_data = getPriceData(data) %}
+	            <div class="item">
+					{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:related, price_data:price_data,section_name:"related_product"} %}
+	            </div>
+	            {% endfor %}
+	        </div>
+	    </div>
+	</section>
+{% endif %}
+
+{% if products_complete_set|length > 0 %}
+
+	{% if products_relateds|length > 0 %}
+		<!-- Divider-->
+		<div class="container">
+			<div class="divider"></div>
+		</div>
+	{% endif %}
+
+	<section class="section-sm bg-default">
+	    <div class="container text-center">
+	        <h5>Complete the Set</h5>
+	        <!-- Owl Carousel-->
+	        <div class="owl-carousel carousel-product" data-items="1" data-md-items="2" data-lg-items="3" data-xl-items="4" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+	            {% for complete_set_data in products_complete_set %}
+				{% set complete_set = complete_set_data[0] %}
+				{% set complete_set_price_data = getPriceData(complete_set_data) %}
+	            <div class="item">
+					{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:complete_set, price_data:complete_set_price_data,section_name:"complete_set"} %}
+	            </div>
+	            {% endfor %}
+	        </div>
+	    </div>
+	</section>
+{% endif %}
+
+{# 360 script include#}
+{#<link type="text/css" rel="stylesheet" href="{{asset('image360/imagerotator/html/css/basic.css')}}"/>
+<script type="text/javascript" src="{{asset('image360/imagerotator/html/js/imagerotator.js')}}"></script>
+<style media="screen">
+.content{width: 100%;height: 450px;/* border: 1px dotted #cecfd2; */}
+</style>#}
+
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+	<script src="{{ asset('jquery-magnify-js/js/jquery.magnify.js')}}"></script>
+	<script type="text/javascript" src="{{ asset('jquery.scrolling-tabs/jquery.scrolling-tabs.min.js') }}"></script>
+	<script src="{{asset('javascripts/base_product.js')}}"></script>
+
+	<script language="javascript" type="text/javascript">
+	jQuery(document).ready(function(){
+		 $('.cover_variant').magnify();
+		//productImageMobileFixPosition();
+		// 360 script start
+	    // $('.wr360PlayerId').rotator({
+	    //     licenseFileURL: 'license.lic',
+		// 	configFileURL: '{{asset('image360/360_assets/NewProject4/NewProject4.xml')}}',
+		// 	graphicsPath: '{{asset('image360/imagerotator/html/img/basic')}}',
+	    //     responsiveBaseWidth: 600,
+	    //     responsiveMinHeight: 0,
+	    //     googleEventTracking: false,
+	    // });
+		$('.tabs-custom').scrollingTabs({
+			bootstrapVersion: 4,
+			scrollToTabEdge: true,
+			cssClassLeftArrow: 'fa fa-chevron-left',
+			cssClassRightArrow: 'fa fa-chevron-right'
+		});
+
+	});
+	// tabs-custom
+	// $('.tabs-custom').scrollingTabs({
+	// 	bootstrapVersion: 4,
+	// 	scrollToTabEdge: true,
+	// 	cssClassLeftArrow: 'fa fa-chevron-left',
+	// 	cssClassRightArrow: 'fa fa-chevron-right'
+	// });
+
+
+	{% if arr_rating.enable %}
+	$("#average_rating_title").rateYo({
+		// The width of each star
+		starWidth: "16px",
+		normalFill: "#f1f1f1",
+		ratedFill: "#faca51",
+		rating: {{arr_rating.average_rating}},
+		readOnly: true
+	});
+	$("#average_rating").rateYo({
+			// The width of each star
+			starWidth: "28px",
+			normalFill: "#f1f1f1",
+			ratedFill: "#faca51",
+	  rating: {{arr_rating.average_rating}},
+	  readOnly: true
+	});
+
+	{% endif %}
+
+	// window.addEventListener('resize', function(event){
+	// 	$('.tabs-custom').scrollingTabs({
+	// 		bootstrapVersion: 4,
+	// 		scrollToTabEdge: true,
+	// 		cssClassLeftArrow: 'fa fa-chevron-left',
+	// 		cssClassRightArrow: 'fa fa-chevron-right'
+	// 	});
+	// });
+	$('.product-count-rating').on( "click", function(e) {
+		if($('window').width() <= 767){
+			var d = $('#review').offset().top - $('nav').height() - 30;
+		}else{
+			var d = $('#review').offset().top - 150;
+		}
+
+		$('html,body').animate({scrollTop : d },800);
+		return false;
+	})
+	function productImageMobileFixPosition (){
+		var slider = $('#slider-main');
+		var image = $('.images-gallery');
+
+		//var cover = $('.select-cover');
+		//var menu = $('#menu');
+		//var hieghtThreshold = $(".product-single").offset().top;
+		var hieghtThreshold_end  = $(".product-icon-wrap").offset().top +$(".product-icon-wrap").height() ;
+		$(window).scroll(function() {
+			var scroll = $(window).scrollTop();
+			var screenWidth = $(window).width();
+			if(scroll >= 20 && scroll <= hieghtThreshold_end && screenWidth < 680){
+			//if (scroll >= hieghtThreshold && scroll <=  hieghtThreshold_end ) {
+				slider.addClass('product-image-position');
+				image.addClass('img-width-set');
+			   // menu.addClass('dark');
+			} else {
+				slider.removeClass('product-image-position');
+				image.removeClass('img-width-set');
+			   // menu.removeClass('dark');
+			}
+		});
+		window.addEventListener('resize', function(event){
+			var scroll = $(window).scrollTop();
+			var screenWidth = $(window).width();
+			if(scroll >= 20 && scroll <= hieghtThreshold_end && screenWidth < 680){
+			//if (scroll >= hieghtThreshold && scroll <=  hieghtThreshold_end ) {
+				slider.addClass('product-image-position');
+				image.addClass('img-width-set');
+			   // menu.addClass('dark');
+			} else {
+				slider.removeClass('product-image-position');
+				image.removeClass('img-width-set');
+			   // menu.removeClass('dark');
+			}
+		});
+		//// if not scroll
+		var scroll = $(window).scrollTop();
+		var screenWidth = $(window).width();
+		if(scroll >= 20 && scroll <= hieghtThreshold_end && screenWidth < 680){
+		//if (scroll >= hieghtThreshold && scroll <=  hieghtThreshold_end ) {
+			slider.addClass('product-image-position');
+			image.addClass('img-width-set');
+		   // menu.addClass('dark');
+		} else {
+			slider.removeClass('product-image-position');
+			image.removeClass('img-width-set');
+		   // menu.removeClass('dark');
+		}
+	}
+	function clickReviews(){
+		$('.tabs-custom a[href="#tabs-1-4"]').tab('show');
+		$("html, body").animate({
+			scrollTop: $('#tabs-1').offset().top - 100
+		}, 1000);
+	}
+	</script>
+
+	<script>
+		var app = angular.module('productDetailApp', ['angularUtils.directives.dirPagination','pascalprecht.translate','jkAngularRatingStars']);
+
+		app.factory('product_data', ['$http', function product_data($http) {
+	        return {
+	            add_item_to_cart: function(dataObj){
+	                return $http({
+	                    method: 'POST',
+	                    // url: Routing.generate('api_1_post_public_additemtocart'),
+	                    url: Routing.generate('cart_add_item_to_cart'),
+	                    data: $.param(dataObj),
+	                    headers: {
+	                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+	                    }
+	                });
+	            }
+	            /*,find_fastest_showroom_distance: function(product_id, lat, lng){
+	                return $http({
+	                    method:'GET',
+	                    url: Routing.generate('api_1_get_public_find_fastest_showroom_distance', { product_id:product_id, lat:lat, lng:lng } ),
+	                    headers: {
+	                        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'
+	                    }
+	                });
+	            }*/
+	        }
+	    }]);
+
+		//////////////////////////////////////////////////////////////// section review ////////////////////////////////////////////////////////////////////
+		app.factory('review_data', ['$http', function review_data($http){
+			return {
+		    createMemberReview: function(token, dataObj){
+		      return $http({
+						method:'POST',
+						url: Routing.generate('api_1_post_reviews'),
+						data: $.param(dataObj),
+						headers: {
+							'Authorization':'Bearer ' + token,
+							'Content-Type':'application/x-www-form-urlencoded'
+						}
+					});
+		    },
+				createNonMemberReview: function(dataObj){
+		      return $http({
+						method:'POST',
+						url: Routing.generate('api_1_post_public_create_reviews'),
+						data: $.param(dataObj),
+						headers: {'Content-Type':'application/x-www-form-urlencoded'}
+					});
+		    },
+				getAllReview: function(product_id, page, list_per_page){
+					list_per_page = list_per_page || "";
+		      return $http({
+						method:'GET',
+						url: Routing.generate('api_1_get_public_reviews',{'product_id':product_id,'page':page,'list_per_page':list_per_page})
+					});
+		    }
+			}
+		}]);
+		app.config(function ($translateProvider) {
+		  $translateProvider.translations('en', {
+		      January: 'January',
+		      February: 'February',
+		      March: 'March',
+		      April: 'April',
+		      May: 'May',
+		      June: 'June',
+		      July: 'July',
+		      August: 'August',
+		      September: 'September',
+		      October: 'October',
+		      November: 'November',
+		      December: 'December',
+		  });
+		  $translateProvider.translations('th', {
+		      January: 'ม.ค.',
+		      February: 'ก.พ.',
+		      March: 'มี.ค.',
+		      April: 'เม.ย.',
+		      May: 'พ.ค.',
+		      June: 'มิ.ย.',
+		      July: 'ก.ค.',
+		      August: 'ส.ค.',
+		      September: 'ก.ย.',
+		      October: 'ต.ค.',
+		      November: 'พ.ย.',
+		      December: 'ธ.ค.',
+		  });
+		  $translateProvider.preferredLanguage('th');
+		  $translateProvider.useSanitizeValueStrategy('escape');
+		});
+
+		app.controller('reviewController', ['$scope', '$sce', '$translate', 'review_data', function($scope, $sce, $translate, review_data){
+
+		  $scope.init = function(token, product_id, user_session, lang_key)
+		  {
+		    $scope.setToken(token);
+		    $scope.formDataReview.product_id = product_id;
+		    $scope.formDataReview.user_session = user_session;
+
+		    //uses the translate
+		    $translate.use(lang_key);
+		  }
+
+		  $scope.setToken = function(token){
+		    $scope.access_token = token;
+		  }
+		  $scope.getToken = function(){
+		    return $scope.access_token;
+		  }
+		  $scope.setItemRating = function(ratingScore){
+		    $scope.formDataReview.ratingScore = ratingScore;
+		  };
+		  $scope.getItemRating = function(){
+		    return $scope.formDataReview.ratingScore;
+		  }
+		  $scope.getDataLoading = function() {
+		    return $scope.data_loaded;
+		  };
+		  $scope.setDataLoading = function(value) {
+		    $scope.data_loaded = value;
+		  };
+		  $scope.setReviewEditor = function(val){
+		    $scope.reviewEditor = val;
+		  };
+		  $scope.getReviewEditor = function(){
+		    return $scope.reviewEditor;
+		  }
+		  $scope.setWriteYourReview = function(val){
+		    $scope.writeYourReview = val;
+		  };
+		  $scope.getWriteYourReview = function(){
+		    return $scope.writeYourReview;
+		  }
+
+		  $scope.processReviewForm = function(){
+		    openDomWindow();
+		    $scope.formDataReview._token = angular.element('#review__token').val();
+		    var acc_token = $scope.getToken();
+
+		    var postData = {review: $scope.formDataReview};
+
+		    if(acc_token){
+		      //member
+		      review_data.createMemberReview(acc_token, postData).then(function onSuccess(response){
+		        var data = response.data;
+		        if(data.success){
+		          $scope.message = $sce.trustAsHtml(data.message);
+		          $scope.errors = {};
+		          $scope.setReviewEditor(false);
+		          //reset data
+		          $scope.formDataReview.title = '';
+		          $scope.formDataReview.content = '';
+		        }else{
+		          $scope.message = $sce.trustAsHtml(data.message);
+		          $scope.errors = data.errors;
+		        }
+
+		        closeDomWindow();
+		      }).catch(function onError(response) {
+		        closeDomWindow();
+		      });
+
+		    }else{
+		      //nonmember
+		      review_data.createNonMemberReview(postData).then(function onSuccess(response){
+		        var data = response.data;
+		        if(data.success){
+		          $scope.message = $sce.trustAsHtml(data.message);
+		          $scope.errors = {};
+		          $scope.setReviewEditor(false);
+		          //reset data
+		          $scope.formDataReview.title = '';
+		          $scope.formDataReview.content = '';
+		        }else{
+		          $scope.message = $sce.trustAsHtml(data.message);
+		          $scope.errors = data.errors;
+		        }
+
+		        closeDomWindow();
+		      }).catch(function onError(response){
+		        closeDomWindow();
+		      });
+
+		    }
+		  }
+
+		  $scope.formDataReview = {'ratingScore':0};
+		  $scope.errors = {};
+		  $scope.message = '';
+		  $scope.setDataLoading(false);
+		  $scope.getReviewEditor(false);
+		  $scope.setWriteYourReview(true);
+
+
+		  /* List all review */
+		  $scope.lists = [];
+		  $scope.countReview = 0;
+		  $scope.listsPerPage = 10;
+		  $scope.pagination = {current: 1};
+		  $scope.pageChanged = function(newPage) {
+		    $scope.getResultsPage(newPage);
+		  };
+		  $scope.getResultsPage = function(pageNumber){
+		    review_data.getAllReview($scope.formDataReview.product_id, pageNumber, $scope.listsPerPage).then(function onSuccess(response){
+		      $scope.lists = response.data.review_data;
+		      $scope.countReview = response.data.count_review;
+		      closeDomWindow();
+		    }).catch(function onError(response) {
+		      closeDomWindow();
+		    });
+		  }
+
+		}]);
+
+		app.filter('nl2br', function($sce){
+		  return function(msg,is_xhtml) {
+		    var is_xhtml = is_xhtml || true;
+		    var breakTag = (is_xhtml) ? '<br />' : '<br>';
+		    var msg = (msg + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+		    return $sce.trustAsHtml(msg);
+		  }
+		});
+////////////////////////////////////////////////////////////////////////////end section reciew ////////////////////////////////////////////////////////////////////////
+
+
+		app.controller('productDetailCtrl',['$scope', '$sce', '$http', 'product_data', function($scope, $sce, $http, product_data){
+
+	        $scope.init = function(product_id, is_variant, variant_type, is_role_client, v_request_get)
+	        {
+				$scope.product_id = product_id;
+				$scope.variant_type = variant_type;
+				$scope.is_variant = is_variant;
+				$scope.arr_sku_variant_data = {{arr_sku_variant_data|json_encode|raw}}
+	            $scope.arr_variant_option_data = {{arr_variant_option_data|json_encode|raw}}
+				$scope.arr_product_options = {{arr_product_options|json_encode|raw}}
+				$scope.setDataLoading(false);
+
+// console.log($scope.arr_product_options);
+// console.log($scope.arr_sku_variant_data.cover_selected_group_data);
+
+				$scope.varian_option_selected = {};
+	            if($scope.arr_variant_option_data['variant_default_option'].length>0){
+	                var key_name = $scope.getVariantKeyName($scope.arr_variant_option_data['variant_default_option'], 'array');
+	                $scope.varian_option_selected = $scope.arr_variant_option_data['variant_option_data'][key_name];
+					// if($scope.variant_type=='cover_variant'){ }
+	            }
+
+				$scope.frm = {};
+	            $scope.frm.quantity = 1;
+	            $scope.frm.product_id = $scope.product_id;
+
+				$scope.showprice = {};
+	            $scope.setShowPriceData();
+
+				$scope.arr_cart_data = {};
+	            $scope.arr_cart_data.products = [];
+	            $scope.arr_cart_data.summary = [];
+	            $scope.error_msg = '';
+				$scope.add_to_cart_message = '';
+
+	            $scope.is_role_client = is_role_client;
+
+				if(v_request_get){
+					//set image thumbnail from app.request.get v
+					$scope.setMainImageThumbnail();
+				}
+
+				/*
+				// geolocation getting the current positionSection
+	            $scope.arr_showrooms = {};
+	            $scope.arr_showrooms_raw_data = {#{{showrooms|json_encode|raw}}#};
+	            $scope.arr_showrooms = $scope.arr_showrooms_raw_data;
+	            $scope.data_showroom_loaded = false;
+	            $scope.data_showroom_showmap = false;
+				*/
+
+			}
+
+			$scope.initSetDefaultMaterialMethod = function (material_code, material_id, cover_code, cover_color_title)
+			{
+				if(cover_code == $scope.arr_sku_variant_data.variant_data[0]['selected'] && $scope.arr_sku_variant_data.variant_data[1]['selected'] == cover_color_title ){
+					$scope.arr_sku_variant_data.variant_data[0]['material_selected'] = material_code.toLowerCase();
+					$scope.arr_sku_variant_data.variant_data[0]['material_selected_id'] = material_id;
+// console.log($scope.arr_sku_variant_data.variant_data);
+				}
+			}
+
+			$scope.setOptionSelected = function(product_option, product_option_category_id)
+	        {
+				$scope.arr_product_options[product_option_category_id].selected = product_option;
+				$scope.arr_product_options[product_option_category_id].selected_id = product_option.id;
+				$scope.setShowPriceData();
+			}
+
+			$scope.setVariantSelectedMaterial = function(material_code, material_id)
+	        {
+				material_code = material_code.toLowerCase();
+				$scope.arr_sku_variant_data.variant_data[0]['material_selected'] = material_code;
+				$scope.arr_sku_variant_data.variant_data[0]['material_selected_id'] = material_id;
+// console.log($scope.arr_sku_variant_data.variant_data);
+			}
+
+			$scope.setVariantSelectedGroupData = function(material_code, material_id, cover_code, cover_color_title)
+	        {
+				if(cover_code && cover_color_title){
+					material_code = material_code.toLowerCase();
+					cover_code = cover_code.toLowerCase();
+					cover_color_title = cover_color_title.toLowerCase();
+					var key_name = $scope.getVariantGroupKeyName(cover_code, cover_color_title);
+					$scope.varian_option_selected = $scope.arr_variant_option_data['variant_option_data'][key_name];
+
+					$scope.arr_sku_variant_data.variant_data[0]['material_selected'] = material_code;
+					$scope.arr_sku_variant_data.variant_data[0]['material_selected_id'] = material_id;
+					$scope.arr_sku_variant_data.variant_data[0]['selected'] = cover_code;
+					$scope.arr_sku_variant_data.variant_data[1]['selected'] = cover_color_title;
+					//set change image thumbnail
+					$scope.setMainImageThumbnail();
+				}
+				$scope.setShowPriceData();
+	        }
+
+			$scope.setMainImageThumbnail = function()
+			{
+				if($scope.varian_option_selected.image_medium){
+					var ele_main_image = angular.element("#main-image");
+					var ele_main_image_thumb = angular.element("#main-image-thumb");
+					var ele_main_image_large = angular.element("#main-image-large");
+
+					ele_main_image.attr('src', $scope.varian_option_selected.image_medium);
+					ele_main_image_thumb.attr('src', $scope.varian_option_selected.image_small);
+					ele_main_image_thumb.click();
+					ele_main_image_large.attr('href', $scope.varian_option_selected.image_large);
+
+					// ele_main_image.fadeOut(400, function() {
+					// 	ele_main_image.attr('src', $scope.varian_option_selected.image_medium);
+					// }).fadeIn(400);
+				}
+			}
+
+			$scope.getVariantGroupKeyName = function(cover_code, cover_color_title)
+	        {
+				var tmp_key_name = cover_code+'-'+cover_color_title;
+				return tmp_key_name;
+			}
+
+			$scope.setVariantSelectedData = function()
+	        {
+	            if($scope.arr_sku_variant_data.variant_data.length>0){
+	                var key_name = $scope.getVariantKeyName($scope.arr_sku_variant_data.variant_data, 'object_selected');
+	                $scope.varian_option_selected = $scope.arr_variant_option_data['variant_option_data'][key_name];
+	            }
+	            $scope.setShowPriceData();
+	        }
+
+			$scope.getVariantKeyName = function(data, type)
+	        {
+	            var arr_data = [];
+	            data.forEach(function(element) {
+	                if(type=='array'){
+	                    arr_data.push(element); //when initial
+	                }else if(type=='object_selected'){
+	                    arr_data.push(element.selected); //when change variants
+	                }
+	            });
+	            var tmp_key_name = arr_data.join('-');
+	            return tmp_key_name;
+	        }
+
+			$scope.setShowPriceData = function()
+	        {
+	            if($scope.is_variant){
+	                //string to float
+	                $scope.showprice.price = Number.parseFloat($scope.varian_option_selected.price);
+	                $scope.showprice.compare_at_price = Number.parseFloat($scope.varian_option_selected.compare_at_price);
+					$scope.showprice.cover_price = $scope.showprice.price;
+	            }else{
+	                //string to float
+	                $scope.showprice.price = Number.parseFloat('{{data.price}}');
+	                $scope.showprice.compare_at_price = Number.parseFloat('{{data.compareAtPrice}}');
+					$scope.showprice.cover_price = $scope.showprice.price;
+	            }
+
+				if ($scope.arr_product_options === undefined || $scope.arr_product_options.length == 0) {
+					$scope.showprice.product_option_price = 0;
+				}else{
+					//calculate product options
+					var n, product_option;
+					var sub_total_option_price = 0;
+					for (n in $scope.arr_product_options) {
+						product_option = $scope.arr_product_options[n];
+						if(product_option.selected.price){
+							option_price = Number.parseFloat(product_option.selected.price);
+							sub_total_option_price += option_price;
+						}
+					}
+					$scope.showprice.product_option_price = sub_total_option_price;
+				}
+
+	            //calculate total price with quantity
+	            if($scope.frm.quantity>1){
+	                $scope.showprice.total_price = ($scope.showprice.price * $scope.frm.quantity);
+	                $scope.showprice.total_compare_at_price = ($scope.showprice.compare_at_price * $scope.frm.quantity);
+
+					$scope.showprice.total_cover_price = $scope.showprice.total_price;
+					$scope.showprice.total_product_option_price = ($scope.showprice.product_option_price * $scope.frm.quantity);
+
+					//include option price
+					$scope.showprice.total_price += $scope.showprice.total_product_option_price;
+					$scope.showprice.total_compare_at_price += $scope.showprice.total_product_option_price;
+	            }else{
+	                $scope.showprice.total_price = ($scope.showprice.price);
+	                $scope.showprice.total_compare_at_price = ($scope.showprice.compare_at_price);
+
+					$scope.showprice.total_cover_price = $scope.showprice.total_price;
+					$scope.showprice.total_product_option_price = $scope.showprice.product_option_price;
+
+					//include option price
+					$scope.showprice.total_price += $scope.showprice.total_product_option_price;
+					$scope.showprice.total_compare_at_price += $scope.showprice.total_product_option_price;
+	            }
+
+	            // js ceil
+	            // Math.ceil($scope.varian_option_selected.price);
+	        }
+
+			// add product to cart
+	        $scope.submitAddToCart = function(is_order_now)
+	        {
+				$scope.setDataLoading(true);
+	            $scope.frm._token = angular.element('#add_to_cart__token').val();
+	            if($scope.is_variant){
+	                $scope.frm.varian_option = $scope.varian_option_selected;
+
+					$scope.frm.varian_option.product_category_id = null;
+					$scope.frm.varian_option.product_category_title = null;
+					if($scope.variant_type=='cover_variant'){
+						$scope.frm.varian_option.product_category_id = $scope.arr_sku_variant_data.variant_data[0]['material_selected_id'];
+						$scope.frm.varian_option.product_category_title = $scope.arr_sku_variant_data.variant_data[0]['material_selected'];
+					}
+	            }
+
+				if ($scope.arr_product_options === undefined || $scope.arr_product_options.length == 0) {
+					$scope.frm.product_options_selected_id = [];
+				}else{
+
+// console.log($scope.varian_option_selected);
+// console.log($scope.frm);
+// console.log('prepare product_options');
+// console.log($scope.arr_product_options);
+
+					//prepare data product options
+					var n, product_option;
+					var arr_product_options_selected_id = [];
+					for (n in $scope.arr_product_options) {
+						product_option = $scope.arr_product_options[n];
+						if(product_option.selected.id){
+							arr_product_options_selected_id.push(product_option.selected.id);
+						}
+					}
+					$scope.frm.product_options_selected_id = arr_product_options_selected_id;
+				}
+
+	            product_data.add_item_to_cart($scope.frm).then(function onSuccess(response){
+	                // closeDomWindow();
+	                if(response.data.status==true){
+	                    $scope.arr_cart_data = response.data.arr_cart_data;
+	                    $scope.error_msg='';
+						$scope.add_to_cart_message = response.data.message;
+
+	                    //redirect to cart
+	                    if(is_order_now==1){
+	                        $(location).attr('href', '{{url('cart')}}');
+	                    }else{
+	                        if($scope.arr_cart_data.summary.total){
+								angular.element($( ".cart_summary_item_count_sub" ).html($scope.arr_cart_data.summary.item_count));
+								angular.element($( ".cart_summary_total" ).html(": ฿"+numeral( $scope.arr_cart_data.summary.total).format('0,0') ));
+								// angular.element($( "#cart_summary_item_count" ).html('<span class="cart-item">'+$scope.arr_cart_data.summary.item_count+'</span>'));
+	                        }
+
+	                        if($scope.arr_cart_data.products){
+	                            angular.element($( ".cart_list_products_item" ).html(''));
+	                            $scope.arr_cart_data.products.forEach(function(element) {
+	                                updateCartBoxData(element, $scope.is_role_client);
+	                            });
+	                        }
+
+							// show mini cart
+							angular.element($("#btn_cart_icon").click() );
+
+							// go to top
+							angular.element($("#ui-to-top").click() );
+
+							// go to top only web
+							// var window_width = $(window).width();
+							// if( window_width > 767 ){
+							// 	angular.element($("#ui-to-top").click());
+							// }
+
+							// angular.element($(".cart_list_products").fadeIn('fast'));
+	                        //angular.element($( "#cart_list_products" ).css({'display':'block'}));
+	                    }
+						$scope.setDataLoading(false);
+	                }else{
+	                    $scope.error_msg = response.data.error_msg;
+						$scope.setDataLoading(false);
+	                }
+
+	            }).catch(function onError(response) {
+	                // closeDomWindow();
+	            });
+
+	        }
+
+			$scope.getDataLoading = function() {
+				return $scope.data_loaded;
+			};
+			$scope.setDataLoading = function(value) {
+				$scope.data_loaded = value;
+			};
+
+		}]);
+
+	</script>
+
+{% endblock %}

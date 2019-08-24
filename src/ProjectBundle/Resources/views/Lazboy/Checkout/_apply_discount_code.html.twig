@@ -1,0 +1,35 @@
+{% if discount_setting_status %}
+    <!-- Bootstrap panel-->
+    <div ng-if="!arr_cart_data.summary.discount_code" class="panel panel-custom" ng-cloak>
+        <div class="panel-custom-heading" id="2Headingundefined" role="tab">
+            <h5 class="panel-custom-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#2" href="#2Collapseundefined" aria-controls="2Collapseundefined">
+                Have a coupon?<span>Click here to enter your code</span></a>
+            </h5>
+        </div>
+        <div class="panel-custom-collapse collapse" id="2Collapseundefined" role="tabpanel" aria-labelledby="2Headingundefined">
+            <div class="panel-custom-body">
+                <div class="row">
+                    <div class="col-md-8 col-xl-5">
+                        <form method="post" enctype="multipart/form-data">
+                            {{form_widget(coupon_form._token)}}
+                            <div class="form-wrap">
+                                <input ng-model="frm_discount.code" name="code" class="form-input" id="coupon-code" type="text" name="code" placeholder="{% trans %}order.enter_coupon_code{% endtrans %}">
+                                {#<input class="form-input" id="coupon-code" type="text" name="text" data-constraints=" @Required">#}
+                                {#<label class="form-label" for="coupon-code">Coupon Code</label>#}
+                            </div>
+                            <button ng-click="applyDiscountCode()" class="button button-black" type="button">
+                                <span ng-hide="getDataLoading()">
+                                    {% trans %}order.apply_coupon_code{% endtrans %}
+                                </span>
+                                <span class="fa fa-circle-o-notch fa-spin" ng-show="getDataLoading()"></span>
+                            </button>
+                            <div ng-hide="arr_result_discount.status">
+                                <div class="err-message">{{'{{arr_result_discount.error_message}}'}}</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,76 @@
+admin_zone:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminZone:index}
+  requirements:
+    _method: get
+
+admin_zone_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminZone:new}
+
+admin_zone_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminZone:create}
+  requirements:
+    _method: post
+
+admin_zone_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminZone:edit}
+  requirements:
+    id: \d+
+
+admin_zone_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminZone:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_zone_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminZone:delete}
+  requirements:
+    _method: get
+
+admin_zone_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminZone:group_delete}
+  requirements:
+    _method: post
+
+admin_zone_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminZone:group_enable}
+  requirements:
+    _method: post
+
+admin_zone_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminZone:group_disable}
+  requirements:
+    _method: post
+
+admin_zone_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminZone:group_enable}
+  requirements:
+    _method: post
+
+admin_zone_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminZone:group_disable}
+  requirements:
+    _method: post
+
+admin_zone_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminZone:sort}
+  requirements:
+    _method: get
+
+admin_zone_sort_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminZone:sort_prosess}
+  requirements:
+    _method: post

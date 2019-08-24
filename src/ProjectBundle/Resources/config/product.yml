@@ -1,0 +1,36 @@
+product_detail:
+    path: /detail/{id}/{slug}
+    defaults: {_controller: ProjectBundle:Product:detail}
+    methods:  [GET,POST]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+product_category:
+    path: /category/{cate_id}/{slug}
+    defaults: {_controller: ProjectBundle:Product:index}
+    methods:  [GET,POST]
+    options:
+        expose: true
+
+product_shop_online_category:
+    path: /shop-online/category/{cate_id}/{slug}
+    defaults: {_controller: ProjectBundle:Product:index}
+    methods:  [GET,POST]
+    options:
+        expose: true
+
+product_shop_online:
+    path: /shop-online
+    defaults: {_controller: ProjectBundle:Product:index}
+    methods:  [GET,POST]
+    options:
+        expose: true
+
+product:
+    path: /
+    defaults: {_controller: ProjectBundle:Product:index}
+    methods:  [GET,POST]
+    options:
+        expose: true

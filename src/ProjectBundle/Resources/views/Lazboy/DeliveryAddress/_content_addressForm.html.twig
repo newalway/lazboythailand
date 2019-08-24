@@ -1,0 +1,231 @@
+<style media="screen">
+    /* Important part */
+    .modal-dialog{
+        overflow-y: initial !important
+    }
+    .modal-body{
+        height: 550px;
+        overflow-y: auto;
+    }
+    .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group .current-location{
+        z-index: 2;
+        margin-left: -1px;
+        height: 34px;
+    }
+    svg.current-location{
+        width: 16px;
+        height: 18px;
+    }
+</style>
+
+<div class="member-address-form">
+    {#
+    <div class="form-wrap">
+        <label class="col-sm-6 col-md-3 control-label" for="title">{% trans %}member.address.title{% endtrans %} *</label>
+        <div class="col-sm-6">
+            {{form_widget(form.title, {'id' : 'title'})}}
+            <div class="text-danger">{{form_errors(form.title)}}</div>
+        </div>
+    </div>
+    #}
+    <div class="row mt-0">
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="first_name">{% trans %}member.personal.fname{% endtrans %} *</label>
+                {{form_widget(form.first_name, {'id' : 'first_name','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.first_name)}}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="last_name">{% trans %}member.personal.lname{% endtrans %} *</label>
+                {{form_widget(form.last_name, {'id' : 'last_name','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.last_name)}}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="company_name">{% trans %}member.personal.company_name{% endtrans %} </label>
+                {{form_widget(form.company_name, {'id' : 'company_name','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.company_name)}}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="phone">{% trans %}member.personal.phone{% endtrans %} *</label>
+                {{form_widget(form.phone, {'id' : 'phone','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.phone)}}</div>
+            </div>
+        </div>
+        {#
+        <div class="col-md-12 mt-3">
+            <div class="form-wrap">
+                <label for="map">{% trans %}find_address{% endtrans %}</label>
+                <div id="floating-panel" class="input-group">
+                    <input id="geocode-address" type="textbox" value="" class="form-input">
+                    <span class="input-group-btn">
+                        <input id="submit-map" type="button" class="button button-primary" value="{% trans %}search{% endtrans %}">
+                    </span>
+                    <span class="input-group-btn">
+                        <button id="get-current-location" type="button" class="button button-primary">
+                            <span class="fa fa-crosshairs"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-wrap">
+                <div id="map-canvas" style="width:100%;height:350px;"></div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="">{% trans %}latitude{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.latitude, {'id' : 'latitude','attr': {'class': 'form-input'}})}}
+                    <div class="error-form text-danger">{{form_errors(form.latitude)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="">{% trans %}longitude{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.longitude, {'id' : 'longitude','attr': {'class': 'form-input'}})}}
+                    <div class="error-form text-danger">{{form_errors(form.longitude)}}</div>
+                </div>
+            </div>
+        </div>#}
+
+        <div class="col-md-12 mt-3">
+            {#}<div class="form-wrap" style="display:none;">
+                <label for="">{% trans %}PlaceId{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.placeId, {'id' : 'placeId','attr': {'class': 'form-input'}})}}
+                    <div class="error-form text-danger">{{form_errors(form.longitude)}}</div>
+                </div>
+            </div>#}
+
+            <div class="form-wrap">
+                <label for="address">{% trans %}member.address{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.address, {'id' : 'address','attr': {'class': 'form-input'}})}}
+                    <div class="text-danger">{{form_errors(form.address)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="district">{% trans %}member.subDistrict{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.district, {'id' : 'district','attr': {'class': 'form-input', 'autocomplete':'off'}})}}
+                    <div class="text-danger">{{form_errors(form.district)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="amphure">{% trans %}member.amphure{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.amphure, {'id' : 'amphure','attr': {'class': 'form-input', 'autocomplete':'off'}})}}
+                    <div class="text-danger">{{form_errors(form.amphure)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="province">{% trans %}member.province{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.province, {'id' : 'province','attr': {'class': 'form-input', 'autocomplete':'off'}})}}
+                    <div class="text-danger">{{form_errors(form.province)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:none;" class="col-md-6 mt-3">
+            <div class="form-wrap select-filter">
+                <label for="countryCode">{% trans %}member.country{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.countryCode, {'id' : 'countryCode','attr': {'class': 'form-input'}})}}
+                    <div class="text-danger">{{form_errors(form.countryCode)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="postcode">{% trans %}member.postcode{% endtrans %} *</label>
+                <div>
+                    {{form_widget(form.postcode, {'id' : 'postcode','attr': {'class': 'form-input', 'autocomplete':'off'}})}}
+                    <div class="text-danger">{{form_errors(form.postcode)}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="taxpayer_id">{% trans %}member.taxpayerid{% endtrans %}</label>
+                {{form_widget(form.taxpayer_id, {'id' : 'taxpayer_id','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.taxpayer_id)}}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label></label>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap input-checkbox">
+                <label for="default_shipping">
+                    {{form_widget(form.default_shipping, {'id' : 'default_shipping'})}}
+                    {% trans %}member.default.shipping{% endtrans %}
+                </label>
+                <div class="text-danger">{{form_errors(form.default_shipping)}}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap input-checkbox">
+                <label for="default_tax">
+                    {{form_widget(form.default_tax, {'id' : 'default_tax'})}}
+                    {% trans %}member.default.billing{% endtrans %}
+                </label>
+                <div class="text-danger">{{form_errors(form.default_tax)}}</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="member-btn mt-3 mb-3">
+        {{form_widget(form.save, {'id' : 'save', 'label': 'member.button.save'|trans({}, 'ProjectBundle'),'attr': {'class': 'button button-primary'} })}}
+        <a href="{{path('address')}}" class="button button-black">
+            <span>{% trans %}member.button.close{% endtrans %}
+        </a>
+    </div>
+</div>
+
+{#
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initGeocodeMap&language={{app.request.locale}}"></script>
+<script>
+    $(document).ready(function() {
+        $('#geocode-address').keydown(function(event) {
+            if (event.keyCode == 13) {
+                document.getElementById("submit-map").click();
+                return false;
+            }
+        });
+        $("#get-current-location").click(function() {
+            initGeocodeMapWithCurrentLocation();
+        });
+	});
+</script>#}

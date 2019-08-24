@@ -1,0 +1,241 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout_member.html.twig" %}
+
+{% block title %}
+    {% if is_granted('ROLE_CUSTOMER') %}
+        {% trans %}member.my.orders{% endtrans %}
+    {% elseif is_granted('ROLE_CLIENT')  %}
+        {% trans %}member.my.rfq{% endtrans %}
+    {% endif %}
+    | {{ parent() }}
+{% endblock %}
+{% block member_home_active %}active{% endblock %}
+{% block member_header %}
+    {% if is_granted('ROLE_CUSTOMER') %}
+        {% trans %}member.my.orders{% endtrans %}
+    {% elseif is_granted('ROLE_CLIENT')  %}
+        {% trans %}member.my.rfq{% endtrans %}
+    {% endif %}
+{% endblock %}
+
+{% block member_orders_active %}active{% endblock %}
+
+{% block breadcrumb_sub %}
+    {{ parent() }}
+    <li>
+            {% if is_granted('ROLE_CUSTOMER') %}
+                {% trans %}member.my.orders{% endtrans %}
+            {% elseif is_granted('ROLE_CLIENT')  %}
+                {% trans %}member.my.rfq{% endtrans %}
+            {% endif %}
+    </li>
+{% endblock %}
+
+{% block content_member %}
+{% for order in paginated.currentpageresults %}
+<div class="card mb-2">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6 pull-left">
+        {% if is_granted('ROLE_CUSTOMER') %}
+            {% trans %}order.txt{% endtrans %}
+        {% elseif is_granted('ROLE_CLIENT')  %}
+            {% trans %}member.number{% endtrans %}
+        {% endif %}
+        <b>#{{order.orderNumber}}</b>
+      </div>
+        <div class="col-md-6 text-right">
+          <a href="{{path('track',{'no':order.orderNumber})}}" class="btn btn-secondary btn-sm">
+              {% if is_granted('ROLE_CUSTOMER') %}
+                  {% trans %}order.manage{% endtrans %}
+              {% elseif is_granted('ROLE_CLIENT')  %}
+                  {% trans %}order.detail{% endtrans %}
+              {% endif %}
+          </a>
+        </div>
+
+    </div>
+
+  </div>
+  <div class="card-body">
+    <div class="container-fluid">
+      <div class="row">
+      <div class="col-sm-4 clear-both">
+          <small>{% trans %}order.placed.on{% endtrans %}
+          {{ order.orderDate|date("d") }} {{ order.orderDate|date("F")|trans }}
+          {{ order.orderDate|date("Y") }}  </small>
+      </div>
+      <div class="col-sm-4">
+          {% if is_granted('ROLE_CUSTOMER') %}
+            {% if order.shipDate %}
+                  <small>{% trans %}order.delivered.on{% endtrans %}
+                  {{ order.shipDate|date("d") }} {{ order.shipDate|date("F")|trans }} {{ order.shipDate|date("Y") }}</small>
+             {% endif %}
+          {% endif %}
+      </div>
+      <div class="col-sm-4">
+          {% if is_granted('ROLE_CUSTOMER') %}
+              {% if order.cancelled == 1  %}
+                  {% if order.refunded == 1 %}
+                      <span class="badge badge-danger">{{payment_status_refunded|trans}}</span>&nbsp;
+                  {% else %}
+                      <span class="badge badge-danger">{{payment_status_cancelled|trans}}</span>&nbsp;
+                  {% endif %}
+
+              {% elseif order.failed == 1  %}
+                <span class="badge badge-danger">{{payment_status_failed|trans}}</span>&nbsp;
+
+              {% else %}
+                  {% if order.paid == 1 %}
+                      <span class="badge badge-success">{{payment_status_paid|trans}}</span>
+                  {% else %}
+                      {% if order.paymentOption == payment_cash_on_deliveryr_code %}
+                          <span class="badge badge-primary" >{{payment_status_pending|trans}}</span>
+                      {% else %}
+                          <span class="badge badge-primary">{{payment_status_awaiting_payment|trans}}</span>
+                      {% endif %}
+                  {% endif %}
+
+                  {% if order.delivered == 1 %}
+                    <span class="badge badge-success">{{payment_status_delivered|trans}}</span>&nbsp;
+                  {% elseif order.fulfilled == 1 %}
+                      <span class="badge badge-primary">{{payment_status_shipped|trans}}</span>&nbsp;
+                  {% else %}
+                      <span class="badge badge-warning">{{payment_status_processing|trans}}</span>&nbsp;
+                  {% endif %}
+              {% endif %}
+          {% endif %}
+      </div>
+    </div>
+    <div class="row container mt-3">
+      <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col"><small><b>#</b></small></th>
+                <th scope="col">    <small><b>{% trans %}order.items{% endtrans %}</b></small></th>
+                <th scope="col" class="text-center">  <small><b>{% trans %}order.price{% endtrans %}</b></small></th>
+                <th scope="col" class="text-center">  <small><b>{% trans %}order.qty{% endtrans %}</b></small></th>
+                <th scope="col" class="text-center">  <small><b>{% trans %}order.subtotal{% endtrans %}</b></small></th>
+
+              </tr>
+            </thead>
+            <tbody>
+            {% for orderItems in order.customerOrderItems %}
+            {#{% set customer_order_item_options = orderItems.getCustomerOrderItemOptions %}#}
+
+                <tr>
+                    <th scope="row">
+                      {% if orderItems.product %}
+                          {% if  orderItems.skuTitle|length > 0 %}
+                              {% set str_variant = orderItems.skuTitle|join('-') %}
+                              {% set link_product_detail = path('product_detail', {'id':orderItems.product.id, 'slug':orderItems.product.getSlug, 'v':str_variant }) %}
+                          {% else %}
+                              {% set link_product_detail = path('product_detail', {'id':orderItems.product.id, 'slug':orderItems.product.getSlug}) %}
+                          {% endif %}
+                          <a href="{{link_product_detail}}">{% if orderItems.image %}<img src="{{orderItems.image|imagine_filter('img_thumb')}}" alt="">{% endif %}</a>
+                      {% else %}
+                          {% if orderItems.image %}<img src="{{orderItems.image|imagine_filter('img_thumb')}}" alt="">{% endif %}
+                      {% endif %}
+                    </th>
+                    <td>
+                        <div>
+                          <small>
+                              <b>{{orderItems.productTitle}}</b>
+                                {% if orderItems.preOrderStatus %}
+                                    <span class="badge badge-primary">{% trans %}order.pre_order{% endtrans %}</span>
+                                {% elseif orderItems.preOrderStatus == 0 and orderItems.inventoryPolicyStatus %}
+                                    <span class="badge badge-primary">{% trans %}order.instock{% endtrans %}</span>
+                                {% endif %}
+                          </small>
+                        </div>
+
+                      {% if orderItems.skuTitle %}
+                        <small>
+                            {% if orderItems.productCategoryTitle %}
+                                {{orderItems.productCategoryTitle}}
+                            {% endif %}
+                            {{ orderItems.skuTitle|join(' · ') }}
+
+                            {% if orderItems.skuValue %}
+                                <br/><span style="font-size: 12px;">SKU: {{orderItems.skuValue}}</span>
+                            {% endif %}
+
+                        </small>
+                      {% endif %}
+                      {% if orderItems.customerOrderItemOptions|length > 0 %}
+                          <div style="font-size: 14px;">
+                              <span>Options {% if orderItems.sumOptionsPrice>0 %} ({% trans %}total{% endtrans %} ฿{{orderItems.sumOptionsPrice|number_format(0, '.', ',')}}) {% endif %}</span>
+                              <ul style="padding-left:18px;">
+                                  {% for customer_order_item_option in orderItems.customerOrderItemOptions %}
+                                      <li style="font-size:12px; list-style-type:disc; display:list-item">
+                                      <span>&nbsp;{{customer_order_item_option.optionCategoryTitle}}:</span>
+                                      <span>{{customer_order_item_option.optionTitle}}</span>
+
+                                      {% if customer_order_item_option.optionPrice>0 %}
+                                        <span>(+{{customer_order_item_option.optionPrice|number_format(0, '.', ',')}})</span>
+                                      {% endif %}
+                                      </li>
+                                  {% endfor %}
+                              </ul>
+                          </div>
+                      {% endif %}
+
+
+                    </td>
+                    <td class="text-center">
+                        <small>
+                        ฿{{orderItems.price|number_format(0, '.', ',') }}
+                        {% if orderItems.compareAtPrice >0 and orderItems.compareAtPrice > orderItems.sumOptionsPrice %}
+                            <del>฿{{orderItems.compareAtPrice|number_format(0, '.', ',') }}</del>
+                        {% endif %}
+                        </small>
+                    </td>
+                    <td class="text-center"><small>{{orderItems.quantity|number_format(0, '', ',') }}</small></td>
+                    <td class="text-center"><small>฿{{orderItems.amount|number_format(0, '.', ',') }}</small></td>
+                </tr>
+
+            {% endfor %}
+            <tr>
+              <td colspan="4" class="text-right"> <small><b>{% trans %}order.total{% endtrans %} {% trans %}order.price{% endtrans %}</b></small></td>
+              <td colspan="1" class="text-center"> <small>  ฿{{order.totalPrice|number_format(0, '.', ',') }}</small></td>
+            </tr>
+            <tr>
+              <td colspan="5"> <small>Total : {{order.itemCount}}</small></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+    </div>
+
+
+
+  </div>
+</div>
+{% endfor %}
+{% if paginated.getNbResults %}
+    <div class="box-footer clearfix">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="margin">Total : {{paginated.getNbResults}}</div>
+            </div>
+            <div class="col-md-9">
+                {% if paginated.havetopaginate %}
+                    {{pagerfanta(paginated,'twitter_bootstrap3_translated')}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% else %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% trans %}order.none{% endtrans %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

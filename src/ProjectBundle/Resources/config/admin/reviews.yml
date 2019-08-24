@@ -1,0 +1,58 @@
+admin_review:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminReview:index}
+  requirements:
+    _method: get
+
+admin_review_view:
+  path: /{id}/view
+  defaults: {_controller: ProjectBundle:AdminReview:view}
+  requirements:
+    _method: get
+    id: \d+
+
+admin_review_publish:
+  path: /{id}/publish
+  defaults: {_controller: ProjectBundle:AdminReview:publish}
+  requirements:
+    _method: get
+    id: \d+
+
+admin_review_unpublish:
+  path: /{id}/unpublish
+  defaults: {_controller: ProjectBundle:AdminReview:unpublish}
+  requirements:
+    _method: get
+    id: \d+
+
+admin_review_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminReview:delete}
+  requirements:
+    _method: get
+    id: \d+
+
+admin_review_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminReview:group_delete}
+  requirements:
+    _method: post
+
+admin_review_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminReview:group_enable}
+  requirements:
+    _method: post
+
+admin_review_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminReview:group_disable}
+  requirements:
+    _method: post
+
+
+admin_review_setting:
+  path: /setting
+  defaults: {_controller: ProjectBundle:AdminReview:setting}
+  requirements:
+    _method: get, post

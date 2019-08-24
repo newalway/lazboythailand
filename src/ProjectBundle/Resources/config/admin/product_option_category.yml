@@ -1,0 +1,64 @@
+admin_product_option_category:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:index}
+  requirements:
+    _method: get
+
+admin_product_option_category_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:new}
+
+admin_product_option_category_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:create}
+  requirements:
+    _method: post
+
+admin_product_option_category_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:edit}
+  requirements:
+    id: \d+
+
+admin_product_option_category_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_product_option_category_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:delete}
+  requirements:
+    _method: get
+
+admin_product_option_category_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:group_delete}
+  requirements:
+    _method: post
+
+admin_product_option_category_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:sort}
+  requirements:
+    _method: get
+
+admin_product_option_category_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminProductOptionCategory:sort_prosess}
+  requirements:
+    _method: post
+
+# admin_product_option_category_group_enable:
+#   path: /group-enable
+#   defaults: {_controller: ProjectBundle:AdminProductOptionCategory:group_enable}
+#   requirements:
+#     _method: post
+#
+# admin_product_option_category_group_disable:
+#   path: /group-disable
+#   defaults: {_controller: ProjectBundle:AdminProductOptionCategory:group_disable}
+#   requirements:
+#     _method: post

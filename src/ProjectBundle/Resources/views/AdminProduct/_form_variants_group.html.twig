@@ -1,0 +1,159 @@
+<!-- view and quick update variants_group -->
+<div ng-if="variantType=='cover_variant'" class="row">
+	<div class="col-md-12">
+		<div ng-if="!showVariants" style="overflow-y:auto;">
+			<span ng-switch on="haveVariants">
+				<span ng-switch-when="true">
+
+					<!-- view quick update -->
+					{{ include('ProjectBundle:AdminProduct:_form_variants_quick_update.html.twig') }}
+
+				</span>
+			</span>
+		</div>
+	</div>
+</div><!-- end row -->
+
+<!-- add / edit cover_variant -->
+<div ng-show="showVariants && variantType=='cover_variant'">
+
+	<hr/>
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="">
+				<label for="variant-select">Choose a cover:</label>
+
+				<select ng-model="cover_variant_element"
+					  ng-options="cv.title+' '+cv.description group by cv.cover_group disable when cv.not_an_option for cv in cover_variants">
+				</select>
+
+				<button type="button" class="addfields" ng-click="addNewCoverVariant()">Add</button>
+			</div>
+
+			<div ng-repeat="scv in cover_variant_selected">
+				<input type='hidden' name="variant_option_id[]" value="{{'{{scv.variant_option_id}}'}}">
+
+				{{'{{scv.cover_group}}'}} - {{'{{scv.title}}'}} <small>{{'{{scv.description}}'}}</small>
+				<input type="number" name="variant_option_basic_price[]"
+					ng-model="scv.variant_option_basic_price"
+					ng-change="setChangedBasicPriceCodeId(scv.id)"
+					ng-model-options="{updateOn:'blur', debounce: {'blur': 500}}"
+					ng-keyup="cancel($event)"
+					style="width:100px;" placeholder="Price">
+
+				<input type="number" name="variant_option_basic_compare_at_price[]"
+					ng-model="scv.variant_option_basic_compare_at_price"
+					ng-change="setChangedBasicCompareAtPriceCodeId(scv.id)"
+					ng-model-options="{updateOn:'blur', debounce: {'blur': 500}}"
+					ng-keyup="cancel($event)"
+					style="width:130px;" placeholder="Compare at price">
+
+				<button type="button" class="addfields" ng-click="removeCoverVariant($index)"><i class="fa fa-trash"></i></button>
+
+				<input type="hidden" name="variant_option_name[]" value="{{'{{scv.code}}'}}">
+				<input type="hidden" name="variant_option_name_cat_id[]" value="{{'{{scv.id}}'}}">
+
+				<div ng-repeat="sub_child in scv.sub_child">
+					<input type='hidden' name="variant_option_value[{{'{{scv.id}}'}}][]" value="{{'{{sub_child.title}}'}}">
+					<input type='hidden' name="variant_option_value_cat_id[{{'{{scv.id}}'}}][]" value="{{'{{sub_child.id}}'}}">
+				</div>
+			</div>
+
+{#
+<hr/>
+Selected: {{dump('{{cover_variant_selected|json}}')}}
+<hr/><br/>
+
+Element: {{dump('{{cover_variant_element|json}}')}}
+<hr/><br/>
+{{dump('{{cover_variants|json}}')}}
+#}
+
+		</div>
+	</div>
+
+	<hr/>
+	<br/><br/>
+	<div class="row">
+		<div class="col-md-12">
+			<div ng-if="showVariants && variantType=='cover_variant'" class="icheckbox disabled" style="overflow-y:auto;">
+				<table ng-if="cover_variant_selected.length>0" class="table" role="grid">
+					<thead>
+						<tr role="row">
+							<th style="width: 30px"></th>
+							<th style="width: 57px">Image</th>
+							<th style="width: 57px">Pattern</th>
+							<th style="width: 50px">Variant</th>
+							<th ng-if="glob_inventory_policy_status=='1' || variant_is_inventory" style="width: 50px">Inventory</th>
+							<th style="width: 50px">Price</th>
+							<th style="width: 50px">Compare at price</th>
+							{#<th style="width: 50px">Title</th>#}
+							<th style="width: 150px">SKU</th>
+						</tr>
+					</thead>
+					<tbody style="overflow-y:auto;">
+						<tr ng-repeat="n in cover_variant_group_option">
+							<!-- add/edit variants -->
+							{{ include('ProjectBundle:AdminProduct:_form_variants_update.html.twig') }}
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div> <!-- /.col-md-12 -->
+	</div> <!-- /.row -->
+
+
+	{#
+	<script type="text/javascript">
+		/*
+		$scope.cover_variants = [
+			{% for variant in arr_tree_variant %}
+				{% set variant_trans = variant.translations[app.request.locale] %}
+				{% set variant_children = variant.__children %}
+
+				{% if variant_children|length > 0 %}
+					{% for child in variant_children %}
+						{% set child_trans = child.translations[app.request.locale] %}
+						{% set child_children = child.__children %}
+						{% if child_children|length > 0 %}
+							{title:'{{child_trans.title }}', id:{{child_trans.id }}, cover_group:'{{variant_trans.title}}', not_an_option: false},
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		];
+		*/
+	</script>
+	#}
+
+	{#
+	<select id="variant-select">
+		{% if arr_tree_variant|length > 0 %}
+			{% for variant in arr_tree_variant %}
+				{% set variant_trans = variant.translations[app.request.locale] %}
+				{% set variant_children = variant.__children %}
+
+				<optgroup label="{{variant_trans.title }}">
+
+				{% if variant_children|length > 0 %}
+					{% for child in variant_children %}
+						{% set child_trans = child.translations[app.request.locale] %}
+						{% set child_children = child.__children %}
+
+						{% if child_children|length > 0 %}
+							<option value="{{child_trans.id}}">{{child_trans.title}}</option>
+						{% endif %}
+
+					{% endfor %}
+				{% endif %}
+
+				</optgroup>
+				{{dump(variant_children)}}
+			{% endfor %}
+		{% endif %}
+	</select>
+	#}
+
+</div>

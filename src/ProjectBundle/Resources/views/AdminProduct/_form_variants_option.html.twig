@@ -1,0 +1,103 @@
+<!-- view and quick update variants_option -->
+<div ng-if="variantType=='option_variant'" class="row">
+	<div class="col-md-12">
+		<div ng-if="!showVariants" style="overflow-y:auto;">
+			<span ng-switch on="haveVariants">
+				<span ng-switch-when="true">
+
+					<!-- view quick update -->
+					{{ include('ProjectBundle:AdminProduct:_form_variants_quick_update.html.twig') }}
+
+				</span>
+			</span>
+		</div>
+	</div>
+</div><!-- end row -->
+
+<!-- add / edit option_name and option_value -->
+<div ng-if="showVariants && variantType=='option_variant'">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label>Option name</label>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="form-group">
+				<label>Option values</label>
+			</div>
+		</div>
+		<div class="col-md-1">
+		</div>
+	</div>
+	<div class="row">
+		<fieldset data-ng-repeat="choice in choices">
+			<div class="col-md-3">
+				<div class="form-group">
+					<input type="text" name="variant_name[]" ng-model="choice.option_name" placeholder="">
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="form-group">
+					<tags-input ng-model="choice.option_value" tabindex="1" min-length="1" max-length="45" use-strings="true" replace-spaces-with-dashes="flase" placeholder=" "></tags-input>
+					<input type='hidden' name="variant_value[{{'{{choice.option_name}}'}}]" value="{{'{{choice.option_value}}'}}">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group">
+					<button type="button" class="remove" ng-click="removeChoice($index)"><i class="fa fa-trash"></i></button>
+				</div>
+			</div>
+		</fieldset>
+		<div class="col-md-12">
+			<br/>
+			{# <button type="button" class="remove" ng-show="$last" ng-click="removeLastChoice()">-</button> #}
+			<button type="button" class="addfields" ng-click="addNewChoice()">Add another option</button>
+		</div>
+
+{#
+<hr/>
+{{'{{choices}}'}}
+<hr/>
+{{'{{variant_options}}'}}
+<hr/>
+{{'{{view_variants}}'}}
+<hr/>
+{{'{{view_variant_options}}'}}
+#}
+
+	</div>
+
+	<!-- list variant option -->
+	<br/><br/>
+	<div class="row">
+		<div class="col-md-12">
+			<div ng-if="showVariants && variantType=='option_variant'"  class="icheckbox disabled" style="overflow-y:auto;">
+				<table ng-if="variant_option.length>0" class="table" role="grid">
+					<thead>
+						<tr role="row">
+							<th style="width: 30px"></th>
+							<th style="width: 57px">Image</th>
+							<th style="width: 57px">Pattern</th>
+							<th style="width: 50px">Variant</th>
+							<th ng-if="glob_inventory_policy_status=='1' || variant_is_inventory" style="width: 50px">Inventory</th>
+							<th style="width: 50px">Price</th>
+							<th style="width: 50px">Compare at price</th>
+							{#<th style="width: 50px">Title</th>#}
+							<th style="width: 50px">SKU</th>
+						</tr>
+					</thead>
+					<tbody style="overflow-y:auto;">
+						<tr ng-repeat="n in variant_option">
+
+							<!-- add/edit variants -->
+							{{ include('ProjectBundle:AdminProduct:_form_variants_update.html.twig') }}
+
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div> <!-- /.col-md-12 -->
+	</div> <!-- /.row -->
+
+</div> <!-- / ng-if showVariants -->

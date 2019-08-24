@@ -1,0 +1,109 @@
+{#{{dump(arr_cart_data)}}#}
+
+    <a id="btn_cart_icon" class="icon icon-md linear-icon-cart link-primary cart-icon-number" data-toggle="dropdown" role="button" aria-expanded="false" href="#">
+        <span class="cart_summary_item_count_sub">
+            {% if arr_cart_data.summary|length > 0 %}
+                {{arr_cart_data.summary.item_count}}
+            {% else %}
+                0
+            {% endif %}
+        </span>
+    </a>
+
+    <div class="cart_list_products megamenu shopping-cart-box">
+        <ul class="dropdown-menu dropdown-cart megamenu shopping-cart-box" role="menu">
+            <div class="cart_list_products_item">
+                {% if arr_cart_data.products|length > 0 %}
+                    {% for product in arr_cart_data.products %}
+                    <li>
+                        <span class="item">
+                            <span class="item-left">
+                                <div class="img-box">
+                                    {% if product.image_small %}
+                                        <img src="{{product.image_small}}" alt="{{product.title}}" />
+                                    {% else %}
+                                        <img src="{{ asset('template/img/resources/header-cart-1.jpg')}}" alt="{{product.title}}" />
+                                    {% endif %}
+                                </div>
+
+                                <span class="item-info">
+                                    <div class="text-box">
+                                        {% if  product.variant_option|length > 0 %}
+                                            {% set str_variant = product.variant_option|join('-') %}
+
+                                            {% if product.product_option_id_query_serialized %}
+                                                {% set link_product_detail = path('product_detail', {'id':product.product_id, 'slug':product.slug, 'v':str_variant, 'product_options_id':product.product_option_id_query_serialized }) %}
+                                            {% else %}
+                                                {% set link_product_detail = path('product_detail', {'id':product.product_id, 'slug':product.slug, 'v':str_variant }) %}
+                                            {% endif %}
+
+                                        {% else %}
+                                            {% if product.product_option_id_query_serialized %}
+                                                {% set link_product_detail = path('product_detail', {'id':product.product_id, 'slug':product.slug, 'product_options_id':product.product_option_id_query_serialized}) %}
+                                            {% else %}
+                                                {% set link_product_detail = path('product_detail', {'id':product.product_id, 'slug':product.slug}) %}
+                                            {% endif %}
+
+                                        {% endif %}
+
+                                        <a href="{{link_product_detail}}">
+                                            <h4><small>{{product.title}}</small></h4>
+
+                                            <small>
+                                                {% if  product.variant_option|length > 0 %}
+                                                    {% if product.product_category is defined and product.product_category.title is defined %}
+                                                        {{product.product_category.title}}
+                                                    {% endif %}
+                                                    {{ product.variant_option|join(' · ')}}
+                                                {% endif %}
+                                            </small>
+                                        </a>
+
+                                        {% if product.sku %}
+                                            <div class="sku"><small>SKU: {{product.sku}}</small></div>
+                                        {% endif %}
+
+                                        <div class="qty">
+                                            <small>Qty: {{product.quantity}}</small>
+
+                                            <!-- {% if product.quantity > 1 %}
+                                            <i>฿{{product.price|number_format(0, '.', ',')}} (Qty: {{product.quantity}})</i>
+                                            {% endif %} -->
+
+                                            <!-- <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> -->
+                                        </div>
+
+                                        <div class="price"><small>฿{{product.amount|number_format(0, '.', ',')}}</small></div>
+
+                                        <!-- <a href="#" class="remove-box"><i class="fa fa-times-circle"></i></a>  -->
+                                    </div>
+                                </span>
+                            </span>
+                        </span>
+                    </li>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- <li class="divider"></li>
+            <li><a class="text-center" href="">View Cart</a></li> -->
+            <li class="clearfix border border-top-1 border-bottom-0 cart-bottom">
+                <div class="mt-1 p-2 total-text pull-left">
+                    <small>
+                        <b>Total
+                            <text class="cart_summary_total">
+                            {% if arr_cart_data.summary|length > 0 %}
+                            : ฿{{arr_cart_data.summary.total|number_format(0, '.', ',')}}
+                            {% endif %}
+                            </text>
+                        </b>
+                    </small>
+                </div>
+                <div class="checkout-btn pull-right">
+                    <small class="p-2"><a class="btn button-primary btn-sm" href="{{path('cart')}}"><span data-hover="VIEW BAG">VIEW BAG&nbsp;<i class="fa fa-caret-right"></i></span></a></small>
+                    <!-- <a href="{{path('checkout')}}"><span data-hover="Checkout">Checkout<i class="fa fa-caret-right"></i></span></a> -->
+                </div>
+            </li>
+
+        </ul>
+    </div>

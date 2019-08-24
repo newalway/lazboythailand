@@ -1,0 +1,14 @@
+{% extends "FOSUserBundle::bundle-layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+<section class="section-md bg-default">
+    <div class="container text-center">
+        <span class="icon linear-icon-checkmark-circle text-success mb-5" style="font-size:6em;"></span>
+        <div>
+            {{ 'registration.check_email'|trans({'%email%': user.email,'%name%': user.firstName}) }}
+        </div>
+    </div>
+</section>
+{% endblock content %}

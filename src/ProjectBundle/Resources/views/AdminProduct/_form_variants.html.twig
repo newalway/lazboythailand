@@ -1,0 +1,61 @@
+<div ng-controller="variantsCtrl" ng-init="init_variants('{{variant_type}}', '{{con_product_variant_type_cover}}', '{{con_product_variant_type_option}}')">
+	<div class="box" ng-cloak>
+
+		<!-- Product variants -->
+		<div class="box-header with-border">
+			<h3 class="box-title">Variants</h3>
+
+{# variantType: {{'{{variantType}}'}} / is_variant_enable: {{'{{showVariants}}'}} #}
+
+			<img ng-if="products_variants_loading_icon" src="/images/bx_loader.gif" alt="loading" width="25px;">
+			<div class="box-tools pull-right">
+				<input type='hidden' name='is_variant_enable' value="{{'{{showVariants}}'}}">
+				<input type='hidden' name='variant_type' value="{{'{{variantType}}'}}">
+				<div ng-show="!showVariants">
+					<button type="button" ng-click="showVariants = !showVariants" class="btn btn-link">
+						<span ng-switch on="haveVariants">
+							<span ng-switch-when="true">
+								Edit options
+							</span>
+							<span ng-switch-default>
+								Add variants
+							</span>
+						</span>
+					</button>
+				</div>
+
+				<div ng-show="showVariants">
+
+					<button type="button" ng-click="variantType='{{con_product_variant_type_cover}}'">Cover Variants</button>
+					<button type="button" ng-click="variantType='{{con_product_variant_type_option}}'">Option Variants</button>
+
+					<button type="button" ng-click="showVariants = !showVariants; initVariantsData()" class="btn btn-link pull-right">Cancel</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="box-body">
+
+			<!-- Cover variants -->
+			{{ include('ProjectBundle:AdminProduct:_form_variants_group.html.twig') }}
+
+			<!-- Option variants -->
+			{{ include('ProjectBundle:AdminProduct:_form_variants_option.html.twig') }}
+
+			{# <!-- // Debug -->
+			<div id="choicesDisplay">
+				<!-- {{ dump('{{choices|json}}') }} -->
+				{{ dump('{{variant_option|json}}') }}
+				Option length : {{'{{choices.length}}'}}
+			</div> #}
+
+			{# {{ dump('{{choices|json}}')}}
+			{{ dump('{{view_variant_options|json}}')}}
+			{{ dump('{{variant_option|json}}')}} #}
+
+			{# >>>{{'{{glob_inventory_policy_status}}'}}
+			>>>{{'{{variant_is_inventory}}'}}<<< #}
+
+		</div> <!-- /.box-body -->
+	</div><!-- /.box -->
+</div> <!-- /Product variants controller -->

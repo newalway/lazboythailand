@@ -1,0 +1,254 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}Sukhumvit 30/1 | {% trans %}menu.gallery{% endtrans %} | {{ parent() }}{% endblock %}
+{% block gallery_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.gallery{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li><a href="{{path('gallery')}}">{% trans %}menu.gallery{% endtrans %}</a></li>
+	<li class="active">{{gallery_detail.getTitle}}</li>
+{% endblock %}
+{% block javascripts_body %}
+    {{ parent() }}
+	<script src="https://maps.google.com/maps/api/js?key={{google_maps_api_key}}&libraries=geometry"></script>
+
+{% endblock %}
+{% block content %}
+
+<section class="pt-4 pb-5 bg-default">
+    <div class="container">
+		<div class="row row-60 justify-content-sm-center">
+			<div class="col-lg-8 section-divided__main">
+				<section class="section-sm post-single-body">
+					<h3>{{gallery_detail.getTitle}}</h3>
+
+					{% if gallery_detail.getAddress %}
+						<div class="address">
+							{{gallery_detail.getAddress}}
+						</div>
+					{% endif %}
+
+					{% if gallery_detail.phone %}
+						<div class="phone">
+							{% trans %}contact.phone{% endtrans %} <a href="tel:{{gallery_detail.phone}}">{{gallery_detail.phone}}</a>
+						</div>
+					{% endif %}
+
+					{% if gallery_detail.mobile %}
+						<div class="phone">
+							{% trans %}contact.mobile{% endtrans %} <a href="tel:{{gallery_detail.mobile}}">{{gallery_detail.mobile}}</a>
+						</div>
+					{% endif %}
+
+					{% if gallery_detail.fax %}
+						<div class="phone">
+							{% trans %}contact.fax{% endtrans %} {{gallery_detail.fax}}
+						</div>
+					{% endif %}
+
+					{% if gallery_detail.email %}
+						<div class="phone">
+							{% trans %}contact.email{% endtrans %} <a href="mailto:{{gallery_detail.email}}">{{gallery_detail.email}}</a>
+						</div>
+					{% endif %}
+
+					{% if gallery_detail.getWorkingDays %}
+						<div class="working-days">
+							{% trans %}contact.open{% endtrans %} {{gallery_detail.getWorkingDays|nl2br}}
+						</div>
+					{% endif %}
+
+					{% if gallery_image|length > 0 %}
+						<div class="owl-carousel carousel-post-gallery carousel-slider-blog-post mb-4" data-items="1" data-stage-padding="0" data-loop="true" data-margin="10px" data-mouse-drag="false" data-nav="true" data-dots="true" data-photo-swipe-gallery="gallery">
+							{% for images in gallery_image %}
+								{% if images.getImage %}
+									<div class="item">
+									  	<a class="img-thumbnail-variant-1" href="{{asset(images.getImage)}}" data-photo-swipe-item="" data-size="1200x800">
+				                      		<figure>
+												<img src="{{asset(images.getImage)|imagine_filter('img_800x600')}}" alt="" width="100%"/>
+				                      		</figure>
+				                      		<div class="caption">
+												<span class="icon icon-lg linear-icon-magnifier"></span>
+											</div>
+										</a>
+				                  	</div>
+								{% endif %}
+							{% endfor %}
+		                </div>
+					{% endif %}
+
+					<div class="font-size-14">
+						{{gallery_detail.getDescription|raw}}
+					</div>
+
+				</section>
+
+				{% if gallery_exclusive_products|length > 0 %}
+					<section class="section-sm" id="exclusive-products">
+						<h4 class="text-center">{% trans %}gallery.exclusive_product{% endtrans %}</h4>
+						<div class="row justify-content-sm-center row-70">
+							{% for exclusive_products in gallery_exclusive_products %}
+								{% set item = exclusive_products[0] %}
+					            {% set price_data = getPriceData(exclusive_products) %}
+								<div class="col-md-6 col-xl-4">
+									{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:item, price_data:price_data,section_name:"gallery_page"} %}
+								</div>
+							{% endfor %}
+						</div>
+					</section>
+				{% endif %}
+
+				{% if gallery_promotion|length > 0 %}
+					<section class="section-sm" id="promotion">
+						<h4 class="text-center">{% trans %}gallery.promotion{% endtrans %}</h4>
+						<div class="row row-60">
+							{% for promotions in gallery_promotion %}
+							<div class="col-lg-6">
+								<!-- Post classic-->
+								<article class="post-classic post-minimal">
+									<a href="{{path('promotion_detail',{'id':promotions.id,'slug':promotions.getTitle|slug})}}">
+										{% if promotions.getImage %}
+											{% set image = asset(promotions.getImage)|imagine_filter('img_660x409') %}
+										{% else %}
+											{% set image = 'https://placehold.it/660x409' %}
+											{#{% set image = asset('lazboy/images/img_670x345.png') %}#}
+										{% endif %}
+										<img src="{{image}}" alt="{{promotions.getTitle}}" width="660" height="409" />
+									</a>
+									<div class="post-classic-title">
+										<h6><a href="{{path('promotion_detail',{'id':promotions.id,'slug':promotions.getTitle|slug})}}">{{promotions.getTitle}}</a></h6>
+									</div>
+								</article>
+							</div>
+							{% endfor %}
+						</div>
+					</section>
+				{% endif %}
+
+				<section class="section-sm" id="location-map">
+					<h4 class="text-center">{% trans %}gallery.location_map{% endtrans %}</h4>
+					<div class="row row-60">
+						<!-- RD Google Map-->
+						<div class="col-lg-12 col-xl-12">
+							<div class="rd-google-map rd-google-map__model" data-zoom="16" data-y="{{gallery_detail.latitude}}" data-x="{{gallery_detail.longitude}}" data-styles="[{&quot;featureType&quot;:&quot;water&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#e9e9e9&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;landscape&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:29},{&quot;weight&quot;:0.2}]},{&quot;featureType&quot;:&quot;road.arterial&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:18}]},{&quot;featureType&quot;:&quot;road.local&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;featureType&quot;:&quot;poi&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:21}]},{&quot;featureType&quot;:&quot;poi.park&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#dedede&quot;},{&quot;lightness&quot;:21}]},{&quot;elementType&quot;:&quot;labels.text.stroke&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;on&quot;},{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;elementType&quot;:&quot;labels.text.fill&quot;,&quot;stylers&quot;:[{&quot;saturation&quot;:36},{&quot;color&quot;:&quot;#333333&quot;},{&quot;lightness&quot;:40}]},{&quot;elementType&quot;:&quot;labels.icon&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;off&quot;}]},{&quot;featureType&quot;:&quot;transit&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f2f2f2&quot;},{&quot;lightness&quot;:19}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:17},{&quot;weight&quot;:1.2}]}]">
+								<ul class="map_locations">
+									<li data-y="{{gallery_detail.latitude}}" data-x="{{gallery_detail.longitude}}">
+
+										{% if gallery_detail.getAddress %}
+											<dl>
+												<dt>{% trans %}contact.address{% endtrans %}:</dt>
+												<dd>{{gallery_detail.getAddress}}</dd>
+											</dl>
+										{% endif %}
+
+										{% if gallery_detail.phone %}
+											<dl>
+												<dt>{% trans %}contact.phone{% endtrans %}:</dt>
+												<dd>
+													<a href="tel:{{gallery_detail.phone}}">{{gallery_detail.phone}}</a>
+												</dd>
+											</dl>
+										{% endif %}
+
+										{% if gallery_detail.mobile %}
+											<dl>
+												<dt>{% trans %}contact.mobile{% endtrans %}:</dt>
+												<dd>
+													<a href="tel:{{gallery_detail.mobile}}">{{gallery_detail.mobile}}</a>
+												</dd>
+											</dl>
+										{% endif %}
+
+										{% if gallery_detail.fax %}
+											<dl>
+												<dt>{% trans %}contact.fax{% endtrans %}:</dt>
+												<dd>
+													{{gallery_detail.fax}}
+												</dd>
+											</dl>
+										{% endif %}
+
+										{% if gallery_detail.email %}
+											<dl>
+												<dt>{% trans %}contact.email{% endtrans %}:</dt>
+												<dd>
+													<a href="mailto:{{gallery_detail.email}}">{{gallery_detail.email}}</a>
+												</dd>
+											</dl>
+										{% endif %}
+
+										{% if gallery_detail.getWorkingDays %}
+											<dl>
+												<dt>{% trans %}contact.open{% endtrans %}:</dt>
+												<dd>{{gallery_detail.getWorkingDays}}</dd>
+											</dl>
+										{% endif %}
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="section-sm">
+					<div class="row row-60 justify-content-md-between">
+						<div class="col-md-5 text-center text-md-left">
+							<a class="unit flex-row unit-spacing-md align-items-center row-xs-center row-sm-left" href="{{path('gallery')}}">
+								<div class="unit__left">
+									<span class="icon icon-md linear-icon-arrow-left"></span>
+								</div>
+								<div class="unit__body">
+									<p class="small">Back</p>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-5 text-center text-md-right">
+							<ul class="list-inline-sm">
+								<li><h6>Share</h6></li>
+								<li><a class="icon-sm fa-facebook icon" href="#"></a></li>
+								<li><a class="icon-sm fa-twitter icon" href="#"></a></li>
+								<li><a class="icon-sm fa-google-plus icon" href="#"></a></li>
+							</ul>
+						</div>
+					</div>
+              	</section>
+
+				<section class="section-sm p-0"></section>
+			</div>
+
+			<div class="col-lg-4 section-divided__aside section-divided__aside-left">
+				<section class="section-sm">
+					<h5><a href="{{path('gallery_detail',{'id':gallery_detail.id,'slug':gallery_detail.getslug})}}">{{gallery_detail.getTitle}}</a></h5>
+					<ul class="list-linked">
+						{% if gallery_exclusive_products|length > 0  %}
+							<li><a href="#exclusive-products" class="link-click">{% trans %}gallery.exclusive_product{% endtrans %}</a></li>
+					    {% endif %}
+						{% if gallery_promotion|length > 0 %}
+							<li><a href="#promotion" class="link-click">{% trans %}gallery.promotion{% endtrans %}</a></li>
+					    {% endif %}
+						<li><a href="#location-map" class="link-click">{% trans %}gallery.location_map{% endtrans %}</a></li>
+
+						{#<li><a href="{{path('gallery_detail',{'id':1,'slug':'La-Z-Boy'})}}">{% trans %}gallery.product{% endtrans %}</a></li>#}
+						{#<li><a href="{{path('gallery_detail',{'id':1,'slug':'La-Z-Boy'})}}">New Location</a></li>#}
+					</ul>
+				</section>
+
+				{#<section class="section-sm">
+                	<h5>Tags</h5>
+                	<ul class="list-tags">
+                  		<li><a href="#">Bedroom</a></li>
+                  		<li><a href="#">Dining Room</a></li>
+                  		<li><a href="#">Kids Room</a></li>
+                  		<li><a href="#">Living Room</a></li>
+                  		<li><a href="#">Office</a></li>
+                	</ul>
+              	</section>#}
+
+				{% include 'ProjectBundle:'~ view_layout ~'/Main:_social.html.twig' %}
+
+			</div>
+		</div>
+    </div>
+</section>
+
+{% endblock %}

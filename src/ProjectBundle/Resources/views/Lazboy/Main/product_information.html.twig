@@ -1,0 +1,97 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.product.info{% endtrans %} | {{ parent() }}{% endblock %}
+{% block product_information_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.product.info{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.product.info{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="pt-4 pb-5 section-divided">
+    <div class="container">
+        <div class="section-divided__main">
+			{{data.getContent|raw}}
+            {#
+			{% if app.request.locale == 'th' %}
+			<section class="section-sm">
+
+                <h4 style="color: #2969b0;">คู่มือการติดตั้งและใช้งานเก้าอี้โยกและปรับเอนเพื่อการพักผ่อน</h4>
+
+				<ul class="list-ordered">
+					<li>
+						การโยก : เก้าอี้โยก LA-Z-BOY ถูกออกแบบเพื่อให้รองรับกับสรีระ และการเคลื่อนไหวของร่างกายได้อย่างเหมาะสม เพื่อตอบสนองความสบายสูงสุด
+					</li>
+					<li>
+						ระดับการพักเท้า: มีทั้งหมด 3 ระดับ โดยการปรับคันโยกด้านข้างดึงไปด้าน หลังช้าๆจนได้ยินเสียง “คลิ๊ก” ซึ่งแสดงถึงการปรับระดับที่ 1
+						และดึงไปด้าน หลังต่อช้าๆ สำหรับระดับที่ 2 และ 3 ส่วนการเก็บที่พักเท้าต้องปรับให้อยู่ ระดับสูงสุด แล้วจึงดันคันโยกกลับไปด้านหน้า
+						การทำงานของระบบโยกจะไม่สามารถใช้งานได้ เมื่อมีการยกที่พักเท้าขึ้น
+					</li>
+					<li>
+						การปรับระดับความยืดหยุ่นของหลังพิง: สามารถปรับได้เองเพื่อให้เหมาะกับน้ำหนักตัว ของผู้ใช้แต่ละคน โดยการปรับน๊อตคู่หางปลาทั้ง 2 ด้านที่อยู่ใต้เก้าอี้
+						(ไขให้แน่น ถ้าน้ำหนักตัวมาก หรือคลายให้หลวม ถ้าน้ำหนักตัวน้อย)
+					</li>
+					<li>
+						ที่พักเท้าและเบาะหลังพิง: หลังพิงของ LA-Z-BOY ทำงานแยกส่วนจากที่พักเท้าซึ่งสามารถปรับระดับ เพื่อรองรับความสบายได้ถึง 18 ระดับ
+					</li>
+					<li>
+						การปรับระดับหลังพิง โดยใช้แรงกดของร่างกายสามารถปรับระดับหลังพิงให้อยู่ในตำแหน่งที่ให้ความสบายสูงสุดได้
+					</li>
+				</ul>
+
+				<figure class="figure figure-centered">
+					<img src="/lazboy/images/product-information/back-side_Th.jpg" alt="Product Information">
+				</figure>
+
+            </section>
+            {% else %}
+            <section class="section-sm">
+
+                <h4 style="color: #2969b0;">Operating your LA-Z-BOY chair for maximum comfort  </h4>
+
+				<p>
+					Rocker recliner chair
+				</p>
+
+				<ul class="list-ordered">
+					<li>
+						Rocker action : LA-Z-BOY  rocker chairs are engineered to offer a smooth and controlled body motivated action.
+					</li>
+					<li>
+						To raise the footrest : There are three footrest positions to choose from.
+						Simply pull back the handle on the side of the chair and listen for the “ click ” as it reaches each position.
+						If your chair is  recliner – rocker, once the footrest is raised, it will cease to rock.
+						When closing the footrest, ensure to rotate the handle to the highest position before turning back to the original position.
+					</li>
+					<li>
+						Adjusting the back rest tension : A pair of simple wing nuts located under each side of the chair are used to
+						adjust the recliner tension and offer tailor made reclining of the chair back according to the size and weight of the individual user.
+ 						The wing nuts are easily adjusted by hand and require no tools.
+					</li>
+					<li>
+						To change the seat pitch : The chair back reclines independently of the footrest.
+						The seat and back recline together to maintain lumbar support.
+						The seat pitch of the chair also tilts to a choice of 18 positions for maximum comfort.
+					</li>
+					<li>
+						To recline the chair back : Using  body pressure, tilt the chair back to your preferred position.
+						The chair will automatically stay in the position where you choose  to settle.
+					</li>
+				</ul>
+
+				<figure class="figure figure-centered">
+					<img src="/lazboy/images/product-information/back-side_Th.jpg" alt="Product Information">
+				</figure>
+
+            </section>
+            {% endif %}
+			#}
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

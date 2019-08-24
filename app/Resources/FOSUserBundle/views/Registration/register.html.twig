@@ -1,0 +1,15 @@
+{% extends "FOSUserBundle::bundle-layout.html.twig" %}
+
+{% block title %}{% trans %}member.personal.register{% endtrans %} | {{ parent() }}{% endblock %}
+
+{% block body_class %}{{ parent() }} fos-regis{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}member.personal.register{% endtrans %}{% endblock %}
+
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}member.personal.register{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+    {% include "@FOSUser/Registration/register_content.html.twig" %}
+{% endblock content %}

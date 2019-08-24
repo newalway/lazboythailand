@@ -1,0 +1,49 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-default">
+			<div class="box-header">
+				<h3 class="box-title">{{group_data.grouptype}}</h3>
+			</div><!-- /.box-header -->
+
+				<div class="box-body">
+					{% for data in datas %}
+						<div class="form-group">
+							<label class="control-label col-md-3" for="status">{{data.optiontitle}}</label>
+							<div class="col-md-7 form-control-static">
+							{% if data.optiontype == 'password' %}
+								 <input type="password" value="{{data.optionvalue}}" name="data[{{data.optionname}}]" id="{{data.optionname}}" class="form-control">
+							{% elseif data.optiontype == 'text' %}
+								<input type="text" value="{{data.optionvalue}}" name="data[{{data.optionname}}]" id="{{data.optionname}}" class="form-control">
+							{% elseif data.optiontype == 'textarea' %}
+								<textarea  name="data[{{data.optionname}}]" id="{{data.optionname}}" class="form-control">{{data.optionvalue}}</textarea>
+							{% elseif data.optiontype == 'ckeditor' %}
+								<textarea  name="data[{{data.optionname}}]" id="{{data.optionname}}" class="form-control">{{data.optionvalue}}</textarea>
+								<script>
+					                // Replace the <textarea> with a CKEditor
+					                // instance, using default configuration.
+					                CKEDITOR.replace('{{data.optionname}}', {
+										customConfig: '{{ asset('javascripts/custom/ckeditor_config.js') }}'
+									});
+					            </script>
+							{% elseif data.optiontype == 'hidden' %}
+								<input type="hidden" value="{{data.optionvalue}}" name="data[{{data.optionname}}]" id="{{data.optionname}}" class="form-control">
+								<a href="javascript:void(0)" onclick="selectFileWithCKFinder('{{data.optionname}}', '{{data.optionname}}_thumbnail');" style="" >
+									{% if data.optionvalue %}
+										<img id="{{data.optionname}}_thumbnail" class="img-responsive" src="{{asset(data.optionvalue) | imagine_filter('img_w_320')}}" alt="{{data.optionname}}" />
+									{% else %}
+										<img id="{{data.optionname}}_thumbnail" class="img-responsive" src="https://placehold.it/600x265?text=600x265" width="320px;">
+									{% endif %}
+								</a>
+								<p class="help-block">Image size 600x265 px</p>
+							{% elseif data.optiontype == 'boolean' %}
+								<input type="radio" name="data[{{data.optionname}}]" value="true" {% if data.optionvalue == 'true' %}checked{% endif %}> True &nbsp;&nbsp;
+								<input type="radio" name="data[{{data.optionname}}]" value="false" {% if data.optionvalue == 'false' %}checked{% endif %}> False &nbsp;&nbsp;
+							{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+
+		</div><!-- /.box -->
+	</div>
+</div>

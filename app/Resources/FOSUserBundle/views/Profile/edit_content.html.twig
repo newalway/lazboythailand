@@ -1,0 +1,105 @@
+{# {% trans_default_domain 'FOSUserBundle' %} #}
+
+{#{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}#}
+
+{#
+{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+    {{ form_widget(form) }}
+    <div>
+        {{form_widget(form.update, {'id' : 'update', 'label': 'Update'})}}
+    </div>
+{{ form_end(form) }}
+#}
+
+<form action="{{path('fos_user_profile_edit')}}" method="post" id="fos_user_profile_form" name="fos_user_profile_form" enctype="multipart/form-data" class="form-horizontal form-web" novalidate>
+    {{form_widget(form._token)}}
+
+    <div class="row mt-0">
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="first_name">{% trans %}member.personal.fname{% endtrans %} *</label>
+                {{form_widget(form.first_name, {'id' : 'first_name','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.first_name)}}</div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="last_name">{% trans %}member.personal.lname{% endtrans %} *</label>
+                {{form_widget(form.last_name, {'id' : 'last_name','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.last_name)}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-wrap mt-3">
+        <label for="company_name">
+            {% trans %}member.personal.company_name{% endtrans %}
+            {% if is_granted('ROLE_CLIENT') %} * {% endif %}
+        </label>
+        {{form_widget(form.company_name, {'id' : 'company_name','attr': {'class': 'form-input'}})}}
+        <div class="text-danger">{{form_errors(form.company_name)}}</div>
+    </div>
+
+    {% if is_granted('ROLE_CUSTOMER') %}
+    <div class="row mt-0">
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap input-radio">
+                <label for="gender">{% trans %}member.personal.gender{% endtrans %} <span id="email-result-true"></span></label>
+                {{form_widget(form.gender, {'id' : 'gender', 'attr': {'class': 'radio-inline gender-radio-inline'}})}}
+                <div class="text-danger">{{form_errors(form.gender)}}</div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap select-filter">
+                <label for="birth_date">{% trans %}member.personal.birth_date{% endtrans %} </label>
+                <div class="row row-5 mt-0">
+                {% for birth_date in form.birth_date %}
+                    <div class="col-4">
+                        {{ form_errors(birth_date) }}
+                        {{ form_widget(birth_date) }}
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="text-danger">{{form_errors(form.birth_date)}}</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mt-0">
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="email">{% trans %}member.personal.email{% endtrans %} *</label>
+                {{form_widget(form.email, {'id' : 'email','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.email)}}</div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3">
+            <div class="form-wrap">
+                <label for="phone_number">{% trans %}member.personal.phone{% endtrans %} </label>
+                {{form_widget(form.phone_number, {'id' : 'phone_number','attr': {'class': 'form-input'}})}}
+                <div class="text-danger">{{form_errors(form.phone_number)}}</div>
+            </div>
+        </div>
+    </div>
+
+    {#
+    <!-- // for remove current password -->
+    <div class="form-wrap">
+    <label for="current_password">{{ 'form.current_password'|trans({}, 'FOSUserBundle') }} </label>
+    <div class="col-sm-6">
+    {{form_widget(form.current_password, {'id' : 'current_password'})}}
+    <div class="text-danger">{{form_errors(form.current_password)}}</div>
+    </div>
+    </div>
+    #}
+
+    {#{{form_widget(form.update, {'id' : 'update', 'label': 'profile.edit.submit'|trans({}, 'FOSUserBundle'),'attr': {'class': 'btn btn-marathon'} })}}#}
+
+    <div class="member-btn mt-3 mb-3">
+        <button type="submit" id="update" name="fos_user_profile_form[update]" class="button button-primary">{{'profile.edit.submit'|trans({}, 'FOSUserBundle')}}</button>
+
+        <a href="{{path('fos_user_profile_show')}}" class="button button-black">{{'profile.edit.close'|trans({}, 'FOSUserBundle')}}</a>
+    </div>
+
+</form>

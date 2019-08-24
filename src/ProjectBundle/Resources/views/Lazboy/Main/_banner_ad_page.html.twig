@@ -1,0 +1,30 @@
+{% if banner_ad %}
+
+    {% if banner_ad.image %}
+        {% set ads_home_pc = banner_ad.image %}
+    {% else %}
+        {% set ads_home_pc = '' %}
+    {% endif %}
+    {% if ads_home_pc %}
+        {% set link = banner_ad.getWebsite %}
+        {% if link %}
+            <a href="{{link}}"><img src="{{ads_home_pc}}" class="w-100 pc" /></a>
+        {% else %}
+            <img src="{{ads_home_pc}}" class="w-100 pc" />
+        {% endif %}
+    {% endif %}
+
+    {% if banner_ad.imageMobile %}
+        {% set ads_home_m = banner_ad.imageMobile %}
+    {% else %}
+        {% set ads_home_m = ads_home_pc %}
+    {% endif %}
+    {% if ads_home_m %}
+        {% if link %}
+            <a href="{{link}}"><img src="{{ads_home_m}}" class="w-100 m" /></a>
+        {% else %}
+            <img src="{{ads_home_m}}" class="w-100 m" />
+        {% endif %}
+    {% endif %}
+
+{% endif %}

@@ -1,0 +1,142 @@
+{% extends 'ProjectBundle::admin.html.twig'%}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('rateyo/jquery.rateyo.min.css')}}">
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {#<script src="{{ asset('ckfinder/ckfinder.js') }}"></script>
+  <script src="{{ asset('javascripts/ckfinder_popups.js') }}"></script>#}
+  <script src="{{ asset('rateyo/jquery.rateyo.min.js')}}"></script>
+  <script>
+    $(function () {
+	    $("#rating_star").rateYo({
+				// The width of each star
+				starWidth: "15px",
+				normalFill: "#f1f1f1",
+				ratedFill: "#faca51",
+	      rating: {{data.ratingScore}},
+	      readOnly: true
+	    });
+	  });
+  </script>
+{% endblock %}
+
+{% use "ProjectBundle:AdminReview:blocks.html.twig" %}
+{% use "ProjectBundle::flash_message.html.twig" %}
+{% block breadcrumb_sub %}
+	{{ parent() }}
+	<li class="active">View</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-12">
+
+	  <div class="box box-primary">
+	    <div class="box-header">
+	      <h3 class="box-title">Product Review</h3>
+	    </div><!-- /.box-header -->
+
+      <div class="row">
+      	<div class="col-md-12">
+          <div class="box box-widget">
+            <div class="box-header with-border">
+              <div class="user-block">
+                <img class="img-circle" src="{{asset('AdminLTE-2.4.2/dist/img/if_user-alt.png')}}" alt="User Image">
+                <span class="username">
+                  {% if data.reviewerName != 'anonymously' %}
+                    <a href="{{path('admin_member_view', {'id' : data.user.id})}}">{{ data.user.getFirstName}}&nbsp;{{ data.user.getLastName}}</a>
+                  {% else %}
+                    {{ data.reviewerName}}
+                  {% endif %}
+                </span>
+                <span class="description">{{data.CreatedAt|date('l, j M Y - H:i:s')}}</span>
+              </div>
+              <!-- /.user-block -->
+
+              <div class="box-tools">
+                {#
+                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-original-title="Mark as read"><i class="fa fa-circle-o"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
+                #}
+                {{ data.status|status|raw }}
+              </div>
+
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <!-- post text -->
+              {% set image = data.product.getImage %}
+              {% set product_title = data.product.getTitle %}
+              {% set product_id = data.product.id %}
+
+              <p>
+                <div id="rating_star"></div>
+                <b>{{data.getTitle}}</b>
+                {#{% for i in 1 .. data.rating %}<i class="fa fa-star"></i>{% endfor %} &nbsp; &nbsp; &nbsp;#}
+              </p>
+
+              <p>{{data.content|nl2br}}</p>
+
+              <p>&nbsp;</p>
+              <div class="attachment-block clearfix">
+                {% if image %}
+                  <img class="attachment-img" src="{{asset(image) | imagine_filter('img_product_thumb')}}" alt="{{product_title}}" />
+                {% endif %}
+                <div class="attachment-pushed">
+                  <a href="{{path('admin_product_edit',{'id':product_id})}}">{{product_title}}</a>
+                  <div class="attachment-text">
+                  </div>
+                  <!-- /.attachment-text -->
+                </div>
+                <!-- /.attachment-pushed -->
+              </div>
+
+              {% if data.status < 1 %}
+                <a href="{{path('admin_review_publish',{'id':data.id})}}">
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-check"></i> Publish</button>
+                </a>
+              {% else %}
+                <a href="{{path('admin_review_unpublish',{'id':data.id})}}">
+                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-times"></i> Unpublish</button>
+                </a>
+              {% endif %}
+              <a href="{%if app.session.get('back_to_url')['admin_review'] is defined%}{{app.session.get('back_to_url')['admin_review']}}{%else%}{{path('admin_review')}}{%endif%}">
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-angle-left"></i> Back</button>
+              </a>
+
+              <span class="pull-right text-muted">
+                {% if data.ipaddress %}
+                  IP : {{data.ipaddress}}
+                {% endif %}
+                {% if data.usersession %}
+                  , ID : {{data.usersession}}
+                {% endif %}
+              </span>
+
+            </div>
+
+          </div>
+
+          {#
+          <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+              <a href="{%if app.session.get('back_to_url')['admin_review'] is defined%}{{app.session.get('back_to_url')['admin_review']}}{%else%}{{path('admin_review')}}{%endif%}" class="btn btn-default">Close </a>
+            </div>
+          </div>
+          #}
+          <br/>
+        </div>
+      </div>
+
+  	</div>
+  </div>
+</div>
+{% endblock %}

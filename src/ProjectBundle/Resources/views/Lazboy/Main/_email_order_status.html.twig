@@ -1,0 +1,226 @@
+{% extends "ProjectBundle:Lazboy:layout_email.html.twig" %}
+
+{% block content %}
+    <!--[if gte mso 9]>
+        <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+            <v:fill type="tile" color="#eeeeee"></v:fill>
+        </v:background>
+    <![endif]-->
+    <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            <tr>
+                <td colspan="3" class="esd-block-image es-p25t es-p25b es-p35r es-p35l">
+                    {{ body|raw }}
+                    <br/>
+                </td>
+            </tr>
+
+            {#
+            <tr>
+                <td colspan="3" class="esd-block-text es-p15t es-p20b" align="left">
+                    Order Number #{{ order.ordernumber }}<br/>
+                </td>
+            </tr>
+            #}
+
+            <tr style="background-color:#D3D3D3;">
+                <td colspan="2" align="center">
+                    <h4>{% trans from "messages" into tran_locale %}order.items{% endtrans %} ({% trans from "messages" into tran_locale %}order.qty{% endtrans %})</h4>
+                </td>
+                <td >
+                    <h4>{% trans from "messages" into tran_locale %}order.price{% endtrans %}</h4>
+                </td>
+            </tr>
+            {% for order_item in order_items %}
+                <tr>
+                    <td width="16%" style="padding: 5px 10px 5px 0" >
+                        <p>
+                            {% if order_item.image %}
+                                <img src="{{order_item.image|imagine_filter('img_product_small')}}" alt="" style="" width="50px;"/>
+                            {% endif %}
+                        </p>
+                    </td>
+                    <td  align="left">
+                        <p>
+                            {{order_item.productTitle}} ({{order_item.quantity}})
+
+                            {% if order_item.preOrderStatus %}
+                                <span class="badge badge-primary"><small>{% trans from "messages" into tran_locale %}order.pre_order{% endtrans %}</small></span>
+                            {% elseif order_item.preOrderStatus == 0 and order_item.inventoryPolicyStatus %}
+                                <span class="badge badge-primary"><small>{% trans from "messages" into tran_locale %}order.instock{% endtrans %}</small></span>
+                            {% endif %}
+
+                            <br/><small>
+                                {% if order_item.productCategoryTitle %}
+                                    {{order_item.productCategoryTitle}}
+                                {% endif %}
+                                {% if order_item.skuTitle|length > 0 %}
+                                    {{ order_item.skuTitle|join(' · ') }}
+                                {% endif %}
+                            </small>
+
+                            {% if order_item.skuValue %}
+                                <br/>
+                                <small>SKU:&nbsp;{{order_item.skuValue}}</small>
+                            {% endif %}
+                        </p>
+
+                        {% if order_item.customerOrderItemOptions|length > 0 %}
+                            <div style="font-size: 13px;">
+                                <span>Options {% if order_item.sumOptionsPrice>0 %} ({% trans from "messages" into tran_locale %}total{% endtrans %} ฿{{order_item.sumOptionsPrice|number_format(0, '.', ',')}}) {% endif %}</span>
+                                <ul style="padding-left:18px;">
+                                    {% for customer_order_item_option in order_item.customerOrderItemOptions %}
+                                        <li style="font-size:12px; list-style-type:disc; display:list-item">
+                                            <span>&nbsp;{{customer_order_item_option.optionCategoryTitle}}:</span>
+                                            <span>{{customer_order_item_option.optionTitle}}</span>
+                                            {% if customer_order_item_option.optionPrice>0 %}
+                                                <span>(+฿{{customer_order_item_option.optionPrice}})</span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </td>
+
+                    <td width="20%" style="padding: 5px 0"  align="left">
+                        <p>฿{{order_item.amount|number_format(0, '.', ',')}}</p>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <td colspan="2" style="padding: 5px 10px 5px 0"  align="left">
+                    <p>{% trans from "messages" into tran_locale %}order.shipping_fee{% endtrans %}</p>
+                </td>
+                <td style="padding: 5px 0" align="left">
+                    <p>
+                        ฿{{order.shippingCost|number_format(0, '.', ',') }}
+                        {#{% if order.shippingCost > 0 %}
+                            ฿{{order.shippingCost|number_format(0, '.', ',') }}
+                        {% else %}
+                            Free Shipping
+                        {% endif %}#}
+                    </p>
+                </td>
+            </tr>
+
+            {% if order.discountAmount %}
+                <tr>
+                    <td colspan="2" style="padding: 5px 10px 5px 0" align="left">
+                        <p>{% trans from "messages" into tran_locale %}order.promotion{% endtrans %} {% if order.discountCode %} Code: {{order.discountCode}}{% endif %}</p>
+                    </td>
+                    <td style="padding: 5px 0" align="left">
+                        <p>-฿{{order.discountAmount|number_format(0, '.', ',') }}</p>
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr style="border-top: 3px solid rgb(238, 238, 238); border-bottom: 3px solid rgb(238, 238, 238);">
+                <td colspan="2" style="border-top: 3px solid rgb(238, 238, 238); border-bottom: 3px solid rgb(238, 238, 238); padding-top: 7px;">
+                    <h4>{% trans from "messages" into tran_locale %}order.total{% endtrans %}</h4>
+                </td>
+                <td style="border-top: 3px solid rgb(238, 238, 238); border-bottom: 3px solid rgb(238, 238, 238); padding-top: 7px;">
+                    <h4>฿{{order.totalPrice|number_format(0, '.', ',') }}</h4>
+                </td>
+            </tr>
+
+            {% if order_status == payment_status_paid or order_status == payment_status_shipped or order_status == payment_status_delivered  %}
+                <tr>
+                    <td colspan="3">
+                        <div class="group">
+                            <div class="col-left">
+                                <br/>
+                                <h4>Shipping To</h4>
+                                {% for orderDeliverys in order.customerOrderDeliverys %}
+                                    {% if orderDeliverys.addressType == 1 %}
+                                        <p>
+                                            {{orderDeliverys.firstName}} {{orderDeliverys.lastName}}
+                                            {% if orderDeliverys.companyName %}<br />{{orderDeliverys.companyName}}{% endif %}
+                                            {% if orderDeliverys.headOffice %}&nbsp;&nbsp;({{orderDeliverys.headOffice}}){% endif %}<br/><br/>
+                                            {{orderDeliverys.address}}, {{orderDeliverys.district}}, {{orderDeliverys.amphure}}<br />
+                                            {{orderDeliverys.province}} {{orderDeliverys.postCode}}<br />
+                                            Phone {{orderDeliverys.phone}}
+                                        </p>
+                                    {% endif %}
+                                {% else %}
+    	                            No data
+    	                        {% endfor %}
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td colspan="3">
+                    <div class="group">
+
+                        {% if order_status == payment_status_delivered %}
+                            <div class="col-left">
+                                {% if order.shipDate %}
+                                    <br/>
+                                    <h4>Delivered on</h4>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" align="center">
+                                            <h5>&nbsp;</h5>
+                                            <h3 class="text-warning">{{order.shipDate|date("d F Y")}}</h3>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if order_status == payment_status_shipped %}
+                            <div class="col-left">
+                                {% if order.shipDate %}
+                                    <br/>
+                                    <h4>Estimated Delivery Date</h4>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body" align="center">
+                                            <h5>&nbsp;</h5>
+                                            <h3 class="text-warning">{{order.shipDate|date("d F Y")}}</h3>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if order_status == payment_status_paid %}
+                            <div class="col-right">
+                                <br/>
+                                 <h4>Payment Method</h4>
+                                 <div class="panel panel-default">
+                                     <div class="panel-body" align="center">
+                                        {% if order.paymentOption == payment_bank_transfer_code %}
+                                                <h5> {{order.paymentOptionTitle|trans({}, 'messages', tran_locale)}} </h5>
+                                            {% if order.paid == 0 %}
+                                                <h3 class="text-warning">{{payment_status_awaiting_payment|trans({}, 'messages', tran_locale)}}</h3>
+                                            {% else %}
+                                                <h3 class="text-success">{{payment_status_paid|trans({}, 'messages', tran_locale)}}</h3>
+                                            {% endif %}
+
+                                        {% elseif order.paymentOption == payment_omise_code %}
+                                            <!-- CRDT -->
+                                            {% set payment_omise = order.customerPaymentOmise %}
+
+                                            <h5> {{order.paymentOptionTitle|trans({}, 'messages', tran_locale)}} </h5>
+                                            {% if payment_omise.status == payment_status_failed  %}
+                                                <h3 class="text-warning">{{payment_status_failed|trans({}, 'messages', tran_locale)}}</h3>
+                                            {% else %}
+                                                <h3 class="text-success">{{payment_status_paid|trans({}, 'messages', tran_locale)}}</h3>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                 </div>
+                             </div>
+                         {% endif %}
+
+                     </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+{% endblock %}

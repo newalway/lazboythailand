@@ -1,0 +1,203 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{{promotion.getTitle}} | {% trans %}menu.promotion{% endtrans %} | {{ parent() }}{% endblock %}
+{% block promotion_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{{promotion.getTitle}}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li><a href="{{path('promotion')}}">{% trans %}menu.promotion{% endtrans %}</a></li>
+	<li class="active">{{promotion.getTitle}}</li>
+{% endblock %}
+
+{% block content %}
+<div ng-app="promotionApp" ng-controller="promotionController" ng-init="init('{{promotion.id}}')" class="pt-4 pb-5">
+	<div class="container">
+		<div class="row row-60 justify-content-sm-center">
+			<div class="col-lg-8 section-divided__main">
+				<section class="section-sm post-single-body">
+					<h3>{{promotion.getTitle}}</h3>
+					<div class="post-meta mb-4">
+						<div class="group">
+							<a href="{{path('promotion_detail',{'id':promotion.id,'slug':promotion.getTitle|slug})}}">
+								<time datetime="{{ promotion.startDate|date("Y") }}">{{ promotion.startDate|date("d/m/Y") }}</time>
+							</a>
+							<a class="meta-author">by La-Z-Boy</a>
+						</div>
+					</div>
+
+					<div>
+					{% if promotion.getDescription %}
+						{{promotion.getDescription|raw}}
+					{% endif %}
+					</div>
+
+					{% if promotion.filepath %}
+					<div ng-click="setPromotionDownloadCreate()" class="clearfix text-center mt-5">
+						<a href="{{path('promotion_download_content',{'id':promotion.id})}}">
+							<button type="button" class="btn btn-outline-light text-dark" style="cursor:pointer">
+								<img src="{{asset('images/icon_pdf.png')}}" alt="" width="80px">
+								{{promotion.filename}}
+							</button>
+						</a>
+						{# <a href="{{path('promotion_download_content',{'id':promotion.id})}}" class="button button-primary button-icon button-icon-left">
+							<div class="media">
+								<div class="align-self-center mr-3">
+									<span class="icon-lg linear-icon-download2"></span>
+								</div>
+							  	<div class="media-body text-left align-self-center">
+									<b>{% trans %}promotion.download{% endtrans %}</b>
+									{% if promotion.filename %}<br/>
+										<small class="text-truncate" style="max-width: 130px;" title="{{promotion.filename}}">{{promotion.filename}}</small>
+									{% endif %}
+							  	</div>
+							</div>
+						</a> #}
+					</div>
+				    {% endif %}
+
+				</section>
+
+				{% if product_promotions|length > 0 %}
+				<section class="section-sm">
+					<h4 class="text-center">Products Promotion</h4>
+					<div class="row justify-content-sm-center row-70">
+					{% for product_has_promotion in product_promotions %}
+						{% set product = product_has_promotion[0] %}
+						{% set product_price = getPriceData(product_has_promotion) %}
+						<div class="col-md-6 col-xl-4">
+							{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:product, price_data:product_price,section_name:"promotion_product"} %}
+						</div>
+					{% endfor %}
+
+					{#{% if paginated.havetopaginate %}
+					<div class="section-sm text-center">
+						<div class="container">
+							<!-- Classic Pagination-->
+							<nav>
+								{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+							</nav>
+						</div>
+					</div>
+					{% endif %}#}
+
+				</section>
+				{% endif %}
+
+				<section class="section-sm">
+					<div class="row row-60 justify-content-md-between">
+						<div class="col-md-5 text-center text-md-left">
+							<a class="unit flex-row unit-spacing-md align-items-center row-xs-center row-sm-left" href="{{path('promotion')}}">
+								<div class="unit__left">
+									<span class="icon icon-md linear-icon-arrow-left"></span>
+								</div>
+								<div class="unit__body">
+									<p class="small">Back</p>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-5 text-center text-md-right">
+							<ul class="list-inline-sm">
+								<li><h6>Share</h6></li>
+								<li><a class="icon-sm fa-facebook icon" href="#"></a></li>
+								<li><a class="icon-sm fa-twitter icon" href="#"></a></li>
+								<li><a class="icon-sm fa-google-plus icon" href="#"></a></li>
+							</ul>
+						</div>
+					</div>
+              	</section>
+
+			</div>
+
+			<div class="col-lg-4 section-divided__aside section-divided__aside-left">
+				{% if latest_promotions|length > 0 %}
+				<section class="section-sm">
+                	<h5>Latest Promotion</h5>
+                	<ul class="list-md">
+						{% for latest_promotion in latest_promotions %}
+                  		<li>
+                    		<article class="unit flex-sm-row unit-spacing-sm">
+                      			<div class="unit__left">
+									<a href="{{path('promotion_detail',{'id':latest_promotion.id,'slug':latest_promotion.getTitle|slug})}}">
+	                        			<figure class="figure-inline text-center text-sm-left">
+											{% if latest_promotion.getImage|length > 0 %}
+												{% set image_latest_promotion = asset(latest_promotion.getImage)|imagine_filter('img_h_150') %}
+											{% else %}
+												{% set image_latest_promotion = 'https://placehold.it/120x90' %}
+											{% endif %}
+											 <img src="{{image_latest_promotion}}" alt="{{latest_promotion.getTitle}}"  width="120" height="90"/>
+
+	                        			</figure>
+									</a>
+                      			</div>
+                      			<div class="unit__body post-inline">
+                        			{#<div class="post-inline__header">
+										<span class="post-inline__time">Jan.20, 2018</span>
+										<a class="post-inline__author meta-author" href="{{path('promotion_detail',{'id':loop.index,'slug':'La-Z-Boy'})}}">by La-Z-Boy Thailand</a>
+									</div>#}
+                    				<p class="post-inline__link">
+											<a href="{{path('promotion_detail',{'id':latest_promotion.id,'slug':latest_promotion.getTitle|slug})}}">{{latest_promotion.getTitle}}</a>
+									</p>
+                      			</div>
+                    		</article>
+                  		</li>
+						{% endfor %}
+                	</ul>
+              	</section>
+				{% endif %}
+
+				{#<section class="section-sm">
+                	<h5>Tags</h5>
+                	<ul class="list-tags">
+                  		<li><a href="#">Bedroom</a></li>
+                  		<li><a href="#">Dining Room</a></li>
+                  		<li><a href="#">Kids Room</a></li>
+                  		<li><a href="#">Living Room</a></li>
+                  		<li><a href="#">Office</a></li>
+                	</ul>
+              	</section>#}
+
+				{% include 'ProjectBundle:'~ view_layout ~'/Main:_social.html.twig' %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+var app = angular.module('promotionApp', []);
+
+app.factory('promotion_download_data', ['$http', function promotion_download_data($http) {
+	return {
+		setPromotionDownload: function(promotion_id){
+			return $http({
+				method:'GET',
+				cache: false,
+				url: Routing.generate('promotion_download_create',{'id':promotion_id}) + '?hash_id=' + Math.random(),
+				headers: {
+					'Content-Type':'application/x-www-form-urlencoded'
+				}
+			});
+		}
+	}
+}]);
+
+app.controller('promotionController', function($scope, $http, promotion_download_data) {
+
+	$scope.promotion_id = '';
+	$scope.init = function(promotion_id) {
+		$scope.promotion_id = promotion_id;
+	}
+
+	$scope.setPromotionDownloadCreate = function() {
+		if($scope.promotion_id){
+			promotion_download_data.setPromotionDownload($scope.promotion_id).then(function onSuccess(response){
+				// /console.log(response.data.data);
+			}).catch(function onError(response) {
+			});
+		}
+	};
+
+});
+
+</script>
+{% endblock %}

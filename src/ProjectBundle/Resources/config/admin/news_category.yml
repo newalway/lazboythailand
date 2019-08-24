@@ -1,0 +1,59 @@
+admin_news_category:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:index}
+  requirements:
+    _method: get
+
+admin_news_category_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:new}
+
+admin_news_category_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:create}
+  requirements:
+    _method: post
+
+admin_news_category_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:edit}
+  requirements:
+    id: \d+
+
+admin_news_category_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_news_category_move_position:
+  path: /{id}/move
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:move_position}
+  requirements:
+    id: \d+
+
+admin_news_category_move_position_update:
+  path: /{id}/move_update
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:move_position_update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_news_category_move_up_position:
+  path: /{id}/move/up
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:move_up_position}
+  requirements:
+    id: \d+
+
+admin_news_category_move_down_position:
+  path: /{id}/move/down
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:move_down_position}
+  requirements:
+    id: \d+
+
+admin_news_category_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminNewsCategory:delete}
+  requirements:
+    _method: get

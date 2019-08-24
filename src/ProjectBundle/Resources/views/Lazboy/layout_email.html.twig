@@ -1,0 +1,51 @@
+{% block body_html %}
+<div marginwidth="0" marginheight="0" style="font:14px/20px 'Helvetica',Arial,sans-serif;margin:0;padding:50px 0 50px 0;text-align:center;background-color:#f8f8f8;border-top: solid 10px #0070af;">
+    <center>
+        <table border="0" cellpadding="20" cellspacing="0" height="100%" width="100%" style="background-color:#f8f8f8">
+            <tbody>
+                <tr>
+                    <td align="center" valign="top">
+
+                        <table border="0" cellpadding="0" cellspacing="0" width="800" style="border-radius:2px;background:none">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" style="padding-bottom:20px;vertical-align: middle;text-align: center;">
+                                        <img src="{{absolute_url(asset('lazboy/images/logo.png'))}}" alt="La-Z-Boy Thailand"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="top">
+                                        {% block wrapper %}
+                                        <table border="0" cellpadding="0" cellspacing="0" width="800" style="border-radius:2px;background-color:#ffffff">
+                                            <tbody>
+                                                <tr>
+                                                    <td align="left" valign="top" style="line-height:150%;font-family:Helvetica;font-size:14px;color:#333333;padding:30px 20px;">
+                                                        {% block head_title_box %}
+                                                            <h2 style="font-size:26px;line-height:28px;margin:0 0 20px 0;color:#0070af;text-transform: uppercase;">
+                                                                {% block head_title %}{% endblock %}
+                                                            </h2>
+                                                        {% endblock %}
+                                                        {% block content %}{% endblock %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        {% endblock %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="top" style="border-collapse:collapse!important;color:#999;font-family:Arial,sans-serif;font-size:13px;font-weight:400;line-height:1.3;margin:0;padding-top:20px;text-align:center;vertical-align:top;word-break:break-word;word-wrap:break-word">
+                                        © 2019 GLOBIZ VENTURE CO., LTD.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <center>
+</div>
+{% endblock %}

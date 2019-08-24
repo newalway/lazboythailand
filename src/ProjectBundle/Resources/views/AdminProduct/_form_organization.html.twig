@@ -1,0 +1,59 @@
+<div class="box">
+	<div class="box-header with-border">
+		<h3 class="box-title">Organization</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<!-- checkbox -->
+
+		<div class="form-group" ng-cloak>
+			<label for="productCategories" class=""> Category</label>
+			<div class="checkbox-group pre-scrollable" style="overflow: scroll;max-height: 500px;">
+				{{form_widget(form.productCategories, {'id' : 'productCategories'})}}
+				<div class="error-form">{{form_errors(form.productCategories)}}</div>
+			</div>
+		</div>
+		<script>
+		$(document).ready(
+			function(){
+				$('.level_1').closest("label").css('cssText', 'font-weight: bold !important');
+				$('.level_2').closest("div").css({'padding-left':'15px'});
+				$('.level_3').closest("div").css({'padding-left':'30px'});
+				$('.level_4').closest("div").css({'padding-left':'45px'});
+				$('.level_5').closest("div").css({'padding-left':'60px'});
+				$('.level_6').closest("div").css({'padding-left':'75px'});
+				$('.level_7').closest("div").css({'padding-left':'90px'});
+				$('.level_8').closest("div").css({'padding-left':'105px'});
+				$('.level_2').closest("label").css('cssText', 'font-weight: 400 !important');
+				$('.level_3').closest("label").css('cssText', 'font-weight: 250 !important');
+			}
+		);
+		</script>
+		<hr>
+		<div class="form-group icheck">
+			<label for="showrooms">Gallery</label>
+			<div class="checkbox-group pre-scrollable" style="overflow: scroll;height: 200px;">
+				<div class="checkbox">
+					<label for="showroom_select_all">
+						<input type="checkbox" id="showroom_select_all" /> All
+					</label>
+				</div>
+				{{form_widget(form.showrooms, {'id' : 'showrooms'})}}
+				<div class="error-form">{{form_errors(form.showrooms)}}</div>
+			</div>
+		</div><hr>
+
+		<div ng-controller="hashTagCtrl" ng-init="init_hashtag()">
+			<div class="form-group">
+				<label>Hashtags</label>
+				<div class="">
+					<tags-input ng-model="tags" min-length="2" max-length="45" use-strings="true" replace-spaces-with-dashes="flase">
+						<auto-complete source="loadTags($query)"></auto-complete>
+					</tags-input>
+					<input type="hidden" name="admin_product[tags]" value="{{'{{tags}}'}}">
+				</div>
+			</div>
+		</div>
+
+	</div><!-- /.box-body -->
+</div>

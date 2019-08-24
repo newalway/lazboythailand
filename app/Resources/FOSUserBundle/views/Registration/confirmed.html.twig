@@ -1,0 +1,17 @@
+{% extends "FOSUserBundle::bundle-layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block content %}
+<section class="section-md bg-default">
+    <div class="container text-center">
+        <span class="icon linear-icon-checkmark-circle text-success mb-5" style="font-size:6em;"></span>
+
+        <h4>{{'registration.confirmed_title'|trans()}}</h2>
+        <p>{{ 'registration.confirmed'|trans({'%username%': user.username,'%name%': user.firstName}) }}</p>
+
+        <a href="{{ path('homepage') }}" class="button button-primary">{{ 'registration.back'|trans }}</a>
+
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,178 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.warrantry.info{% endtrans %} | {{ parent() }}{% endblock %}
+{% block warrantry_information_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.warrantry.info{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.warrantry.info{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="pt-4 pb-5 section-divided">
+    <div class="container">
+        <div class="section-divided__main">
+			{{data.getContent|raw}}
+			{#
+            {% if app.request.locale == 'th' %}
+            <section class="section-sm">
+                <h4 style="color: #2969b0;">ขอแสดงความยินดีสำหรับท่านเจ้าของเฟอร์นิเจอร์ LA-Z-BOY</h4>
+                <p>
+                    LA-Z-BOY ผลิตด้วยคุณภาพมาตราฐานที่ได้รับลิขสิทธิ์เฉพาะจากLA-Z-BOY อินคอร์ปอเรทมิชิแกนสหรัฐอเมริกาได้รับการออกแบบเพื่อการนั่ง และ/หรือ ปรับเอนนอน (สำหรับรุ่นปรับเอนRecliner) สามารถรองรับน้ำหนักได้สูงสุดถึง120 กก.
+                </p>
+                <p>
+                    <b class="text-dark">การรับประกันจะครอบคลุมเฉพาะการใช้งานตามปกติเท่านั้น</b> โดยมีการรับประกันในเรื่องความผิดปกติของกลไกโครงสร้างไม้ฟองน้ำหนังหรือผ้าหุ้มรวมถึงอุปกรณ์อิเล็กทรอนิกส์ที่มากับเก้าอี้เท่านั้นโดยนับจากวันที่ซื้อสินค้าตามใบรับประกันและใบเสร็จรับเงิน
+                </p>
+
+                <p class="text-dark"><b>ข้อควรทราบ</b>ในการรับประกัน</p>
+                <ul class="list-marked">
+                    <li>ต้องแสดงหลักฐานใบรับประกันและใบเสร็จรับเงินที่ถูกต้องเท่านั้น</li>
+                    <li>ครอบคลุมเฉพาะการใช้งานในประเทศ</li>
+                    <li>ไม่ครอบคลุมบริการการจัดส่ง</li>
+                    <li>ไม่ครอบคลุมการใช้งานที่ผิดประเภทหรือรองรับน้ำหนักเกินที่กำหนด (มากกว่า 120 กก.)</li>
+                    <li>ไม่ครอบคลุมหากมีการดัดแปลงแก้ไขโดยไม่ผ่านบริษัทฯ</li>
+                    <li>กรณีเกินระยะเวลาการรับประกันจะมีค่าใช้จ่ายตามความเป็นจริง</li>
+                </ul>
+                <p>
+                    <b class="text-dark">การติดต่อ:</b> ติดต่อโดยตรงที่ บริษัท โกลบิซเวนเจอร์ จำกัด ผู้ได้รับสิทธิ์ในการจัดจำหน่าย LA-Z-BOY ในประเทศไทย โทร: <a href="tel:+6623760118">+66(0)2376-0118</a>, แฟกซ์: +66(0)2 376-0119
+                </p>
+            </section>
+
+            <section class="section-sm">
+                <h4 style="color: #2969b0;">เงื่อนไขการรับประกัน</h4>
+                <p class="text-dark">
+                    <b>ระบบกลไก - รับประกัน 10 ปี</b>
+                </p>
+
+                <p class="text-dark">
+                    <b>โครงไม้ - รับประกัน 5 ปี</b>
+                </p>
+
+                <p class="text-dark">
+                    <b>หนัง - รับประกัน 2 ปี</b>
+                </p>
+
+                <p>
+                    การรับประกันหนังจะไม่ครอบคลุมดังนี้
+                </p>
+                <ol class="list-ordered">
+                    <li>
+                        <b class="text-dark">ลักษณะตามธรรมชาติของหนังเมื่อมีการใช้งาน</b> เช่น หนังเป็นริ้วรอยรอยตำหนิรอยย่น/ยับ การเปลี่ยนแปลงของผิวหรือสีหนังเช่นหนังซีดแตกเฉพาะที่
+                    </li>
+                    <li>
+                        <b class="text-dark">กรณีใช้งานผิดประเภทหรือการขาดการดูแลรักษาที่ถูกต้องตามคำแนะนำ</b> เช่น รอยปากการอยเปื้อนรอยขูดขีดจากสัตว์เลี้ยงการสัมผัสของเหลวหนังเปื่อยฉีกขาดจากรอยตะเข็บเย็บหรือสารเคมีที่ทำให้หนังด่างเป็นคราบหรือหนังแตกอุบัติเหตุต่างๆเป็นต้น
+                    </li>
+                </ol>
+
+                <p>
+                    <b class="text-dark">*หนังวัวแท้ชั้นบน (Top Grain)</b> - เนื่องจากผ่่านกระบวนการฟอกย้อมสีมาน้อยมากจึงมีโอกาสเห็นรอยตำหนิของธรรมชาติ (รอยขูดขีดรอยแผลเป็นฯลฯ) ได้มากกว่าหนังแท้ที่ผ่านการย้อมสีและปั๊มลายรวมถึงต้องได้รับการดูแลรักษามากกว่าจึงจะมีอายุการใช้งานมากขึ้น
+                </p>
+
+                <p>
+                    <b class="text-dark">ฟองน้ำ - รับประกัน 2 ปี</b><br />
+                    เมื่อมีการใช้งานไประยะหนึ่งฟองน้ำและไฟเบอร์จะมีการอัดตัวแน่นขึ้นเล็กน้อย ซึ่งถือเป็นเรื่องปกติ การรับประกันครอบคลุมการยุบตัวมากผิดปกติของฟองน้ำ(มากกว่า2 ซม.) ทั้งนี้ไม่ครอบคลุมถึงการยุบตัวของไฟเบอร์
+                </p>
+
+                <p>
+                    <b class="text-dark">ผ้า และอุปกรณ์อิเล็กทรอนิกส์ - รับประกัน 1 ปี</b><br />
+                    <b class="text-dark">ผ้าหุ้มเก้าอี้ (ไม่รวมผ้ากันเปื้อน)</b> - การรับประกันไม่รวมถึงผ้าหุ้มที่มาจากผู้ผลิตรายอื่นการใช้งานที่ผิดประเภทหรือการขาดการดูแลรักษาที่ถูกต้องตามคำแนะนำเช่นรอยปากการอยเปื้อนรอยคราบสกปรกรอยขูดขีดจากสัตว์เลี้ยงการสัมผัสของเหลวหรือสารเคมีที่ทำให้ผ้าด่างเป็นคราบรอยย่น/ยับการเปลี่ยนแปลงของผิวหรือสีผ้าผ้าซีดเฉพาะที่สีตกหรืออุบัติเหตุต่างๆเป็นต้น
+                </p>
+
+                <p>
+                    <b class="text-dark">อุปกรณ์ไฟฟ้า</b> - ไม่ครอบคลุมการช็อตอันเนื่องมาจากกระแสไฟฟ้าลัดวงจรภัยธรรมชาติหรือใช้งานโดยประมาท<br />
+                </p>
+
+                <h6><u>เพิ่มเติม</u></h6>
+
+                <ol class="list-ordered">
+                    <li>
+                        สินค้าประเภท PowerRecline XR+ (1HT) และ  Lift Recliner (TPL,TBR)  ขยายระยะเวลารับประกันเรื่องอุปกรณ์อิเล็กทรอนิกส์ จาก 1 ปี เป็น 2 ปี
+                    </li>
+                    <li>
+                        สินค้านำเข้าประเภท Nordic Collection รับประกันเฉพาะโครงสร้างและหนัง 2 ปี
+                    </li>
+                </ol>
+            </section>
+            {% else %}
+            <section class="section-sm">
+                <h4 style="color: #2969b0;">Congratulations on your purchase</h4>
+                <p>
+                    Your LA-Z-BOY Furniture is made in high specification and standards under the license of LA-Z-BOY Incorporated, Michigan, USA., especially designed to sit and / or recline (*Only Recliner Models) support a maximum weight of 120 kg.
+                </p>
+                <p>
+                    <b class="text-dark">The warranty only covers a normal use,</b> specifically the malfunction of the mechanism, frame, foam, leather or fabric covers, including the electronics that come with the products. These are all covered by the warranty based on the date on a warranty card and receipt.
+                </p>
+
+                <p class="text-dark"><b>Please Note For The Warranty:</b></p>
+                <ul class="list-marked">
+                    <li>Show a valid warranty card and receipt.</li>
+                    <li>Only support in a domestic use.</li>
+                    <li>Not cover any uses in misuse and/or anything in excess 120Kg. (a maximum support)</li>
+                    <li>Not cover any modifications that are not allowed by the company.</li>
+                    <li>In case of beyond the warranty period, any claim after the warranty period will be on chargeable basis.</li>
+                </ul>
+                <p>
+                    <b class="text-dark">Contact:</b> Globiz Ventures. Co., Ltd - the authorized of LA-Z-BOY distributor in Thailand Tel: <a href="tel:+6623760118">+66(0)2376-0118</a>, fax: +66(0)2 376-0119
+                </p>
+            </section>
+
+            <section class="section-sm">
+                <h4 style="color: #2969b0;">Warranty Conditions</h4>
+                <p class="text-dark">
+                    <b>10 Year Warranty : Recliner Mechanism (where applicable) </b>
+                </p>
+                <p class="text-dark">
+                    <b>5 Year Warranty : Frame</b>
+                </p>
+                <p class="text-dark">
+                    <b>2 Year Warranty : Leather</b>
+                </p>
+
+                <p>
+                    The warranty of leather will not be covered:
+                </p>
+                <ol class="list-ordered">
+                    <li>
+                        <b class="text-dark">The nature of Leathers after its use:</b> Ex. wrinkled, ridged / creased or skin and color changed such as skin fading or cracking in a topical area.
+                    </li>
+                    <li>
+                        <b class="text-dark">In case of misuse or lack of maintenance by the instructions:</b> Ex. Pen marks, Scratched by pets, Liquid exposure, Leather decompose and torn from the seam stitching or chemicals that make leather stain or crack and any accidents.
+                    </li>
+                </ol>
+
+                <p>
+                    <b class="text-dark">*Top layer leather (Top Grain)</b> - Due to bleaching process, there is a chance of visiible nature's imperfections (scratches, scars, etc.) comparing dyed and embossed processes, well maintainand care is required.
+                </p>
+
+                <p>
+                    <b class="text-dark">2 Year Warranty : Foam</b><br />
+                    Foam and Fiber will be tightly compressed a little over time. This is considered normal. An unusual deflate of foam (more than 2 cm.) will be covered by the warranty excepting any fiber deflate.
+                </p>
+
+                <p>
+                    <b class="text-dark">1 Year Warranty : Fabric & Electrical Components</b><br />
+                    <b class="text-dark">Fabric Covers (Not Included Aprons)</b>- Please note the warranty does not apply to fabric covers provided by the other suppliers, or defects arising from negligence or misuse such as soiling, fading, wrinkling, creasing, accidents or imprudent cleaning.<br />
+                    <b class="text-dark">Electrical Components</b> - Do not cover a damage caused by short circuit, natural disasters or user negligence.
+                </p>
+
+                <h6><u>Remarks</u>:</h6>
+
+                <ol class="list-ordered">
+                    <li>
+                        PowerRecline XR+ (1HT) and Lift Recliner (TPL,TBR) product extend the warranty of electronic components from 1 year to be 2 years.
+                    </li>
+                    <li>
+                        Nordic Collection Imported product has warranty  for mechanism and leather for 2 years.
+                    </li>
+                </ol>
+            </section>
+            {% endif %}
+			#}
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

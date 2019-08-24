@@ -1,0 +1,84 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div ng-app="inspirationCategoryApp" ng-controller="inspirationCategoryController" ng-init="init_inspiration_ategory('{{data.lvl}}', '{{form.vars.value.id}}', '{{ arr_option_tree_persist_node|json_encode }}')" ng-cloak>
+
+	<div class="box-body">
+
+		{% if form.vars.value.id is empty %}
+			{% include 'ProjectBundle:AdminInspirationCategory:_content_position.html.twig'%}
+		{% endif %}
+
+		<div class="form-group">
+	    	<label class="control-label col-md-2" for="status"> Translation</label>
+			<div class="col-md-6">
+				{{ form_widget(form.translations) }}
+		    </div>
+		</div>
+
+		{#
+		<!-- for 2 level -->
+		<!-- condition for show cover_code or color_code  -->
+		{% if form.vars.value.id %}
+		<!-- element for edit -->
+		<div ng-if="data_category_lvl>1">
+		{% else %}
+		<!-- element for add -->
+		<div ng-if="( (moveto.value=='nextsibling' || moveto.value=='prevsibling') && (parent.level>1))  ||  ((moveto.value=='lastchild' || moveto.value=='firstchild') && (parent.level==1))">
+		{% endif %}
+		#}
+
+		<div class="form-group icheck">
+			<label class="control-label col-md-2" for="image"> Image</label>
+			<div class="col-md-6">
+				{% if form.vars.value.image %}
+					<a href="{{asset(form.vars.value.image)}}" class="fancybox pull-left" style="margin-right: 10px;margin-bottom: 10px;" >
+						<img src="{{asset(form.vars.value.image) | imagine_filter('img_thumb')}}" alt="Image" />
+					</a>
+					<span class="checkbox">
+						<input type="checkbox" id="removefileimage" name="removefileimage" value="1">
+						<label class="control-label" for="removefileimage">  Remove</label>
+					</span>
+				{% endif %}
+				<div class="input-group clearfix">
+					{{form_widget(form.image, {'id' : 'image'})}}
+					<span class="input-group-btn">
+						<button onclick="selectFileWithCKFinder('image');" class="btn btn-default" name="image_btn" id="image_btn" type="button">Browse Server</button>
+					</span>
+				</div>
+				<p class="help-block">image size 1000x620 px</p>
+				<div class="error-form">{{form_errors(form.image)}}</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="form-group">
+				<label class="control-label col-md-2" for="isTopPage"> </label>
+				<div class="col-md-6">
+					{{form_widget(form.isTopPage, {'id' : 'isTopPage'})}}
+					<div class="error-form">{{form_errors(form.isTopPage)}}</div>
+					<!-- <p class="help-block"><small>Hide product variant price</small></p> -->
+				</div>
+			</div>
+		</div> <!-- end div if form.vars.value.id  -->
+
+	</div>
+
+	<div class="box-footer">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-9">
+				{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+				{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+				{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+				<a href="{%if app.session.get('back_to_url')['admin_inspiration_category'] is defined%}{{app.session.get('back_to_url')['admin_inspiration_category']}}{%else%}{{path('admin_inspiration_category')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+			</div>
+		</div>
+	</div>
+
+{#<div>
+	{{'{{moveto}}'}}<br/>
+	{{'{{parent}}'}}
+</div>#}
+
+</div>
+
+<script src="{{ asset('javascripts/adminInspirationCategoryApp/app.js') }}"></script>

@@ -1,0 +1,83 @@
+{% if product_category %}
+    <!-- category banner -->
+    {% set product_category = product_category[0] %}
+
+    {% if product_category.getBannerImage %}
+        {% set ads_home_pc = product_category.getBannerImage %}
+    {% else %}
+        {% set ads_home_pc = 'https://placehold.it/1350x550' %}
+    {% endif %}
+
+    {% if product_category.getBannerImageMobile %}
+        {% set ads_home_m = product_category.getBannerImageMobile %}
+    {% else %}
+        {% set ads_home_m = 'https://placehold.it/640x410' %}
+    {% endif %}
+
+    <img src="{{ads_home_pc}}" class="w-100 pc" />
+    <img src="{{ads_home_m}}" class="w-100 m" />
+
+    <div class="mt-5 mb-3 text-seccond text-center">
+        <div class="d-none d-md-block">
+            <h4>{{product_category.getCaptionTitle}}</h4>
+            <p class="mt-1">{{product_category.getCaptionDescription}}</p>
+        </div>
+        <div class="d-lg-none d-md-none">
+            <h4 class="title-text">{{product_category.getCaptionTitle |upper}}</h4>
+            <div class="mt-3 line"></div>
+            <p class="text-short-desc">{{product_category.getCaptionDescription}}</p>
+        </div>
+    </div>
+
+{% else %}
+    {% if banner_top_ad %}
+
+        {% if banner_top_ad.image %}
+
+            <!--  product top ad -->
+            {% set banner_top_ad_pc = banner_top_ad.image %}
+            {% if banner_top_ad.imageMobile %}
+                {% set banner_top_ad_mobile = banner_top_ad.imageMobile %}
+            {% else %}
+                {% set banner_top_ad_mobile = banner_top_ad_pc %}
+            {% endif %}
+
+            {% set link = banner_top_ad.getWebsite %}
+            <!-- pc link  -->
+            {% if link %}
+                <a href="{{link}}"><img src="{{banner_top_ad_pc}}" class="w-100 pc" /></a>
+            {% else %}
+                <img src="{{banner_top_ad_pc}}" class="w-100 pc" />
+            {% endif %}
+
+            <!-- mobile link  -->
+            {% if link %}
+                <a href="{{link}}"><img src="{{banner_top_ad_mobile}}" class="w-100 m" /></a>
+            {% else %}
+                <img src="{{banner_top_ad_mobile}}" class="w-100 m" />
+            {% endif %}
+
+            <div class="mt-5 mb-3 text-seccond text-center">
+                <div class="d-none d-md-block">
+                    <h4>{{banner_top_ad.getCaptionTitle}}</h4>
+                    <p class="mt-1">{{banner_top_ad.getCaptionDescription}}</p>
+                </div>
+                <div class="d-lg-none d-md-none">
+                    <h4 class="title-text">{{banner_top_ad.getCaptionTitle |upper}}</h4>
+                    <div class="mt-3 line"></div>
+                    <p class="text-short-desc">{{banner_top_ad.getCaptionDescription}}</p>
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% else %}
+        {#
+        <!-- default -->
+        {% set ads_home_pc = 'https://placehold.it/1350x550' %}
+        {% set ads_home_m = 'https://placehold.it/640x410' %}
+        <img src="{{ads_home_pc}}" class="w-100 pc" />
+        <img src="{{ads_home_m}}" class="w-100 m" />
+        #}
+    {% endif %}
+{% endif %}

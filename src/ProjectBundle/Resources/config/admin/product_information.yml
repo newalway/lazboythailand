@@ -1,0 +1,12 @@
+admin_product_information:
+  path:  /
+  defaults: { _controller: ProjectBundle:AdminProductInformation:index }
+  requirements:
+    _method: get
+
+admin_product_information_update:
+  path: /update
+  defaults: {_controller: ProjectBundle:AdminProductInformation:update}
+  requirements:
+    _method: post
+    id: \d+

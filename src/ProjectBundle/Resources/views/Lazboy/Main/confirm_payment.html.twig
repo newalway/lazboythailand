@@ -1,0 +1,214 @@
+{% extends "ProjectBundle:" ~ view_layout ~ ":layout.html.twig" %}
+
+{% block title %}{% trans %}payment.title{% endtrans %} | {{ parent() }}{% endblock %}
+{% block orders_payment_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}payment.title{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+    <li class="active">{% trans %}payment.title{% endtrans %}</li>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="pt-4 pb-5 bg-default" ng-app="myApp" ng-controller="myCtrl">
+        <div class="container">
+
+            <div class="row justify-content-md-center">
+                <div class="col-md-8 col-lg-8 col-xl-5">
+
+                    <form method="post" name="form_search_confirm_payment" id="form_search_confirm_payment" enctype="multipart/form-data">
+                        <div class="input-group">
+                            {{form_widget(form.orderSearch,{'id' : 'orderSearch','attr' : {'ng-model' :'orderSearch','class': 'form-input'}})}}
+                            <!-- <input type="text" id="orderSearch" name="orderSearch" value="" class="form-control"> -->
+                            <span class="input-group-btn">
+                                <button id="btnorderSearch" class="button button-primary" ng-click="searchOrder()" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="text-danger order-err">{% trans %}error.order.number.search{% endtrans %}</div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="row justify-content-md-center">
+                <div class="col-md-12 col-xl-8">
+                    <div class="divider mb-4"></div>
+                    {% block flash_message %}
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="alert alert-success">
+                                <i class="fa fa-check-circle-o"></i> {{ flashMessage|raw }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endblock %}
+
+                    <form method="post" id="frmData" enctype="multipart/form-data" action="{{path('confirm_payment')}}" {#autocomplete="off"#}>
+                        {{form_widget(form._token)}}
+                        <div class="row mt-0">
+
+                            <div class="col-sm-12 col-md-6 col-lg-4 mt-4">
+                                <label for="orderNumber">{% trans %}payment.orderno{% endtrans %} *</label>
+                                {{form_widget(form.orderNumber,{'id' : 'orderNumber','attr': {'ng-model':'frm.orderNumber','class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.orderNumber)}}</div>
+                                <div class="text-danger order-err">{% trans %}error.order.number.search{% endtrans %}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-lg-4 mt-4">
+                                <label for="date_of_birth">{% trans %}payment.date{% endtrans %} *</label>
+                                <div class="input-group">
+                                    {{form_widget(form.dateTransfer, {'id' : 'dateTransfer','attr': {'class': 'form-input'}})}}
+                                    <div class="input-group-addon">
+                                        <label for="dateTransfer"><i class="fa fa-calendar"></i></label>
+                                    </div>
+                                </div>
+                                <div class="text-danger">{{form_errors(form.dateTransfer)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.time{% endtrans %} *</label>
+                                <div class="input-group">
+                                {% for timeTransfer in form.timeTransfer %}
+                                    {{ form_widget(timeTransfer,{'attr': {'class': 'form-input'}})}}
+                                    {% if loop.index == 1 %}
+                                        <div class="input-group-addon" style="border: 0; background: none;">:</div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                                <div class="text-danger">{{form_errors(form.timeTransfer)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.fname{% endtrans %} *</label>
+                                {{form_widget(form.firstName, {'id' : 'firstname','attr':{'ng-model':'frm.firstName','class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.firstName)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.lname{% endtrans %} *</label>
+                                {{form_widget(form.lastName, {'id' : 'lastname','attr':{'ng-model':'frm.lastName','class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.lastName)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}member.personal.phone{% endtrans %} *</label>
+                                {{form_widget(form.phone,{'id' : 'phone','attr': {'ng-model':'frm.phone','class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.phone)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.bank{% endtrans %} *</label>
+                                {{form_widget(form.bankAccount, {'id' : 'bankAccount','attr': {'class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.bankAccount)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.amount{% endtrans %} *</label>
+                                {{form_widget(form.amount, {'id':'amount', 'attr':{'ng-model':'frm.amount','class': 'form-input'}})}}
+                                <div class="text-danger">{{form_errors(form.amount)}}</div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 mt-4">
+                                <label>{% trans %}payment.file{% endtrans %} *</label>
+                                {{form_widget(form.attach_file,{'attr': {'class': 'mt-2'}})}}
+                                <div class="text-danger">{{form_errors(form.attach_file)}}</div>
+                                <div class="txt-upload">
+                                    {% trans %}payment.file.txt{% endtrans %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <button type="submit" class="button button-primary"> &nbsp; &nbsp; &nbsp;{% trans %}payment.submit{% endtrans %} &nbsp; &nbsp; &nbsp;</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+    <script src="{{ asset('bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    {% if app.request.locale == 'th' %}
+    <script src="{{ asset('bootstrap-datepicker/locales/bootstrap-datepicker.th.min.js') }}" charset="UTF-8"></script>
+    {% endif %}
+
+    <script>
+
+        $('#dateTransfer').datepicker({
+            todayHighlight:true,
+            todayBtn:'linked',
+            format: 'dd/mm/yyyy',
+            endDate: '+0d',
+            maxDate: "now"
+            {% if app.request.locale == 'th' %}
+            ,language: 'th'
+            {% endif %}
+        });
+        var valindateTransfer = $('#dateTransfer').val();
+
+        if(valindateTransfer.length === 0){
+            $("#dateTransfer").datepicker('setDate', 'now');
+        }
+
+        $( "div .order-err" ).hide();
+        var app = angular.module('myApp', []);
+        app.config(['$locationProvider', function($locationProvider){
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            })
+        }])
+        app.controller('myCtrl', function($scope, $http ,$location) {
+
+            $scope.frm = {};
+            $scope.frm.dateTransfer = '{{form.vars.value.dateTransfer|date}}';
+            $scope.frm.orderNumber = '{{form.vars.value.orderNumber}}';
+            $scope.frm.firstName = '{{form.vars.value.firstName}}';
+            $scope.frm.lastName = '{{form.vars.value.lastName}}';
+            $scope.frm.phone = '{{form.vars.value.phone}}';
+            $scope.frm.amount = '{{form.vars.value.amount}}';
+
+            $scope.searchOrder = function() {
+                $http({
+                    method: 'POST',
+                    url: '{{path('search_payment_data')}}',
+                    data: $.param({orderId: $scope.orderSearch}),
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+                }).then(function successCallback(response) {
+                    if (response.data != false ){
+                        $scope.frm.orderNumber = response.data.orderNumber;
+                        $scope.frm.firstName = response.data.firstname;
+                        $scope.frm.lastName = response.data.lastname;
+                        $scope.frm.phone = response.data.phone;
+                        $scope.frm.amount = numeral(response.data.totalPrice).format('0') ;
+                        $location.search('orderId', $scope.frm.orderNumber); //set query string
+                        $( "div .order-err" ).hide();
+                    }else{
+                        $( "div .order-err" ).show();
+                        $scope.frm.orderNumber = ' ';
+                        $location.search('orderId', $scope.orderSearch); //set query string
+                    }
+                }, function errorCallback(response) {
+
+                });
+            };
+            if($location.search().hasOwnProperty('orderId')){
+                var myvalue = $location.search();
+                $scope.orderSearch = myvalue.orderId;
+                $scope.searchOrder();
+            }
+        });
+    </script>
+{% endblock %}

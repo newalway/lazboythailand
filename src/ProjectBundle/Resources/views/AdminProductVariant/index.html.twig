@@ -1,0 +1,37 @@
+{% extends 'ProjectBundle::admin.html.twig'%}
+
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}
+
+{% use "ProjectBundle:AdminProductVariant:blocks.html.twig" %}
+{% use "ProjectBundle::flash_message.html.twig" %}
+{% block content %}
+<div class="row">
+	<div class="col-md-8 margin-10-0">
+		<a href="{{path('admin_product_variant_new')}}" class="btn btn-instagram" title="Add"><i class="fa fa-plus"></i> Add</a>
+        {#<a href="#" class="btn bg-purple" title="sort"><i class="fa fa-list-ol"></i> Sort</a>#}
+	</div>
+</div>
+<br class="clearBoth">
+
+<div class="row">
+    <div class="col-xs-8">
+
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <!-- <i class="fa fa-text-width"></i> -->
+                <h3 class="box-title">Product Variant</h3>
+            </div>
+            <div class="box-body tree-view">
+                {{tree|raw}}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

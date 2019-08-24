@@ -1,0 +1,83 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}member.title{% endtrans %}{% endblock %}
+
+{% block body_class %}{{ parent() }} body-member{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}member.title{% endtrans %}{% endblock %}
+
+{% block breadcrumbs_custom %}
+    {{ parent() }}
+    <li><a href="{{path('fos_user_profile_show')}}">{% trans %}member.title{% endtrans %}</a></li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default section-md">
+    <div class="container">
+        <div class="row flex-lg-row-reverse row-70">
+            <div class="col-lg-8 col-xl-9 section-divided__main section-divided__main-left">
+                <h4 class="mb-3">{% block member_header %}{% endblock %}</h4>
+                {% block content_member %}{% endblock %}
+            </div>
+            <div class="col-lg-4 col-xl-3 section-divided__aside section__aside-left">
+                <section class="section-sm">
+                    <h5>{% trans %}member.hello{% endtrans %}, {{ app.user.firstName }} {{ app.user.lastName }}</h5>
+                    <ul class="list-linked">
+                        <li>
+                            <a href="{{path('fos_user_profile_show')}}" class="{% block member_profile_active %}{% endblock %}">{% trans %}member.personal{% endtrans %}</a>
+                        </li>
+
+                        <li>
+                            <a href="{{path('fos_user_profile_edit')}}" class="{% block member_profile_edit_active %}{% endblock %}">{% trans %}member.change.personal.info{% endtrans %}</a>
+                        </li>
+
+                        {% if app.user.issetpassword == 1 %}
+                            <li>
+                                <a href="{{path('fos_user_change_password')}}" class="{% block member_change_password_active %}{% endblock %}">{% trans %}member.change.password{% endtrans %}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{path('member_set_password')}}" class="{% block member_set_password_active %}{% endblock %}">{% trans %}member.set_password{% endtrans %}</a>
+                            </li>
+                        {% endif %}
+
+                        <li>
+                            <a href="{{path('address')}}" class="{% block member_address_active %}{% endblock %}">{% trans %}member.address.book{% endtrans %}</a>
+                        </li>
+
+                        <li>
+                            <a href="{{path('member_orders')}}" class="{% block member_orders_active %}{% endblock %}">
+                              {% if is_granted('ROLE_CUSTOMER') %}
+                                  {% trans %}member.my.orders{% endtrans %}
+                              {% elseif is_granted('ROLE_CLIENT')  %}
+                                  {% trans %}member.my.rfq{% endtrans %}
+                              {% endif %}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{path('member_wishlist')}}" class="{% block member_wishlist_active %}{% endblock %}">
+                                {% trans %}member.wishlist{% endtrans %}
+                                {#({{ render(controller('ProjectBundle:Member:_wishlistCount')) }})#}
+                            </a>
+                        </li>
+
+                        {% if is_granted('ROLE_CUSTOMER') %}
+                            <li>
+                                <a href="{{path('member_social_connections')}}" class="{% block member_social_connections_active %}{% endblock %}">{% trans %}member.social.connections{% endtrans %}</a>
+                            </li>
+                        {% endif %}
+
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li>
+                                <a href="{{path('fos_user_security_logout')}}">{% trans %}menu.logout{% endtrans %}</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

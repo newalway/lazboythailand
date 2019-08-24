@@ -1,0 +1,661 @@
+{% extends 'ProjectBundle::base.html.twig' %}
+
+{% block title %}La-Z-Boy Minimal Collection{% endblock %}
+{% block html_description %}ส่งกลับความรู้สึกที่ดีที่สุดกับ La-Z-Boy Thailand{% endblock %}
+{% block html_keywords %},Lazboy, เก้าอี้, โซฟา, ปรับเอน, Recliner, เก้าอี้รีไคลเนอร์, เก้าอี้ปรับเอน, เก้าอี้ปรับนอน, เก้าอี้ปรับระดับ, เก้าอี้ระบบไฟฟ้า, โซฟารีไคลเนอร์{% endblock %}
+
+{% block html_meta %}
+    {#<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="copyright" content="&copy; La-Z-Boy Thailand">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('minimal_collection/favicon.ico') }}" />
+    <link rel="alternate" href="{{url('campaign_minimal_collection')}}" hreflang="{{app.request.locale}}-{{app.request.locale}}"/>
+
+    <meta property="fb:app_id"             content="1000319920175489" />
+    <meta property="og:url"                content="{{url('campaign_minimal_collection')}}" />
+    <meta property="og:type"               content="website" />
+    <meta property="og:title"              content="La-Z-Boy Minimal Collection" />
+    <meta property="og:description"        content="ส่งกลับความรู้สึกที่ดีที่สุดกับ La-Z-Boy Thailand" />
+    <meta property="og:image"              content="{{ app.request.getSchemeAndHttpHost() ~ asset('minimal_collection/images/share-minimal-collection.png') }}" />
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('minimal_collection/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('minimal_collection/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('minimal_collection/OwlCarousel2-2.3.4/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('minimal_collection/OwlCarousel2-2.3.4/assets/owl.theme.default.min.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Kanit:200,300,400,500,600,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('minimal_collection/themify-icons/themify-icons.css') }}">
+    <!--[if lt IE 8]><!-->
+    <link rel="stylesheet" href="{{ asset('minimal_collection/themify-icons/ie7/ie7.css') }}">
+    <!--<![endif]-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('minimal_collection/stylesheets/style.min.css') }}">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('minimal_collection/javascripts/jquery-1.12.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('minimal_collection/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('minimal_collection/OwlCarousel2-2.3.4/owl.carousel.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('minimal_collection/javascripts/angular/angular.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('minimal_collection/javascripts/angular/angular-route.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('minimal_collection/javascripts/base.js') }}"></script>
+
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '792371867565791');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=792371867565791&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+{% endblock %}
+
+{% block body %}
+<header id="top">
+    <div class="container p-lr-m">
+        <div class="header-cover">
+            <img src="{{ asset('minimal_collection/images/logo.png') }}" class="img-logo" alt="La-Z-Boy Logo" />
+            <img src="{{ asset('minimal_collection/images/cover.jpg') }}" class="img-cover" alt="La-Z-Boy Cover" />
+        </div>
+
+        <nav id="menu-affix" class="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="#top" class="navbar-brand link-click">
+                        <img src="{{ asset('minimal_collection/images/logo.png') }}" alt="La-Z-Boy Logo" />
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="menu-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active">
+                            <a href="#top" class="link-click">Home</a>
+                        </li>
+                        <li>
+                            <a href="#products" class="link-click">Products</a>
+                        </li>
+                        <li>
+                            <a href="#specification" class="link-click">Specification</a>
+                        </li>
+                        <li>
+                            <a href="#color_option" class="link-click">Color Options</a>
+                        </li>
+                        <li>
+                            <a href="#available_shop" class="link-click">Available Shop</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <div class="container p-lr-m">
+        <section class="top-campaign">
+            <div class="detail">
+                <p>
+                    ชุดคอลเลคชั่นเก้าอี้ปรับเอน 1 ที่นั่ง
+                    <span class="font-supermarket title-h3">"มินิมอล คอลเลคชั่น"</span> (Minimal Collection)
+                    ดีไซน์เรียบง่ายแต่ดูดี ใช้งานได้กับทุกขนาดพื้นที่ แม้ในพื้นที่จำกัดเช่นคอนโดฯ และยังให้ความนุ่มสบาย ตามแบบฉบับ เล-ซี-บอย
+                </p>
+                <p>
+                    มาพร้อมราคาที่ตัดสินใจได้ง่ายขึ้น เริ่มต้นเพียง 16,900 บาท มินิมอล คอลเลคชั่น มีด้วยกัน 4 รุ่น ได้แก่
+                </p>
+                <p>
+                    <b>10T-705 RAYNA  /  10T-584 PARKER  /  10T-344 HUDSON  /  10T-352 SHANNON</b>
+                </p>
+                <p>
+                    วัสดุหุ้มให้เลือก 2 ประเภท :   
+                    ผ้า iClean ปกป้องทุกการเลอะ เริ่มต้น 16,900 บาท*   
+                    หนังแท้ผิวสัมผัส เริ่มต้น 26,900 บาท*
+                </p>
+                สามารถทดลองนั่งและหาซื้อได้แล้ววันนี้ ที่ เล-ซี-บอย แกลเลอรี และร้านเฟอร์นิเจอร์ที่ร่วมรายการ
+            </div>
+        </section>
+    </div>
+
+    <section id="products">
+        <div class="container p-lr-m">
+            <div class="title-style1">
+                <h3><span>La-Z-Boy</span><br />MINIMAL COLLECTION</h3>
+                <h2>PRODUCT LINE UP</h2>
+            </div>
+
+            <!-- Product 1 -->
+            <div class="tb pro">
+                <div class="tr">
+                    <div class="td tdw1 pro-img pro-img1">
+                        <img src="{{ asset('minimal_collection/images/product/705-RAYNA/banner.jpg') }}" alt="705 RAYNA" />
+                    </div>
+                    <div class="td tdw1 bg01 text-white pro-box1 show-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-705 RAYNA</h3>
+                            <p class="pro-detail">
+                                ความสบายที่ตอบรับชีวิตคนรุ่นใหม่สไตล์ Minimal ด้วยดีไซน์ที่เรียบง่ายแต่มากไปด้วย function และประโยชน์ใช้สอย ซึ่งเป็นความโดดเด่นที่มีแค่เฉพาะเก้าอี้ของ La-Z-Boy เท่านั้น
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=310" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                    <div class="td tdw2 pro-item bg01-1">
+                        <div class="box">
+                            <img src="{{ asset('minimal_collection/images/logo-lazboy-mini.png') }}" alt="La-Z-Boy Logo" class="logo" />
+                            <div class="start-price">
+                                START AT <b>16,900.-</b>
+                            </div>
+                            <div class="sliders">
+                                <div id="owl1" class="owl-carousel owl-theme">
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=310" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/705-RAYNA/p1.png') }}" alt="10T-705 RAYNA"/>
+                                            <p>10T-705 RAYNA</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=310" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/705-RAYNA/p2-2.png') }}" alt="10T-705 RAYNA"/>
+                                            <p>10T-705 RAYNA</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=310" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/705-RAYNA/p3-2.png') }}" alt="10T-705 RAYNA"/>
+                                            <p>10T-705 RAYNA</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw1 bg01 text-white pro-box1 hide-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-705 RAYNA</h3>
+                            <p class="pro-detail">
+                                ความสบายที่ตอบรับชีวิตคนรุ่นใหม่สไตล์ Minimal ด้วยดีไซน์ที่เรียบง่ายแต่มากไปด้วย function และประโยชน์ใช้สอย ซึ่งเป็นความโดดเด่นที่มีแค่เฉพาะเก้าอี้ของ La-Z-Boy เท่านั้น
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=310" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                    <div class="td tdw2 bg-pink-img text-white text-center pro-box2">
+                        <div class="box">
+                            <h3>
+                                MINIMAL COLLECTION
+                                <span>WHEN THE ESSENTIAL GO PERFECT</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product 1 -->
+
+            <!-- Product 2 -->
+            <div class="tb pro">
+                <div class="tr show-m">
+                    <div class="td tdw1 pro-img pro-img2">
+                        <img src="{{ asset('minimal_collection/images/product/584-PARKER/banner.jpg') }}" alt="584 PARKER" />
+                    </div>
+                    <div class="td tdw2 bg02 text-white pro-box1">
+                        <div class="box text-left">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-584 PARKER</h3>
+                            <p class="pro-detail">
+                                เก้าอี้ปรับเอนคุณภาพดี ที่โครงสร้างถูกออกแบบมาให้รองรับกับทุกสรีระ ตัววัสดุอัดแน่นไปด้วยคุณภาพ การันตีอายุการใช้งานที่คงทนและสัมผัสที่นุ่มสบายตามสไตล์ของ La-Z-Boy
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=311" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw2 pro-item bg02-1">
+                        <div class="box">
+                            <img src="{{ asset('minimal_collection/images/logo-lazboy-mini.png') }}" alt="La-Z-Boy 584 PARKER" class="logo" />
+                            <div class="start-price">
+                                START AT <b>18,900.-</b>
+                            </div>
+                            <div class="sliders">
+                                <div id="owl2" class="owl-carousel owl-theme">
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=311" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/584-PARKER/p1.png') }}" alt="10T-584 PARKER"/>
+                                            <p>10T-584 PARKER</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=311" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/584-PARKER/p2-2.png') }}" alt="10T-584 PARKER"/>
+                                            <p>10T-584 PARKER</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=311" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/584-PARKER/p3.png') }}" alt="10T-584 PARKER"/>
+                                            <p>10T-584 PARKER</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="td tdw1 pro-img pro-img2 hide-m">
+                        <img src="{{ asset('minimal_collection/images/product/584-PARKER/banner.jpg') }}" alt="584 PARKER" />
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw2 bg-pink-img text-white text-center pro-box2">
+                        <div class="box">
+                            <h3>
+                                MINIMAL COLLECTION
+                                <span>WHEN THE ESSENTIAL GO PERFECT</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="td tdw1 bg02 text-white pro-box1 hide-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-584 PARKER</h3>
+                            <p class="pro-detail">
+                                เก้าอี้ปรับเอนคุณภาพดี ที่โครงสร้างถูกออกแบบมาให้รองรับกับทุกสรีระ ตัววัสดุอัดแน่นไปด้วยคุณภาพ การันตีอายุการใช้งานที่คงทนและสัมผัสที่นุ่มสบายตามสไตล์ของ La-Z-Boy
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=311" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product 2 -->
+
+            <!-- Product 3 -->
+            <div class="tb pro">
+                <div class="tr">
+                    <div class="td tdw1 pro-img pro-img3">
+                        <img src="{{ asset('minimal_collection/images/product/344-HUDSON/banner.jpg') }}" alt="344-HUDSON" />
+                    </div>
+                    <div class="td tdw1 bg03 text-white pro-box1 show-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-344 HUDSON</h3>
+                            <p class="pro-detail">
+                                นิยามของความเรียบง่ายที่ไม่ธรรมดา ออกแบบมาให้เข้ากับไลฟ์สไตล์ของคนรุ่นใหม่อย่างคุณ ปรับเอนสบาย ไม่กินพื้นที่ สามารถจัดวางได้แม้ในพื้นที่ที่กระทัดรัด
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=312" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                    <div class="td tdw2 pro-item bg03-1">
+                        <div class="box">
+                            <img src="{{ asset('minimal_collection/images/logo-lazboy-mini.png') }}" alt="La-Z-Boy Logo" class="logo" />
+                            <div class="start-price">
+                                START AT <b>19,900.-</b>
+                            </div>
+                            <div class="sliders">
+                                <div id="owl3" class="owl-carousel owl-theme">
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=312" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/344-HUDSON/p1.png') }}" alt="10T-344 HUDSON"/>
+                                            <p>10T-344 HUDSON</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=312" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/344-HUDSON/p2-2.png') }}" alt="10T-344 HUDSON"/>
+                                            <p>10T-344 HUDSON</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=312" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/344-HUDSON/p3.png') }}" alt="10T-344 HUDSON"/>
+                                            <p>10T-344 HUDSON</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw1 bg03 text-white pro-box1 hide-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-344 HUDSON</h3>
+                            <p class="pro-detail">
+                                นิยามของความเรียบง่ายที่ไม่ธรรมดา ออกแบบมาให้เข้ากับไลฟ์สไตล์ของคนรุ่นใหม่อย่างคุณ ปรับเอนสบาย ไม่กินพื้นที่ สามารถจัดวางได้แม้ในพื้นที่ที่กระทัดรัด
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=312" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                    <div class="td tdw2 bg-pink-img text-white text-center pro-box2">
+                        <div class="box">
+                            <h3>
+                                MINIMAL COLLECTION
+                                <span>WHEN THE ESSENTIAL GO PERFECT</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product 3 -->
+
+            <!-- Product 4 -->
+            <div class="tb pro">
+                <div class="tr show-m">
+                    <div class="td tdw1 pro-img pro-img4">
+                        <img src="{{ asset('minimal_collection/images/product/352-SHANNON/banner.jpg') }}" alt="352 SHANNON" />
+                    </div>
+                    <div class="td tdw2 bg04 text-white pro-box1">
+                        <div class="box text-left">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-352 SHANNON</h3>
+                            <p class="pro-detail">
+                                เก้าอี้ดีไซน์สวยมาพร้อมกับความกระทัดรัด ตัวเก้าอี้สามารถปรับเอนสูงสุดได้ถึง 63.50" รองรับสรีระทุกส่วนของผู้ใช้งาน ซึ่งกลไกการปรับเอนเป็นลิขสิทธิ์เฉพาะตัวของ La-Z-Boy
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=313" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw2 pro-item bg04-1">
+                        <div class="box">
+                            <img src="{{ asset('minimal_collection/images/logo-lazboy-mini.png') }}" alt="La-Z-Boy 352 SHANNON" class="logo" />
+                            <div class="start-price">
+                                START AT <b>19,900.-</b>
+                            </div>
+                            <div class="sliders">
+                                <div id="owl2" class="owl-carousel owl-theme">
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=313" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/352-SHANNON/p1.png') }}" alt="10T-352 SHANNON"/>
+                                            <p>10T-352 SHANNON</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=313" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/352-SHANNON/p2-2.png') }}" alt="10T-352 SHANNON"/>
+                                            <p>10T-352 SHANNON</p>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="https://www.lazboythailand.com/product_detail.php?id=313" target="_blank">
+                                            <img src="{{ asset('minimal_collection/images/product/352-SHANNON/p3.png') }}" alt="10T-352 SHANNON"/>
+                                            <p>10T-352 SHANNON</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="td tdw1 pro-img pro-img4 hide-m">
+                        <img src="{{ asset('minimal_collection/images/product/352-SHANNON/banner.jpg') }}" alt="352 SHANNON" />
+                    </div>
+                </div>
+
+                <div class="tr">
+                    <div class="td tdw2 bg-pink-img text-white text-center pro-box2">
+                        <div class="box">
+                            <h3>
+                                MINIMAL COLLECTION
+                                <span>WHEN THE ESSENTIAL GO PERFECT</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="td tdw1 bg04 text-white pro-box1 hide-m">
+                        <div class="box">
+                            <h3>เก้าอี้ La-Z-Boy รุ่น 10T-352 SHANNON</h3>
+                            <p class="pro-detail">
+                                เก้าอี้ดีไซน์สวยมาพร้อมกับความกระทัดรัด ตัวเก้าอี้สามารถปรับเอนสูงสุดได้ถึง 63.50" รองรับสรีระทุกส่วนของผู้ใช้งาน ซึ่งกลไกการปรับเอนเป็นลิขสิทธิ์เฉพาะตัวของ La-Z-Boy
+                            </p>
+                            <a href="https://www.lazboythailand.com/product_detail.php?id=313" class="pro-btn" target="_blank">รายละเอียดเพิ่มเติม</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product 4 -->
+
+        </div>
+    </section>
+
+    <section id="specification">
+        <div class="container">
+            <div class="title-style1">
+                <h3><span>La-Z-Boy</span><br />MINIMAL COLLECTION</h3>
+                <h2>SPECIFICATION</h2>
+            </div>
+
+            <!-- <div class="embed-responsive embed-responsive-16by9 m-lr-15-m">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/9FRF4u-Ipg8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div> -->
+
+            <div class="pro-spec">
+                <!-- Product 1 -->
+                <div class="title-style2 sty1" style="margin-top:0;">
+                    <h3>MINIMAL COLLECTION</h3>
+                    <hr />
+                    <h2>705 RAYNA</h2>
+                </div>
+                <div class="detail">
+                    <img src="{{ asset('minimal_collection/images/product/705-RAYNA/overall2.jpg') }}" />
+                    <h4>OVERALL : 32.50" W × 34.00" D × 42.50" H</h4>
+                    <ul>
+                        <li>iClean Fabric  16,900.-</li>
+                        <li>Half Leather  26,900.-</li>
+                    </ul>
+                </div>
+                <!-- Product 2 -->
+                <div class="title-style2 sty2">
+                    <h3>MINIMAL COLLECTION</h3>
+                    <hr />
+                    <h2>584 PARKER</h2>
+                </div>
+                <div class="detail">
+                    <img src="{{ asset('minimal_collection/images/product/584-PARKER/overall.jpg') }}" />
+                    <h4>OVERALL : 33.00" W × 37.50" D × 40.50" H</h4>
+                    <ul>
+                        <li>iClean Fabric  18,900.-</li>
+                        <li>Half Leather  28,900.-</li>
+                    </ul>
+                </div>
+                <!-- Product 3 -->
+                <div class="title-style2 sty3">
+                    <h3>MINIMAL COLLECTION</h3>
+                    <hr />
+                    <h2>344 HUDSON</h2>
+                </div>
+                <div class="detail">
+                    <img src="{{ asset('minimal_collection/images/product/344-HUDSON/overall.jpg') }}" />
+                    <h4>OVERALL : 30.50" W × 36.00" D × 42.00" H</h4>
+                    <ul>
+                        <li>iClean Fabric  19,900.-</li>
+                        <li>Half Leather  29,900.-</li>
+                    </ul>
+                </div>
+                <!-- Product 4 -->
+                <div class="title-style2 sty4">
+                    <h3>MINIMAL COLLECTION</h3>
+                    <hr />
+                    <h2>352 SHANNON</h2>
+                </div>
+                <div class="detail">
+                    <img src="{{ asset('minimal_collection/images/product/352-SHANNON/overall.jpg') }}" />
+                    <h4>OVERALL : 34.00" W × 37.50" D × 40.50" H</h4>
+                    <ul>
+                        <li>iClean Fabric  19,900.-</li>
+                        <li>Half Leather  29,900.-</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="color_option">
+        <section>
+            <div class="container">
+                <div class="title-style1">
+                    <h3><span>La-Z-Boy</span><br />MINIMAL COLLECTION</h3>
+                    <h2>COLOR OPTIONS</h2>
+                </div>
+
+                <div class="color-option">
+                    <h3 class="mt-0">iClean Fabric  <img src="{{ asset('minimal_collection/images/logo-iclean.png') }}" alt="iClean logo" class="logo-iclean" /></h3>
+                    <p>
+                        <img src="{{ asset('minimal_collection/images/color-option/color01.jpg') }}" />
+                        <img src="{{ asset('minimal_collection/images/color-option/color02.jpg') }}" />
+                        <img src="{{ asset('minimal_collection/images/color-option/color03.jpg') }}" />
+                    </p>
+
+                    <h3>Half leather </h3>
+                    <p>
+                        <img src="{{ asset('minimal_collection/images/color-option/color04.jpg') }}" />
+                        <img src="{{ asset('minimal_collection/images/color-option/color05.jpg') }}" />
+                        <img src="{{ asset('minimal_collection/images/color-option/color06.jpg') }}" />
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="available_shop">
+            <div class="container">
+
+                <div class="title-style1">
+                    <h3><span>La-Z-Boy</span><br />MINIMAL COLLECTION</h3>
+                    <h2>AVAILABLE SHOP</h2>
+                </div>
+
+                <div class="camp-law">
+                    <h3 class="mt-0">เล-ซี-บอย แกลเลอรี</h3>
+                    สุขุมวิท 30/1 (02-6614941)<br />
+                    เมกาบางนา (02-1051728)<br />
+                    บุญถาวร ไลฟ์สไตล์ เฟอร์ฯ  สาขาเชียงใหม่ (053-105099)<br />
+                    บุญถาวร ไลฟ์สไตล์ เฟอร์ฯ  สาขารัชดา (02-2750029)<br />
+                    บุญถาวร ไลฟ์สไตล์ เฟอร์ฯ  สาขาสุราษฎร์ธานี (077-2370000)<br />
+                    บุญถาวร ไลฟ์สไตล์ เฟอร์ฯ  สาขาอุดรธานี (087-8319509)<br />
+                    ตั้งซุ่นเส่ง เฟอร์นิเจอร์  สาขาชยางกูร (อุบลราชธานี) 045-953277
+
+                    <h3>ร้านเฟอร์นิเจอร์ที่ร่วมรายการ</h3>
+                    <h4>กรุงเทพฯ</h4>
+                    โมแซนโต้  สาขาบางกะปิ 02-3633346,  สาขาซีคอนสแควร์ 02-7264036<br />
+                    อุดมเฟอร์นิเจอร์  สาขาเลียบด่วนเอกมัย-รามอินทรา 02-9336637,  สาขาราชพฤกษ์ 02-4226365
+
+                    <h4>ภาคกลาง</h4>
+                    นครปฐม : เรืองศิลป์ เฟอร์นิเจอร์แลนด์ 034-254900-1<br />
+                    สมุทรสาคร : บิ๊กโฮม เฟอร์นิเจอร์ 034-441611<br />
+                    สุพรรณบุรี : แสงเสน่ห์ 039-312646,  เอ็กซ์ตร้าโฮม เฟอร์นิเจอร์ สโตร์ 035-440222
+
+                    <h4>ภาคเหนือ</h4>
+                    เชียงราย : เรือนทอง 053-750168<br />
+                    เชียงใหม่ : เชียงใหม่ธนทัต 053-252309,  บางกอกเฟอร์ฯ สาขาแยกศรีบัวเงิน 053-115775, บางกอกเฟอร์ฯ สาขาโฮมโปร หางดง 053-804858, อินโฮม เฟอร์นิเจอร์ 053-295687<br />
+                    น่าน : ปางค่า 054-774054
+
+                    <h4>ภาคตะวันออก</h4>
+                    ชลบุรี : ลีฟวิ่งแอนด์เดคอร์เซ็นเตอร์ 038-289089,  ศรีราชา ลีฟวิ่ง 038-327004-5<br />
+                    ระยอง : ระยองนิยมภัณฑ์ 038-809300-1
+
+                    <h4>ภาคตะวันออกเฉียงเหนือ</h4>
+                    ขอนแก่น : ธงชัยโฮมเฟอร์นิเจอร์ 043-313188,  บุญมาครอง 043-238583,  เมืองเก่า 043-233955<br />
+                    นครราชสีมา : เอกลักษณ์ลิฟวิ่งโฮม 044-278760<br />
+                    บุรีรัมย์ : เต็งหนึ่งโฮมดีไซน์ 044-161929<br />
+                    ร้อยเอ็ด : อิมเมจ ลิฟวิ่งโฮม 043-525329<br />
+                    ศรีสะเกษ : เลี่ยงกวง 065-0564914<br />
+                    อุบลราชธานี : ตั้งซุ่นเส่ง เฟอร์นิเจอร์ สาขาชยางกูร  045-953277, สาขาพโลรังฤทธิ์ 045-242415, สาขาเลี่ยงเมือง 045-314333, สาขาวารินชำราบ 045-424333
+
+                    <h4>ภาคตะวันตก</h4>
+                    ประจวบคีรีขันธ์ : กิตติศักดิ์ หัวหิน 032-522827<br />
+                    ราชบุรี : กิตติศักดิ์ ราชบุรี 032-3211562<br />
+
+                    <h4>ภาคใต้</h4>
+                    ตรัง : ประสิทธิ์อินเตอร์โฮม 075-210360<br /><br />
+
+                    *(ตามเงื่อนไขของบริษัทฯ)
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        <div class="copyright">
+            © 2019 Globiz Venture Co,. Ltd. All Right Reserved.
+        </div>
+    </div>
+</footer>
+
+<div class="scrollTop">
+    <span class="ti-angle-up"></span>
+</div>
+
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64644234-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-64644234-2');
+    </script>
+
+    <!-- LINE Tag Base Code -->
+    <!-- Do Not Modify -->
+    <script>
+    (function(g,d,o){
+      g._ltq=g._ltq||[];g._lt=g._lt||function(){g._ltq.push(arguments)};
+      var h=location.protocol==='https:'?'https://d.line-scdn.net':'http://d.line-cdn.net';
+      var s=d.createElement('script');s.async=1;
+      s.src=o||h+'/n/line_tag/public/release/v1/lt.js';
+      var t=d.getElementsByTagName('script')[0];t.parentNode.insertBefore(s,t);
+        })(window, document);
+    _lt('init', {
+      customerType: 'lap',
+      tagId: 'a2d337e5-f4ee-4071-b7c8-38d386cd8af0'
+    });
+    _lt('send', 'pv', ['a2d337e5-f4ee-4071-b7c8-38d386cd8af0']);
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+           src="https://tr.line.me/tag.gif?c_t=lap&t_id=a2d337e5-f4ee-4071-b7c8-38d386cd8af0&e=pv&noscript=1" />
+    </noscript>
+    <!-- End LINE Tag Base Code -->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131552643-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-131552643-1');
+    </script>
+
+{% endblock %}

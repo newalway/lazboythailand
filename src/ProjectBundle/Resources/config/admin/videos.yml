@@ -1,0 +1,64 @@
+admin_videos:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminVideos:index}
+  requirements:
+    _method: get
+
+admin_videos_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminVideos:new}
+
+admin_videos_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminVideos:create}
+  requirements:
+    _method: post
+
+admin_videos_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminVideos:edit}
+  requirements:
+    id: \d+
+
+admin_videos_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminVideos:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_videos_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminVideos:delete}
+  requirements:
+    _method: get
+
+admin_videos_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminVideos:group_delete}
+  requirements:
+    _method: post
+
+admin_videos_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminVideos:group_enable}
+  requirements:
+    _method: post
+
+admin_videos_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminVideos:group_disable}
+  requirements:
+    _method: post
+
+admin_videos_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminVideos:sort}
+  requirements:
+    _method: get
+
+admin_videos_sort_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminVideos:sort_prosess}
+  requirements:
+    _method: post

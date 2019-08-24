@@ -1,0 +1,593 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.home{% endtrans %} | {{ parent() }}{% endblock %}
+{% block home_active %}active{% endblock %}
+{% block navbar_class %}rd-navbar_transparent{% endblock %}
+{% block navbar_absolute_class %}rd-navbar-absolute{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<style media="screen">
+.carousel-product .owl-stage-outer {
+    padding-top: 0px;
+    z-index: 1;
+}
+</style>
+<!-- Swiper-->
+{% if banners|length > 0 %}
+<section class="">
+    <div class="owl-carousel carousel-post-gallery carousel-slider-blog-post" id="owl-carousel-banner" data-items="1" data-stage-padding="0" data-loop="true" data-margin="0" data-mouse-drag="true" data-nav="true" data-dots="true" data-photo-swipe-gallery="gallery" data-autoplay="true" data-smart-speed="1000" data-video="true" data-autoplay-hover-pause="true">
+        {% for banner in banners %}
+        <div class="item text-center {% if banner.getVideo %}video{% endif %}">
+            {% if banner.getVideo %}
+                {#<a data-fancybox href="{{banner.video}}">
+                    <img class="wh img-responsive" src="{{banner.thumbnailUrlPlayButton}}" alt="">
+                    <div class="title-category">{{banner.getTitle}}</div>
+                </a>#}
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe class="embed-responsive-item embed-player" src="https://www.youtube.com/embed/{{banner.video|youtube}}?rel=0" allowfullscreen></iframe>
+                    {#<a class="embed-responsive-item embed-player owl-video" href="https://www.youtube.com/embed/{{banner.video|youtube}}?rel=0"></a>#}
+                </div>
+            {% elseif banner.image %}
+                <a {% if banner.getWebsite %}href="{{banner.getWebsite}}"{% endif %}>
+                    <figure>
+                        {% set banner_image_type = banner.image|getFileType %}
+                        {% if banner_image_type == 'gif' %}
+                            {% set banner_image = asset(banner.image) %}
+                        {% else %}
+                            {% set banner_image = asset(banner.image) | imagine_filter('img_1960x840') %}
+                        {% endif  %}
+                        <img src="{{banner_image}}" alt="{{banner.getTitle}}" class="w-100"/>
+                    </figure>
+                </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+<!-- Divider-->
+<!-- <div class="row mt-0 mb-0">
+    <div class="divider"></div>
+</div> -->
+<!-- Banner Home ADS 1-3 -->
+{% if banner_home_top_ads|length > 0 %}
+<section class="pt-3 pb-5 section-limit">
+        {#<div class="row justify-content-sm-center">
+        {% for banner_home_top_ad in banner_home_top_ads %}
+            {% if banner_home_top_ad.image %}
+                <div class="p-1  col-6 col-sm-6  col-md-3 col-xl-3" id="{{banner_home_top_ad.bannerName}}">
+                    <div class="banner-thumbnail banner-thumbnail-top text-center">
+                        <a {% if banner_home_top_ad.getWebsite %}href="{{banner_home_top_ad.getWebsite}}"{% endif %}>
+                            {% set banner_home_top_ad_image = banner_home_top_ad.image %}
+                            <img src="{{banner_home_top_ad_image}}" alt="{{banner_home_top_ad.bannerValue}}" width="450" height="272" />
+
+                            {% if banner_home_top_ad.image %}
+                                {% set banner_home_top_ad_image = banner_home_top_ad.image %}
+                            {% else %}
+                                {% set banner_home_top_ad_image = 'https://placehold.it/450x272' %}
+                            {% endif %}
+
+                        </a>
+                    </div>
+                </div>
+
+            {% endif %}
+        {% endfor %}
+
+    </div>#}
+    <div class="row pt-3 text-center">
+        <!-- Owl Carousel-->
+        <div class="owl-carousel carousel-product p-2" data-items="2" data-md-items="2" data-lg-items="3" data-xl-items="3" data-stage-padding="0" data-loop="true" data-margin="0"data-autoplay="true" data-mouse-drag="true" data-nav="true" data-smart-speed="3500" data-autoplay-hover-pause="false" data-dots="false">
+            {% for banner_home_top_ad in banner_home_top_ads %}
+                {% if banner_home_top_ad.image %}
+                    {% set banner_home_top_ad_image = banner_home_top_ad.image %}
+                    <a {% if banner_home_top_ad.getWebsite %}href="{{banner_home_top_ad.getWebsite}}"{% endif %}>
+                        <div class="item p-1">
+                                <img src="{{banner_home_top_ad_image}}" alt="{{banner_home_top_ad.bannerValue}}" />
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+
+</section>
+{% endif %}
+
+{% if product_categorys|length > 0 %}
+<section class="section-sm bg-default pt-0 pb-0 home-pro-cate">
+    <div class="container text-center">
+        <h4 class="line-text">{% trans %}title.our_product_categories{% endtrans %}</h4>
+        <!-- Owl Carousel-->
+        <div class="owl-carousel carousel-product p-2" data-items="1" data-md-items="2" data-lg-items="3" data-xl-items="4" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+            {% for product_category in product_categorys %}
+            <div class="item">
+                <div class="product product-grid">
+                    <div class="product-img-wrap">
+                        <a href="{{path('product_category',{'cate_id':product_category.id,'slug':product_category.slug})}}">
+                            {% if product_category.image %}
+                            <img src="{{asset(product_category.image) | imagine_filter('img_300x300')}}" alt="{{product_category.getTitle}}" width="300"/>
+                            {% else %}
+                            <img src="https://placehold.it/300x300" alt="{{product_category.getTitle}}" width="300" height="300"/>
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="product-caption">
+                        <h6 class="product-title">
+                            <a href="{{path('product_category',{'cate_id':product_category.id,'slug':product_category.slug})}}">{{product_category.getTitle}}</a>
+                        </h6>
+                        {% if product_category.getShortDesc %}
+                        <p>{{product_category.getShortDesc}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+
+{% if item_sales|length > 0 %}
+<section class="section-sm bg-default">
+    <div class="container text-center">
+        <h4 class="line-text">{% trans %}title.promotion_products{% endtrans %}</h4>
+
+        <!-- Owl Carousel-->
+        {#<div class="owl-carousel carousel-product" data-items="1" data-md-items="1" data-lg-items="2" data-xl-items="2" data-stage-padding="0" data-loop="false" data-margin="20" data-mouse-drag="false" data-nav="true">
+            {% for promotion in promotions %}
+            <div class="item">
+                <div class="product product-grid">
+                    <a href="{{path('product_detail',{'id':loop.index,'slug':'xxxxxx'})}}">
+                        {% if promotion.getImage %}
+                        <img src="{{asset(promotion.getImage) | imagine_filter('img_670x345')}}" alt="{{promotion.getTitle}}" width="670" height="345"/>
+                        {% else %}
+                        <img src="{{asset('lazboy/images/img_418x315.png')}}" alt="No Image" width="670" height="345"/>
+                        {% endif %}
+                    </a>
+                    <div class="product-caption">
+                        <h6 class="product-title">
+                            <a href="{{path('product_detail',{'id':loop.index,'slug':'xxxxxx'})}}">Italian Furniture Contemporary Yellow Club Chair</a>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>#}
+
+        <div class="owl-carousel carousel-product p-2" data-items="1" data-md-items="2" data-lg-items="3" data-xl-items="4" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+        {% for item_sale in item_sales %}
+            {% set sale = item_sale[0] %}
+            {% set sale_price = getPriceData(item_sale) %}
+            <div class="item">
+                {% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:sale, price_data:sale_price,section_name:"promotion_product_index"} %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<div id="{{con_banner_home_middle_ad}}">
+    {% include "ProjectBundle:"~ view_main ~":_banner_ad_page.html.twig" with {'banner_ad': banner_home_middle_ad} %}
+</div>
+
+{#
+<section class="section-limit bg-gray-lighter bg-image" style="background-image: url(https://placehold.it/1819x515);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 col-lg-5 section-sm">
+                <h2 class="wow fadeInUpSmall" data-wow-delay=".2s" data-wow-duration="1.2s">Get our Catalogue</h2>
+                <p class="big wow fadeInUpSmall" data-wow-delay=".5s" data-wow-duration="1.2s">Receive free monthly catalogue showcasing the best in modern furniture design!</p>
+                <a class="banner-link wow fadeInUpSmall" href="catalog-grid.html" data-wow-delay=".7s" data-wow-duration="1.2s">Shop now!</a>
+            </div>
+        </div>
+    </div>
+</section>
+#}
+
+{% if item_best_seller|length > 0 %}
+<section class="section-sm bg-default">
+    <div class="container text-center">
+        <h4 class="line-text">{% trans %}title.our_best_sellers{% endtrans %}</h4>
+        <!-- Owl Carousel-->
+        <div class="owl-carousel carousel-product p-2" data-items="1" data-md-items="2" data-lg-items="3" data-xl-items="4" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+        {% for best_seller in item_best_seller %}
+            {% set item = best_seller[0] %}
+            {% set price_data = getPriceData(best_seller) %}
+            <div class="item">
+                {% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:item, price_data:price_data,section_name:"top_seller"} %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+
+{% if inspiration_categories|length > 0 %}
+    {% for inspiration_category in inspiration_categories %}
+        {% set top_inspirations = getInspirationByCategoryId(inspiration_category.id)  %}
+        {% if top_inspirations|length > 0 %}
+            <section class="section-sm bg-default text-center">
+                <div class="container">
+                    <h4 class="line-text">{{inspiration_category.getTitle|upper}}</h4>
+                    <div class="row row-5 justify-content-md-center">
+                        <!-- inspirations loop  -->
+                        {% for top_inspiration in top_inspirations %}
+                            {% set top_inspiration_link = path('inspiration_detail',{'id':top_inspiration.id,'slug':top_inspiration.getTitle|slug}) %}
+                            <div class="col-md-6 col-lg-4">
+                                <!-- Post classic-->
+                                <article class="post-classic post-minimal text-center">
+                                    <a href="{{top_inspiration_link}}">
+                                        {% if top_inspiration.image %}
+                                            <img src="{{asset(top_inspiration.image) | imagine_filter('img_418x259')}}" alt="{{top_inspiration.getTitle}}" width="418" height="259"/>
+                                        {% else %}
+                                            <img src="{{asset('lazboy/images/img_418x315.png')}}" alt="No Image" width="418" height="259"/>
+                                        {% endif %}
+                                    </a>
+                                    <div class="post-classic-title">
+                                        <h6>
+                                            <a href="{{top_inspiration_link}}">{{top_inspiration.getTitle}}</a>
+                                        </h6>
+                                    </div>
+                                    <div class="post-meta">
+                                        <div class="group">
+                                            <a class="meta-author clear-font-style" href="{{path('inspiration_detail',{'id':top_inspiration.id,'slug':top_inspiration.getTitle|slug})}}">{{top_inspiration.getShortDesc}}</a>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+{#
+{% if top_hashtags|length > 0 %}
+<section class="section-sm bg-default text-center">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.customer_favorites{% endtrans %}</h4>
+        <div class="row row-5">
+            {% for top_hashtag in top_hashtags %}
+                {% set hashtag = top_hashtag[0] %}
+                <div class="p-1 col-6 col-sm-6  col-md-3">  <!--col-md-6 col-xl-3-->
+                    <!-- Thumb corporate-->
+                    <div class="thumb thumb-corporate">
+                        <div class="thumb-corporate__main">
+                            {% if hashtag.image %}
+                                <img src="{{asset(hashtag.image) | imagine_filter('img_330x330')}}" alt="{{hashtag.title}}" width="330"/>
+                            {% else %}
+                                <img src="https://placehold.it/330x330" alt="{{hashtag.title}}" width="330" height="330"/>
+                            {% endif %}
+                        </div>
+                        <div class="thumb-corporate__caption">
+                            <p class="thumb__title">
+                                <a href="{{path('product', {'product_search[hashtag]':hashtag.id})}}">{{hashtag.title}}</a>
+                            </p>
+                            {% if top_hashtag.productCount > 0 %}
+                                <p class="thumb__subtitle">{{top_hashtag.productCount}} products</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+#}
+{#
+{% if customer_favorites|length > 0 %}
+<section class="section-sm bg-default text-center">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.customer_favorites{% endtrans %}</h4>
+        <div class="row row-5 justify-content-md-center">
+            {% for customer_favorite in customer_favorites %}
+            <div class="col-md-6 col-lg-4">
+                <!-- Post classic-->
+                <article class="post-classic post-minimal text-center">
+                    {% if customer_favorite.image %}
+                        <img src="{{asset(customer_favorite.image) | imagine_filter('img_418x259')}}" alt="{{customer_favorite.getTitle}}" width="418" height="259"/>
+                    {% else %}
+                        <img src="{{asset('lazboy/images/img_418x315.png')}}" alt="No Image" width="418" height="259"/>
+                    {% endif %}
+                    <div class="post-classic-title">
+                        <h6>
+                            <a href="{{path('inspiration_detail',{'id':customer_favorite.id,'slug':customer_favorite.getTitle|slug})}}">{{customer_favorite.getTitle}}</a>
+                        </h6>
+                    </div>
+                    <div class="post-meta">
+                        <div class="group">
+                            <a class="meta-author clear-font-style" href="{{path('inspiration_detail',{'id':customer_favorite.id,'slug':customer_favorite.getTitle|slug})}}">{{customer_favorite.getShortDesc}}</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+#}
+{#
+{% if inspirations|length > 0 %}
+<section class="section-sm bg-default text-center">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.design_inspirations{% endtrans %}</h4>
+        <div class="row row-5 justify-content-md-center">
+            {% for inspiration in inspirations %}
+            <div class="col-md-6 col-lg-4">
+                <!-- Post classic-->
+                <article class="post-classic post-minimal text-center">
+                    {% if inspiration.image %}
+                        <img src="{{asset(inspiration.image) | imagine_filter('img_418x259')}}" alt="{{inspiration.getTitle}}" width="418" height="259"/>
+                    {% else %}
+                        <img src="{{asset('lazboy/images/img_418x315.png')}}" alt="No Image" width="418" height="259"/>
+                    {% endif %}
+                    <div class="post-classic-title">
+                        <h6>
+                            <a href="{{path('inspiration_detail',{'id':inspiration.id,'slug':inspiration.getTitle|slug})}}">{{inspiration.getTitle}}</a>
+                        </h6>
+                    </div>
+                    <div class="post-meta">
+                        <div class="group">
+                            <a class="meta-author clear-font-style" href="{{path('inspiration_detail',{'id':inspiration.id,'slug':inspiration.getTitle|slug})}}">{{inspiration.getShortDesc}}</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+#}
+{#
+{% if top_pr_newss|length > 0 %}
+<section class="section-sm bg-default text-center">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.pr_news{% endtrans %}</h4>
+        <div class="row row-5 justify-content-md-center">
+            {% for top_pr_news in top_pr_newss %}
+            <div class="col-md-6 col-lg-4">
+                <!-- Post classic-->
+                <article class="post-classic post-minimal text-center">
+                    {% if top_pr_news.image %}
+                    <img src="{{asset(top_pr_news.image) | imagine_filter('img_450x279')}}" alt="{{top_pr_news.getTitle}}" width="450" height="276"/>
+                    {% else %}
+                    <img src="{{asset('lazboy/images/img_450x276.png')}}" alt="No Image" width="450" height="276"/>
+                    {% endif %}
+                    <div class="post-classic-title">
+                        <h6>
+                            <a href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}">{{top_pr_news.getTitle}}</a>
+                        </h6>
+                    </div>
+                    <div class="post-meta">
+                        <div class="group">
+                            <a href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}">
+                                <time datetime="{{top_pr_news.publicDate|date('Y')}}">{{top_pr_news.publicDate|date('d')}} {{top_pr_news.publicDate|date('M')|trans}} {{top_pr_news.publicDate|date('Y')}}</time>
+                            </a>
+                            {% if top_pr_news.author %}
+                                <a class="meta-author" href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}"> by {{top_pr_news.author}}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section> <!-- old not slider -->
+
+<section class="section-sm bg-default">
+    <div class="container text-center">
+        <h4 class="line-text">{% trans %}title.pr_news{% endtrans %}</h4>
+        <!-- Owl Carousel-->
+        <div class="owl-carousel carousel-product p-2" data-items="1" data-md-items="2" data-lg-items="4" data-xl-items="2" data-stage-padding="0" data-loop="false" data-margin="50" data-mouse-drag="false" data-nav="true">
+        {% for top_pr_news in top_pr_newss %}
+
+            <div class="item">
+                <article class="pt-2 post-classic post-minimal text-center">
+                    {% if top_pr_news.image %}
+                    <img src="{{asset(top_pr_news.image) | imagine_filter('img_450x279')}}" alt="{{top_pr_news.getTitle}}" width="450" height="276"/>
+                    {% else %}
+                    <img src="{{asset('lazboy/images/img_450x276.png')}}" alt="No Image" width="450" height="276"/>
+                    {% endif %}
+                    <div class="post-classic-title">
+                        <h6>
+                            <a href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}">{{top_pr_news.getTitle}}</a>
+                        </h6>
+                    </div>
+                    <div class="post-meta">
+                        <div class="group">
+                            <a href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}">
+                                <time datetime="{{top_pr_news.publicDate|date('Y')}}">{{top_pr_news.publicDate|date('d')}} {{top_pr_news.publicDate|date('M')|trans}} {{top_pr_news.publicDate|date('Y')}}</time>
+                            </a>
+                            {% if top_pr_news.author %}
+                                <a class="meta-author" href="{{path('news_detail',{'id':top_pr_news.id,'slug':top_pr_news.getTitle|slug})}}"> by {{top_pr_news.author}}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>  <!-- old with slider -->
+{% endif %}
+#}
+{#
+{% if newss|length > 0 %}
+<section class="section-sm bg-default text-center">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.pr_news{% endtrans %}</h4>
+        <div class="row row-5 justify-content-md-center">
+            {% for news in newss %}
+            <div class="col-md-6 col-lg-4">
+                <!-- Post classic-->
+                <article class="post-classic post-minimal text-center">
+                    {% if news.image %}
+                    <img src="{{asset(news.image) | imagine_filter('img_450x279')}}" alt="{{news.getTitle}}" width="450" height="276"/>
+                    {% else %}
+                    <img src="{{asset('lazboy/images/img_450x276.png')}}" alt="No Image" width="450" height="276"/>
+                    {% endif %}
+                    <div class="post-classic-title">
+                        <h6>
+                            <a href="{{path('news_detail',{'id':news.id,'slug':news.getTitle|slug})}}">{{news.getTitle}}</a>
+                        </h6>
+                    </div>
+                    <div class="post-meta">
+                        <div class="group">
+                            <a href="{{path('news_detail',{'id':news.id,'slug':news.getTitle|slug})}}">
+                                <time datetime="{{news.publicDate|date('Y')}}">{{news.publicDate|date('d')}} {{news.publicDate|date('M')|trans}} {{news.publicDate|date('Y')}}</time>
+                            </a>
+                            <a class="meta-author" href="{{path('news_detail',{'id':news.id,'slug':news.getTitle|slug})}}">{% if top_pr_news.author %}  by {{top_pr_news.author}}{% endif %}</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+{% endif %}
+#}
+
+{% if (our_galleries_index.optionValue is defined) or  (shop_locators_index.optionValue is defined) %}
+<section class="section-sm bg-default">
+    <div class="container">
+        <h4 class="line-text">{% trans %}title.our_galleries_shop_locators{% endtrans %}</h4>
+        <div class="row m-0">
+            {% if our_galleries_index.optionValue  is defined and  our_galleries_index.optionValue != null %}
+                <div class="mt-5 col-md-6">
+                    <h5 class="text-center">{% trans %}title.lazboy_galleries{% endtrans %}</h5>
+                    <div class="divider mt-3 mb-3"></div>
+                    {% if our_galleries_index_image.optionValue %}
+                        <img src="{{asset(our_galleries_index_image.optionValue)}}" alt="La-Z-Boy Galleries" class="w-100" />
+                    {% else %}
+                        <img src="https://placehold.it/600x265?text=600x265" alt="La-Z-Boy Galleries" class="w-100" />
+                    {% endif %}
+                    <div class="divider mt-3 mb-3"></div>
+                    <div class="mt-0 font-size-14">
+                        {{our_galleries_index.optionValue|raw}}
+                    </div>
+                    <a href="{{path('gallery')}}" class="button button-gray-light-outline">{% trans %}title.lazboy_gallery_detail{% endtrans %}</a>
+                </div>
+            {% endif %}
+            {% if shop_locators_index.optionValue  is defined and  shop_locators_index.optionValue != null %}
+                <div class="mt-5 col-md-6">
+                    <h5 class="text-center">{% trans %}title.shop_locators{% endtrans %}</h5>
+                    <div class="divider mt-3 mb-3"></div>
+                    {% if shop_locators_index_image.optionValue %}
+                        <img src="{{asset(shop_locators_index_image.optionValue)}}" alt="Shop Locator" class="w-100" />
+                    {% else %}
+                        <img src="https://placehold.it/600x265?text=600x265" alt="La-Z-Boy Galleries" class="w-100" />
+                    {% endif %}
+                    <div class="divider mt-3 mb-3"></div>
+                    <div class="mt-0 font-size-14">
+                        {{shop_locators_index.optionValue|raw}}
+                    </div>
+                    <a href="{{path('distributor',{'id':1})}}" class="button button-gray-light-outline">{% trans %}title.find_location{% endtrans %}</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section-md bg-default">
+    <div class="container">
+        <div class="row row-5 justify-content-md-center">
+            <div class="col-md-6 col-lg-4">
+                <!-- Blurb circle-->
+                <article class="blurb blurb-circle blurb-circle_centered">
+                    <div class="blurb-circle__icon">
+                        <span class="icon linear-icon-clock3"></span></div>
+                    <p class="blurb__title">{% trans %}title.quality{% endtrans %}</p>
+                    <p>{% trans %}title.quality_info{% endtrans %}</p>
+                </article>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <!-- Blurb circle-->
+                <article class="blurb blurb-circle blurb-circle_centered">
+                    <div class="blurb-circle__icon">
+                        <span class="icon linear-icon-truck"></span></div>
+                    <p class="blurb__title">{% trans %}title.services{% endtrans %}</p>
+                    <p>{% trans %}title.services_info{% endtrans %}</p>
+                </article>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <!-- Blurb circle-->
+                <article class="blurb blurb-circle blurb-circle_centered">
+                    <div class="blurb-circle__icon">
+                        <span class="icon linear-icon-medal-empty"></span></div>
+                    <p class="blurb__title">{% trans %}title.warranty{% endtrans %}</p>
+                    <p>{% trans %}title.warranty_info{% endtrans %}</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Divider-->
+<!-- <div class="container">
+    <div class="divider"></div>
+</div> -->
+
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+    <script>
+    $('.owl-carousel-ads').owlCarousel({
+        loop:true,
+        margin:10,
+        responsiveClass:true,
+        responsive:{
+            0:{
+                items:3,
+                nav:true
+            },
+            600:{
+                items:3,
+                nav:false
+            },
+            1000:{
+                items:5,
+                nav:true,
+                loop:false
+            }
+        }
+    })
+    </script>
+{% endblock %}

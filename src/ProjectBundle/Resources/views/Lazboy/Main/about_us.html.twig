@@ -1,0 +1,45 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.about.us{% endtrans %} | {{ parent() }}{% endblock %}
+{% block news_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.about.us{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.about.us{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		{{data.getContent|raw}}
+
+		{#
+		<!-- ENG -->
+		<h3 style="color: #2969b0;">GLOBIZ VENTURE CO., LTD.</h3>
+		<h5 style="color: #2969b0;">COMPANY OVERVIEW</h5>
+
+		<ul class="list-marked">
+			<li>Year 2000, Globiz Venture Co., Ltd. was established.</li>
+			<li>Year 2004, LA-Z-BOY USA grants license to Globiz Venture Co., Ltd. to authorize the sale and marketing for LA-Z-BOY upholstery products.</li>
+			<li>The company is located at 2991/12 Ladprao rd., Klongjan, Bangkapi, Bangkok 10240</li>
+			<li>Galleries at Sukhumvit 30/1, Mega Bangna, and Ladprao 101/3</li>
+			<li>Warehouse is located at Bangna-Trad 22.5 km.</li>
+			<li>Manpower = 73 persons</li>
+		</ul>
+
+		<!-- TH -->
+		<h3 style="color: #2969b0;">บริษัท โกลบิซ เวนเจอร์ จำกัด</h3>
+		<h5 style="color: #2969b0;">ข้อมูลทั่วไปเกี่ยวกับบริษัทฯ</h5>
+
+		<ul class="list-marked">
+			<li>ปี ค.ศ 2000 บริษัท โกลบิซ เวนเจอร์ จำกัด เริ่มก่อตั้ง</li>
+			<li>ปี ค.ศ 2004 LA-Z-BOY ของประเทศสหรัฐอเมริกาได้ให้ลิขสิทธิ์กับทางบริษัทฯ ในการเป็นตัวแทนจำหน่ายเก้าอี้และชุดโซฟาปรับเอนนอน เล-ซี-บอย ในประเทศไทยแต่เพียงผู้เดียว</li>
+			<li>ที่ตั้งสำนักงานใหญ่ : 2991/12 ถนนลาดพร้าว แขวงคลองจั่น เขตบางกะปิ กรุงเทพฯ 10240</li>
+			<li>มีแกลเลอรี่ 3 สาขา : สุขุมวิท 30/1, เมกาบางนา, และ ลาดพร้าว 101/3</li>
+			<li>คลังสินค้า ตั้งอยู่ที่ ถ.บางนา-ตราด กม.ที่ 22.5</li>
+			<li>มีพนักงานบริษัทฯ ทั้งหมด 73 คน</li>
+		</ul>
+		#}
+	</div>
+</section>
+{% endblock %}

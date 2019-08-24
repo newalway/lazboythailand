@@ -1,0 +1,274 @@
+<style media="screen">
+.tb {display: table;}
+.tb-cell {display: table-cell;padding: 20px;}
+#review_rating {padding-top: 20px;font-size: 16px;}
+#review_rating .ratting_bar .r-title-star {display: inline-block;width: 45px;text-align: left;}
+.button.star-button {position: relative;border: none;border-radius: 0;padding: 0;}
+#review .r-click {display: inline-block;font-size: 12px;font-weight: 700;color: #FFF;line-height: 22px;padding: 0 20px 0;background-color: #000;margin-top: 6px;position: relative;margin-left: 10px;}
+#review .r-click:before {content: '';width: 0;height: 0;border-bottom: 11px solid transparent;border-top: 11px solid transparent;border-right: 11px solid #000;position: absolute;left: -11px;top: 0;}
+@media (max-width: 560px){
+    #review_rating .tb, #review_rating .tb-cell {display: block;}
+    .form-wrap .tb, .form-wrap .tb-cell {display: block;}
+}
+</style>
+<div class="col-xs-12" ng-controller="reviewController" ng-init="init('{{acctoken}}','{{data.id}}','{{user_session}}', '{{app.request.locale}}')">
+    <div id="review">
+        <div><h5><!-- Rating & Reviews of -->{{getProductTypeAndStyleNumber(data)}} {{data.getTitle}}</h5></div>
+
+        <button type="button" id="write_your_review" name="write_your_review" class="button button-primary mt-3" ng-click="setReviewEditor(true);setWriteYourReview(false)" ng-show="getWriteYourReview()" >
+            {% trans %}review.review_customer_comment_click{% endtrans %} <!-- Write your review -->
+        </button>
+        <div class="alert ng-cloak" ng-show="message" style="padding:0;">
+            <button type="button" class="close" ng-click="message=false">×</button>
+            <span ng-bind-html="message" style="color:green"></span>
+        </div>
+        <div class="row" ng-show="getReviewEditor()">
+            <div class="col-xs-12 col-sm-12 col-md-7">
+                <form class="text-left" ng-submit="processReviewForm()" id="contact-form">
+                    {{form_widget(review_form._token)}}
+                    <div class="form-wrap">
+                        <div>{% trans %}review.review_score_text1{% endtrans %} <!-- Rate this product --></div>
+                        <div class="tb">
+                            <div class="tb-cell">
+                                <jk-rating-stars class="my-custom-stars"max-rating="5"reset-allowed="false" on-rating="setItemRating(rating)"></jk-rating-stars>
+                            </div>
+                            <div class="tb-cell">
+                                <span class="r-click" ng-show="formDataReview.ratingScore<1">{% trans %}review.review_score_text2{% endtrans %}</span>
+                                <span class="r-star" ng-show="formDataReview.ratingScore>0">{{'{{formDataReview.ratingScore}}'}} ดาว</span>
+                            </div>
+                        </div>
+                        <div class="text-red" ng-show="errors.rating" ng-bind="errors.rating"></div>
+                    </div>
+
+                    <div class="form-wrap form-wrap_icon linear-icon-man">
+                        {{form_widget(review_form.title, {'attr' : {'class':'form-input','id' : 'title','placeholder':'review.review_title_text'}})}}
+                        <div class="text-red" ng-show="errors.title" ng-bind="errors.title"></div>
+                    </div>
+
+                    <div class="form-wrap form-wrap_icon linear-icon-feather">
+                        {{form_widget(review_form.content, {'attr' : {'class':'form-input','id' : 'content','placeholder':'review.review_content_text'}})}}
+                        <div class="text-red" ng-show="errors.content" ng-bind="errors.content"></div>
+                    </div>
+
+                    <div class="form-wrap">
+                        {% if app.user and acctoken %}
+                            {% trans %}review.review_by{% endtrans %}<!--Review as--> {#{showReviewerName(app.user.firstname, app.user.lastname)}#}
+                        {% else %}
+                            {% trans %}review.review_text1{% endtrans %}<!--Your review will be published anonymously-->
+                        {% endif %}
+                    </div>
+
+                    <div class="form-wrap">
+                        {{form_widget(review_form.save, { 'label': 'review.review_button'})}}
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-5">
+            {#<div class="r-tip">
+            <strong>การเขียนรีวิวที่ถูกวิธี</strong><br />
+            <strong>สิ่งที่ควรทำ</strong><br />
+            <ul>
+            <li>เน้นเฉพาะที่ตัวสินค้าและคุณสมบัติของสินค้า</li>
+            <li>แสดงความคิดเห็นตามประสบการณ์โดยตรงของคุณ</li>
+            <li>โปรดช่วยอธิบายเพิ่มเติม ว่าทำไมคุณถึงแสดงความคิดเห็นเช่นนั้น</li>
+            </ul>
+            <strong>แสดงความคิดเห็นที่ไม่เกี่ยวข้องกับสินค้าโดยตรง</strong>
+            <ul>
+            <li>กรุณาอย่าแสดงความคิดเห็นที่ไม่เป็นความจริง เบี่ยงเบนหรือนำไปสู่ในทางที่ไม่เป็นจริง</li>
+            <li>ใช้ คำดูหมิ่น หยายคาย ลามก ทำลายชื่อเสียง ข่มขู่ หรือ ภาษาดูถูกผู้อื่น</li>
+            <li>เปิดเผยข้อมูลส่วนตัวของผู้อื่น</li>
+            <li>ใส่ ลิงค์ที่ไม่เกี่ยวข้องกับ LAZBOY THAILAND</li>
+            <li>ใส่ ลิงค์เครื่องหมายการค้าที่ไม่ได้รับอนุญาติ หรือ เนื้อหาที่ละเมิดลิขสิทธ์</li>
+            </ul>
+            <strong>เกณฑ์การให้คะแนนสินค้า</strong>
+            <ul>
+            <li>5 ดาว = ยอดเยี่ยม</li>
+            <li>4 ดาว = ดี</li>
+            <li>3 ดาว = พอใช้</li>
+            <li>2 ดาว = ค่อนข้างแย่</li>
+            <li>1 ดาว = แย่</li>
+            </ul>
+            </div>#}
+            </div>
+        </div>
+    </div>
+
+    <div id="review_rating">
+        <div class="tb">
+            <div class="tb-cell">
+                <div class="ratting_rating">
+                    <div>{% trans %}review.review_avg_text{% endtrans %}</div>
+                    <div id="average_rating"></div>
+                    <div> {{arr_rating.average_rating}} {% trans %}review.review_score_from{% endtrans %} 5 {% trans %}review.review_score{% endtrans %} </div>
+                    <div>
+                        <span ng-show="{{arr_rating.count_rating}}>0">{{arr_rating.sum_rating}} {% trans %}review.review_score_product{% endtrans %}</span>
+                        <span ng-show="{{arr_rating.count_review}}>0">{{arr_rating.count_review}} {% trans %}review.review_text2{% endtrans %}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tb-cell">
+                <div class="ratting_bar">
+                    <div><div class="r-title-star">5 {% trans %}review.review_star{% endtrans %}</div> <progress value="{{arr_rating.data_ratings[5].percentage}}" max="100"></progress><span></span> {{arr_rating.data_ratings[5].count}}</div>
+                    <div><div class="r-title-star">4 {% trans %}review.review_star{% endtrans %}</div> <progress value="{{arr_rating.data_ratings[4].percentage}}" max="100"></progress><span></span> {{arr_rating.data_ratings[4].count}}</div>
+                    <div><div class="r-title-star">3 {% trans %}review.review_star{% endtrans %}</div> <progress value="{{arr_rating.data_ratings[3].percentage}}" max="100"></progress><span></span> {{arr_rating.data_ratings[3].count}}</div>
+                    <div><div class="r-title-star">2 {% trans %}review.review_star{% endtrans %}</div> <progress value="{{arr_rating.data_ratings[2].percentage}}" max="100"></progress><span></span> {{arr_rating.data_ratings[2].count}}</div>
+                    <div><div class="r-title-star">1 {% trans %}review.review_star{% endtrans %}</div>  <progress value="{{arr_rating.data_ratings[1].percentage}}" max="100"></progress><span></span> {{arr_rating.data_ratings[1].count}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="review_list" ng-init="getResultsPage(1);" ng-show="lists.length>0" class="ng-cloak">
+        <div class="r-head mb-3">{% trans %}review.review_customer_comment{% endtrans %}</div>
+        <div class="col-sm-12 r-data"  dir-paginate="list in lists | itemsPerPage: listsPerPage" total-items="countReview" current-page="pagination.current">
+            <!-- <h5>1 review for ITALIAN FURNITURE CONTEMPORARY ALLUMEN GLASS TABLE</h5> -->
+            <div class="mt-3 box-comment box-comment__product">
+                <div class="unit flex-column flex-sm-row unit-spacing-md">
+                    <div class="unit__left">
+                        <div class="box-comment__icon">
+                            <span class="icon linear-icon-man"></span>
+                        </div>
+                    </div>
+                    <div class="unit__body">
+                        <div class="box-comment__body">
+                            <h6>{{'{{list.reviewer_name}}'}}</h6>
+                            <div class="r-date">
+                                <small>{{'{{list.created_at|date:"d"}}'}} {{'{{list.created_at|date:"MMMM"|translate}}'}} {{'{{list.created_at|date:"y"}}'}}</small>
+                            </div>
+                            <p><div class="r-content" ng-bind-html="list.content | nl2br"> </div></p>
+                            <ul class="rating-list">
+                                <li ng-repeat="rate in [].constructor(list.rating) track by $index"><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                                <li ng-repeat="rate in [].constructor(5 - list.rating) track by $index"><span class="icon linear-icon-star icon-secondary"></span></li>
+                                <!-- <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                                <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                                <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                                <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                                <li><span class="icon linear-icon-star-half"></span></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+    </div>
+{#<hr ng-hide="lists.length>0" />#}
+</div>
+
+{#<div class="row row-60">
+    <div class="col-sm-12">
+        <h5>1 review for ITALIAN FURNITURE CONTEMPORARY ALLUMEN GLASS TABLE</h5>
+        <div class="box-comment box-comment__product">
+            <div class="unit flex-column flex-sm-row unit-spacing-md">
+                <div class="unit__left">
+                    <div class="box-comment__icon">
+                        <span class="icon linear-icon-man"></span>
+                    </div>
+                </div>
+                <div class="unit__body">
+                    <div class="box-comment__body">
+                        <h6>Adam Smith</h6>
+                        <time datetime="2018">- Jan.20, 2018</time>
+                        <p>This is a great online store.</p>
+                        <ul class="rating-list">
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h5>Add a review</h5>
+        <p>Your email address will not be published. Required fields are marked *</p>
+        <h6>Your Rating</h6>
+        <ul class="rating-list">
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+        </ul>
+        <!-- RD Mailform-->
+        <form class="text-left" data-form-output="form-output-global" data-form-type="contact" method="post"ng-submit="processReviewForm()" id="contact-form">
+            {{form_widget(review_form._token)}}
+            <div class="form-wrap form-wrap_icon linear-icon-man">
+                {{form_widget(review_form.title, {'attr' : {'class':'form-input','id' : 'title','placeholder':'Your Name'}})}}
+			  	<div class="text-red" ng-show="errors.title" ng-bind="errors.title"></div>
+            </div>
+            <div class="form-wrap form-wrap_icon linear-icon-feather">
+                {{form_widget(review_form.content, {'attr' : {'class':'form-input','id' : 'content','placeholder':'Message'}})}}
+			  	<div class="text-red" ng-show="errors.content" ng-bind="errors.content"></div>
+            </div>
+            <!-- <button class="button button-primary" type="submit">Submit</button> -->
+            {{form_widget(review_form.save, {'attr' : {'class':'button button-primary','id' : 'title','placeholder':'Your Name'}})}}
+        </form>
+    </div>
+</div>#}
+
+{#<div class="row row-60">
+    <div class="col-sm-12">
+        <h5>1 review for ITALIAN FURNITURE CONTEMPORARY ALLUMEN GLASS TABLE</h5>
+        <div class="box-comment box-comment__product">
+            <div class="unit flex-column flex-sm-row unit-spacing-md">
+                <div class="unit__left">
+                    <div class="box-comment__icon">
+                        <span class="icon linear-icon-man"></span>
+                    </div>
+                </div>
+                <div class="unit__body">
+                    <div class="box-comment__body">
+                        <h6>Adam Smith</h6>
+                        <time datetime="2018">- Jan.20, 2018</time>
+                        <p>This is a great online store.</p>
+                        <ul class="rating-list">
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-secondary-4"></span></li>
+                            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h5>Add a review</h5>
+        <p>Your email address will not be published. Required fields are marked *</p>
+        <h6>Your Rating</h6>
+        <ul class="rating-list">
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+            <li><span class="icon linear-icon-star icon-gray-4"></span></li>
+        </ul>
+        <!-- RD Mailform-->
+        <form class="rd-mailform rd-mailform_style-1 text-left" data-form-output="form-output-global" data-form-type="contact" method="post" action="bat/rd-mailform.php">
+            <div class="form-wrap form-wrap_icon linear-icon-man">
+                <input class="form-input" id="contact-name" type="text" name="name" data-constraints="@Required">
+                <label class="form-label" for="contact-name">Your name *</label>
+            </div>
+            <div class="form-wrap form-wrap_icon linear-icon-envelope">
+                <input class="form-input" id="contact-email" type="email" name="email" data-constraints="@Email @Required">
+                <label class="form-label" for="contact-email">Your e-mail *</label>
+            </div>
+            <div class="form-wrap form-wrap_icon linear-icon-telephone">
+                <input class="form-input" id="contact-phone" type="text" name="phone" data-constraints="@Numeric">
+                <label class="form-label" for="contact-phone">Your phone *</label>
+            </div>
+            <div class="form-wrap form-wrap_icon linear-icon-feather">
+                <textarea class="form-input" id="contact-message" name="message" data-constraints="@Required"></textarea>
+                <label class="form-label" for="contact-message">Your message *</label>
+            </div>
+            <button class="button button-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>#}

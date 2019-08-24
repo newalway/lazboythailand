@@ -1,0 +1,52 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{{data.getTitle}} - {% trans %}menu.history{% endtrans %} | {{ parent() }}{% endblock %}
+{% block history_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.history{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li><a href="{{path('history')}}">{% trans %}menu.history{% endtrans %}</a></li>
+	<li class="active">{{data.getTitle}}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		<div class="row row-70 justify-content-sm-center">
+
+			<div class="col-lg-7 col-xl-8 section-divided__main">
+				{% if data.image %}
+				<figure class="figure mb-3">
+					<img src="{{asset(data.image) | imagine_filter('img_w_1000')}}" alt="{{data.getTitle}}" />
+				</figure>
+				{% endif %}
+				{% if app.request.locale == "en" %}
+					{% set css_font_size = "font-size-14" %}
+				{% elseif app.request.locale == "th" %}
+					{% set css_font_size = "font-size-16" %}
+				{% endif %}
+				<div class="{{css_font_size}}">
+					{{data.getDescription|raw}}
+				</div>
+			</div>
+
+			<div class="col-lg-5 col-xl-4 section-divided__aside section-divided__aside-left">
+				<section class="section-sm">
+					<h5>History</h5>
+					<ul class="list-linked">
+					{% if historys|length > 0 %}
+						{% for history in historys %}
+						<li><a href="{{path('history_detail',{'id':history.id,'slug':history.getTitle|slug})}}" {% if history.id == data.id %}style="color:#2969b0;"{% endif %}>{{history.getTitle}}</a></li>
+						{% endfor %}
+					{% endif %}
+					</ul>
+				</section>
+
+				{% include 'ProjectBundle:'~ view_layout ~'/Main:_social.html.twig' %}
+
+			</div>
+
+		</div>
+    </div>
+</section>
+{% endblock %}

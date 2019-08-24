@@ -1,0 +1,213 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}cart.title{% endtrans %} | {{ parent() }}{% endblock %}
+{% block cart_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}cart.title{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}cart.title{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+
+<section class="section-md bg-default" ng-app="cartApp" ng-controller="cartCtrl" ng-init="init({% if is_granted('ROLE_CLIENT') %}true{% else %}false{% endif %})">
+	<div class="container cart-container">
+
+		{% if arr_cart_data.products|length > 0 %}
+
+			<div ng-show="arr_cart_data.products.length>0" ng-cloak>
+
+				<div class="row row-30 cart-pc font-size-14">
+					<div class="col-sm-5 text-dark"><b>{% trans %}order.product{% endtrans %}</b></div>
+					<div class="col-sm-2 text-dark text-center"><b>{% trans %}order.price{% endtrans %}</b></div>
+					<div class="col-sm-2 text-dark text-center"><b>{% trans %}order.quantity{% endtrans %}</b></div>
+					<div class="col-sm-2 text-dark text-center"><b>{% trans %}order.subtotal{% endtrans %}</b></div>
+				</div>
+
+				<div class="cart-item" ng-repeat="product in arr_cart_data.products" ng-cloak>
+					<div class="row align-items-center">
+						<div class="col-12 col-sm-3 col-md-2 col cart-img">
+							<a class="thumbnail-classic-title" href="{{'{{getRouteProductDetail(product.product_id, product.slug, product.variant_option, product.product_option_id_query_serialized )}}'}}">
+								<img ng-if="product.image_medium" ng-src="{{'{{product.image_medium}}'}}" alt="{{'{{product.title}}'}}" width="120" />
+							</a>
+						</div>
+
+						<div class="col-12 col-sm-9 col-md-3 col">
+
+							<a class="thumbnail-classic-title " href="{{'{{getRouteProductDetail(product.product_id, product.slug, product.variant_option, product.product_option_id_query_serialized )}}'}}">
+								<div>
+									<b style="font-size: 18px;">{{'{{product.title}}'}}</b>
+									<span ng-if="product.is_pre_order" class="badge badge-primary">{% trans %}order.pre_order{% endtrans %}</span>
+									<span ng-if="product.is_pre_order==0 && product.inventory_policy_status && product.inventory_quantity>0" class="badge badge-primary">{% trans %}order.instock{% endtrans %}</span>
+								</div>
+
+								<div ng-if="product.variant_option.length>0" style="font-size: 16px;">
+									<span ng-if="product.product_category.title">{{'{{product.product_category.title}}'}}&nbsp;</span>
+									{{'{{product.variant_option.join(" · ")}}'}}
+									{#{{'{{product.basic_price|currency:"":0}}'}}#}
+								</div>
+							</a>
+
+
+
+							<div ng-if="product.sku" style="font-size: 14px;">
+								SKU:&nbsp;{{'{{product.sku}}'}}
+							</div>
+
+							<div ng-if="product.product_option.length>0" style="font-size: 14px;">
+								<span>Options <span ng-if="product.sum_options_price>0">({% trans %}total{% endtrans %} ฿{{'{{product.sum_options_price| currency:"":0}}'}})</span> </span>
+								<ul style="padding-left:18px;">
+									<li ng-repeat="option in product.product_option" style="font-size:12px; list-style-type:disc; display:list-item">
+										<span>{{'{{option.option_category_title}}'}}:</span>
+										<span>&nbsp;{{'{{option.option_title}}'}}</span>
+										<span ng-if="option.option_price>0">(+฿{{'{{option.option_price| currency:"":0}}'}})</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="col-6 col-md-2 col cart-price">
+							<span class="cart-m">{% trans %}order.price{% endtrans %}:</span> ฿{{'{{product.price| currency:"":0}}'}}
+							<del ng-if="product.compare_at_price>0 && product.compare_at_price > product.sum_options_price ">
+								฿{{'{{product.compare_at_price| currency:"":0}}'}}
+							</del>
+						</div>
+
+						<div class="col-6 col-md-2 col cart-quantity">
+							<input ng-model="product.quantity" ng-change="updateProductQuantity($event, product.quantity, product.product_id, product.sku_id, product.product_options_index, $index, 'update')" class="form-input" type="number" min="1" value="{{'{{product.quantity}}'}}" name="quantity" string-to-number input-number>
+
+							<div>
+								<span style="color:#ff596d;" ng-if=product.error_msg> <small>{{'{{product.error_msg}}'}}</small> </span>
+								<span style="color:#4CAF50;" ng-if=product.add_to_cart_message> <small>{{'{{product.title}}'}} {{'{{product.add_to_cart_message}}'}}</small> </span>
+							</div>
+						</div>
+
+						<div class="col-7 col-md-2 col cart-total">
+							<span class="cart-m">{% trans %}order.subtotal{% endtrans %}:</span> ฿{{'{{product.amount| currency:"":0}}'}}
+						</div>
+
+						<div class="col-5 col-md-1 col cart-remove">
+							<a href="javascript:void(0)" ng-click="removeProduct(product.product_id, product.sku_id, product.product_options_index, $index)" title="Remove">
+								<span class="fa-lg fa-trash icon-gray-4"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<hr class="mb-5 mt-5 ng-cloak" />
+
+		        <div class="row text-center" ng-cloak>
+
+					{% if discount_setting_status %}
+						<div ng-if="!arr_cart_data.summary.discount_code" class="col-md-8 text-md-left mb-0">
+							<form method="post" enctype="multipart/form-data">
+								{{form_widget(form._token)}}
+				                <div class="group-xs">
+				                    <div class="form-wrap form-wrap_icon linear-icon-tag">
+				                        <input class="form-input" type="text" placeholder="{% trans %}order.enter_coupon_code{% endtrans %}" ng-model="frm_discount.code" name="code">
+				                    </div>
+				                    <button ng-click="applyDiscountCode()" class="button button-black" type="button">
+										<span ng-hide="getDataLoading()">
+											{% trans %}order.apply_coupon_code{% endtrans %}
+										</span>
+										<span class="fa fa-circle-o-notch fa-spin" ng-show="getDataLoading()"></span>
+									</button>
+
+									<div class="form-group" ng-hide="arr_result_discount.status">
+										<div class="err-message">{{'{{arr_result_discount.error_message}}'}}</div>
+									</div>
+				                </div>
+							</form>
+			            </div>
+					{% endif %}
+
+		            <div class="col-md-4 text-md-right">
+						{# <button class="button button-gray-light-outline" type="submit">Update card</button> #}
+		            </div>
+
+		        </div>
+
+				<hr class="mb-5 mt-5 clearfix ng-cloak" ng-if="!arr_cart_data.summary.discount_code"/>
+
+				<div class="text-center text-md-right ng-cloak">
+					<dl class="list-terms-minimal">
+						<dt>{% trans %}order.subtotal{% endtrans %}</dt>
+						<dd>฿{{'{{arr_cart_data.summary.sub_total| currency:"":0}}'}}</dd>
+					</dl>
+
+					<dl class="list-terms-minimal">
+						<dt>{% trans %}order.shipping_fee{% endtrans %}</dt>
+						<dd>฿{{'{{arr_cart_data.summary.shipping_cost| currency:"":0}}'}}</dd>
+						{# <dd ng-show="arr_cart_data.summary.shipping_cost>0">฿{{'{{arr_cart_data.summary.shipping_cost| currency:"":0}}'}}</dd>
+						<dd ng-show="arr_cart_data.summary.shipping_cost<=0">{% trans %}order.free_shipping{% endtrans %}</dd> #}
+					</dl>
+
+					<dl ng-if="arr_cart_data.summary.discount_code" class="list-terms-minimal">
+						<dt>{% trans %}order.promotion{% endtrans %} <span style="color: #006EAE;">{{'{{arr_cart_data.summary.discount_code}}'}}</span> <a href="javascript:void(0)" ng-click="removeDiscountCode()" style="font-size: 13px;">{% trans %}remove{% endtrans %}</a></dt>
+						<dd>-฿{{'{{arr_cart_data.summary.discount_amount| currency:"":0}}'}}</dd>
+					</dl>
+
+					<dl class="heading-5 list-terms-minimal">
+						<dt>{% trans %}order.total{% endtrans %}</dt>
+						<dd>฿{{'{{arr_cart_data.summary.total| currency:"":0}}'}}</dd>
+					</dl>
+					<a class="button button-primary" href="{{path('checkout')}}"> {% trans %}cart.checkout{% endtrans %}</a>
+				</div>
+
+			</div>
+
+			<div ng-show="arr_cart_data.products.length<=0" ng-cloak class="text-center">
+				{% trans %}cart.no_items_in_cart{% endtrans %}<br />
+				<a class="button button-primary mt-4" href="{{path('product')}}">{% trans %}cart.continued_shopping{% endtrans %}</a>
+			</div>
+
+		{% else %}
+			<div class="text-center">
+				{% trans %}cart.no_items_in_cart{% endtrans %}<br />
+				<a class="button button-primary mt-4" href="{{path('product')}}">{% trans %}cart.continued_shopping{% endtrans %}</a>
+			</div>
+		{% endif %}
+	</div>
+
+	<div ng-show="arr_cart_data.products.length>0" ng-cloak style="padding-top: 25px; padding-left: 25px;">
+		{% if (delivery_information or warranty_condition or replacement_condition) %}
+		<div class="row">
+			<div class="col-md-6 col-lg-6 col-xl-6">
+				{% if delivery_information %}
+					<div class="col-md-12">
+						{{delivery_information.optionValue|raw}}
+					</div>
+				{% endif %}
+			</div>
+			<div class="col-md-6 col-lg-6 col-xl-6">
+				{% if warranty_condition %}
+					<div class="col-md-12 mb-3">
+						{{warranty_condition.optionValue|raw}}
+					</div>
+				{% endif %}
+
+				{% if replacement_condition %}
+					<div class="col-md-12">
+						{{replacement_condition.optionValue|raw}}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
+</section>
+
+{% endblock %}
+
+{% block javascripts_body %}
+{{ parent() }}
+<script>
+    window.cart_data = {{arr_cart_data|json_encode|raw}};
+</script>
+<script src="{{asset('javascripts/base_product.js')}}"></script>
+<!-- Modules -->
+<script src="{{asset('javascripts/cartApp/app.js')}}"></script>
+<!-- Controllers -->
+<script src="{{asset('javascripts/cartApp/controllers/cart_controller.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,64 @@
+admin_history:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminHistory:index}
+  requirements:
+    _method: get
+
+admin_history_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminHistory:new}
+
+admin_history_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminHistory:create}
+  requirements:
+    _method: post
+
+admin_history_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminHistory:edit}
+  requirements:
+    id: \d+
+
+admin_history_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminHistory:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_history_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminHistory:delete}
+  requirements:
+    _method: get
+
+admin_history_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminHistory:group_delete}
+  requirements:
+    _method: post
+
+admin_history_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminHistory:group_enable}
+  requirements:
+    _method: post
+
+admin_history_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminHistory:group_disable}
+  requirements:
+    _method: post
+
+admin_history_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminHistory:sort}
+  requirements:
+    _method: get
+
+admin_history_sort_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminHistory:sort_prosess}
+  requirements:
+    _method: post

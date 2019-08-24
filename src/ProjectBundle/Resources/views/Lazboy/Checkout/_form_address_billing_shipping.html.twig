@@ -1,0 +1,66 @@
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.first_name, {'id' : 'fd_first_name', 'attr':{'ng-model':'frm_first_delivery.first_name', 'placeholder': 'member.personal.fname'|trans ~ ' *', 'data-constraints':'@Required'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.first_name" ng-bind="frm_first_delivery_error.first_name"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.last_name, {'id' : 'fd_last_name', 'attr':{'ng-model':'frm_first_delivery.last_name', 'placeholder': 'member.personal.lname'|trans ~ ' *', 'data-constraints':'@Required'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.last_name" ng-bind="frm_first_delivery_error.last_name"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.company_name, {'id' : 'fd_company_name', 'attr':{'ng-model':'frm_first_delivery.company_name', 'placeholder':'member.personal.company_name'|trans}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.company_name" ng-bind="frm_first_delivery_error.company_name"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.phone, {'id' : 'fd_phone', 'attr':{'ng-model':'frm_first_delivery.phone', 'placeholder':'member.personal.phone'|trans ~ ' *', 'data-constraints':'@Required'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.phone" ng-bind="frm_first_delivery_error.phone"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.address, {'id' : 'fd_address', 'attr':{'ng-model':'frm_first_delivery.address', 'placeholder':'member.address'|trans ~ ' *', 'data-constraints':'@Required'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.address" ng-bind="frm_first_delivery_error.address"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.district, {'id' : 'fd_district', 'attr':{'ng-model':'frm_first_delivery.district', 'placeholder':'member.subDistrict'|trans ~ ' *', 'data-constraints':'@Required', 'autocomplete':'off'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.district" ng-bind="frm_first_delivery_error.district"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.amphure, {'id' : 'fd_amphure', 'attr':{'ng-model':'frm_first_delivery.amphure', 'placeholder':'member.amphure'|trans ~ ' *', 'data-constraints':'@Required', 'autocomplete':'off'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.amphure" ng-bind="frm_first_delivery_error.amphure"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.province, {'id' : 'fd_province', 'attr':{'ng-model':'frm_first_delivery.province', 'placeholder':'member.province'|trans ~ ' *', 'data-constraints':'@Required', 'autocomplete':'off'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.province" ng-bind="frm_first_delivery_error.province"></div>
+</div>
+<div style="display:none;">
+	{{form_widget(first_delivery_form.countryCode, {'id' : 'fd_countryCode', 'attr':{'ng-model':'frm_first_delivery.countryCode'}})}}
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.postcode, {'id' : 'fd_postcode', 'attr':{'ng-model':'frm_first_delivery.postcode', 'placeholder':'member.postcode'|trans ~ ' *', 'data-constraints':'@Required', 'autocomplete':'off'}})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.postcode" ng-bind="frm_first_delivery_error.postcode"></div>
+</div>
+<div class="form-wrap">
+	{{form_widget(first_delivery_form.taxpayer_id, {'id' : 'fd_taxpayer_id', 'attr':{'ng-model':'frm_first_delivery.taxpayer_id', 'placeholder':'member.taxpayerid'|trans  }})}}
+	<div class="text-danger" ng-show="frm_first_delivery_error.taxpayer_id" ng-bind="frm_first_delivery_error.taxpayer_id"></div>
+</div>
+
+{#
+<div class="form-wrap">
+	<input class="form-input" id="contact-email" type="email" name="email" data-constraints="@Email @Required">
+	<label class="form-label" for="contact-email">Email Address *</label>
+</div>
+<div class="form-wrap">
+	<!--Select 2-->
+	<select class="form-control select-filter" data-placeholder="Country" data-minimum-results-for-search="Infinity" data-constraints="@Required">
+		<option>Country</option>
+		<option value="2">USA</option>
+		<option value="3">Mexico</option>
+		<option value="4">China</option>
+	</select>
+</div>
+<div class="form-wrap">
+	<label class="checkbox-inline">
+		<input type="checkbox" name="remember">Create an account?
+	</label>
+</div>
+#}
+
+<button type="button" ng-click="submitCreateFirstDeliveryAddressForm({{first_delivery_form.countryCode.vars.choices[1].value}})" class="button button-black mb-5">{% trans %}member.button.save{% endtrans %}</button>

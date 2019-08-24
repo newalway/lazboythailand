@@ -1,0 +1,25 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<!-- /.box-header -->
+<div class="box-body">
+
+	<div class="form-group icheck">
+		<label class="control-label col-md-2" for="title"> Title</label>
+		<div class="col-md-9">
+			{{form_widget(form.title, {'id' : 'title'})}}
+			<div class="error-form">{{form_errors(form.title)}}</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="box-footer">
+	<div class="row">
+		<div class="col-md-offset-2 col-md-9">
+			{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+			{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+			{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+			<a href="{%if app.session.get('back_to_url')['admin_product_style_number'] is defined%}{{app.session.get('back_to_url')['admin_product_style_number']}}{%else%}{{path('admin_product_style_number')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,181 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}checkout.title{% endtrans %} | {{ parent() }}{% endblock %}
+{% block checkout_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}checkout.title{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}checkout.title{% endtrans %}</li>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('jquery.ThaiAddress.En-Th.js/css/jquery.ThaiAddress.En-Th.css') }}">
+{% endblock %}
+
+{% block content %}
+<div ng-app="cartApp" ng-controller="cartCtrl" ng-init="init({% if is_granted('ROLE_CLIENT') %}true{% else %}false{% endif %})">
+
+	{% for flashMessage in app.session.flashbag.get('inventory_errors') %}
+        <div class="container alert alert-danger alert-dismissible">
+            <div class="text-center">
+                <i class="fa fa-2x fa-exclamation-circle"></i>
+                {{ flashMessage }}
+            </div>
+        </div>
+    {% endfor %}
+
+	<section class="bg-default">
+        <div class="container">
+            <!-- Accordion-->
+            <div id="accordion" role="tablist">
+				{# login panel #}
+				{% include "ProjectBundle:"~ view_checkout ~":_login_panel.html.twig"%}
+
+				{# apply discount code panel #}
+				{% include "ProjectBundle:"~ view_checkout ~":_apply_discount_code.html.twig"%}
+            </div>
+            <hr>
+
+			<div class="mt-5" ng-controller="deliveryAddressCtrl" ng-init="delivery_init('{{first_delivery_form.vars.value.firstName}}', '{{first_delivery_form.vars.value.lastName}}', '{{first_delivery_form.vars.value.companyName}}', '{{first_delivery_form.vars.value.phone}}')" ng-cloak>
+				<!-- RD Mailform-->
+	            <form id="first_delivery_form" ng-submit="submitCreateFirstDeliveryAddressForm({{first_delivery_form.countryCode.vars.choices[1].value}})" class="text-left row row-50">
+					{{form_widget(first_delivery_form._token, {'id':'delivery_address__token'})}}
+	                <div class="col-md-6 col-lg-5">
+						<h5>Delivery Details</h5>
+                        <div class="form-wrap"></div>
+						<div ng-show="shipping_address.id">
+							{# list delivery address #}
+							{% include "ProjectBundle:"~ view_checkout ~":_list_delivery_address.html.twig"%}
+						</div>
+						<div ng-show="!shipping_address.id">
+							{# form delivery address #}
+							{% include "ProjectBundle:"~ view_checkout ~":_form_address_billing_shipping.html.twig"%}
+						</div>
+	                </div>
+
+	                <div class="col-md-6 col-lg-7">
+						<h5>Additional Information</h5>
+	                    <div class="form-wrap">
+	                        <textarea ng-model="$parent.frm_order_notes" class="form-input" id="contact-message" name="order_notes_model"></textarea>
+	                        <label class="form-label" for="contact-message">Order Notes</label>
+	                    </div>
+
+	                </div>
+	            </form>
+
+				{# modal delivery address #}
+				{% include "ProjectBundle:"~ view_checkout ~":_modal_list_address_billing.html.twig"%}
+				{% include "ProjectBundle:"~ view_checkout ~":_modal_list_address_form.html.twig"%}
+			</div>
+
+        </div>
+    </section>
+
+    <section class="pt-5 bg-default">
+    <!-- Divider-->
+        <div class="container">
+            <div class="divider"></div>
+        </div>
+    </section>
+
+    <section class="section-sm bg-default" ng-cloak>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5>Your order</h5>
+                    {% include "ProjectBundle:"~ view_checkout ~":_products.html.twig"%}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <!-- Divider-->
+        <div class="container">
+            <div class="divider"></div>
+        </div>
+    </section>
+
+    <section class="section-sm bg-default">
+        <div class="container" ng-controller="paymentCtrl" ng-init="payment_init('')" ng-cloak>
+			<div class="row" ng-show="arr_cart_data.delivery_information.shipping_address.id">
+                <div class="col-sm-12">
+                    <h5>{% trans %}payment.method.title{% endtrans %}</h5>
+					{% include "ProjectBundle:"~ view_checkout ~":_payment_method.html.twig"%}
+				</div>
+			</div>
+        </div>
+    </section>
+
+	<section ng-cloak>
+		<div style="padding-left: 25px; padding-bottom: 25px;">
+			{% if (delivery_information or warranty_condition or replacement_condition) %}
+			<div class="row">
+				<div class="col-md-6 col-lg-6 col-xl-6">
+					{% if delivery_information %}
+						<div class="col-md-12">
+							{{delivery_information.optionValue|raw}}
+						</div>
+					{% endif %}
+				</div>
+				<div class="col-md-6 col-lg-6 col-xl-6">
+					{% if warranty_condition %}
+						<div class="col-md-12 mb-3">
+							{{warranty_condition.optionValue|raw}}
+						</div>
+					{% endif %}
+
+					{% if replacement_condition %}
+						<div class="col-md-12">
+							{{replacement_condition.optionValue|raw}}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+
+</div>
+
+
+{% endblock %}
+
+{% block javascripts_body %}
+{{ parent() }}
+<script>
+    window.cart_data = {{arr_cart_data|json_encode|raw}};
+    window.delivery_address = {{delivery_address|json_encode|raw}};
+</script>
+<script src="{{ asset('javascripts/base_product.js') }}"></script>
+<!-- Modules -->
+<script src="{{asset('javascripts/cartApp/app.js')}}"></script>
+<!-- Controllers -->
+<script src="{{asset('javascripts/cartApp/controllers/cart_controller.js')}}"></script>
+<script src="{{asset('javascripts/cartApp/controllers/delivery_address_controller.js')}}"></script>
+<script src="{{asset('javascripts/cartApp/controllers/payment_controller.js')}}"></script>
+
+<!-- jquery.Thailand -->
+<script src="{{asset('jquery.Thailand.js/dependencies/JQL.min.js')}}"></script>
+<script src="{{asset('jquery.Thailand.js/dependencies/typeahead.bundle.js')}}"></script>
+<script src="{{asset('jquery.ThaiAddress.En-Th.js/js/jquery.ThaiAddress.En-Th.js')}}"></script>
+
+<!-- Omise -->
+<script src="https://cdn.omise.co/omise.js"></script>
+<script src="{{asset('javascripts/cartApp/omise_app.js')}}"></script>
+
+<script>
+	$(function() {
+		//first delivery address
+        initJueryThailandEnTh('{{asset('jquery.ThaiAddress.En-Th.js/js/thai_address_database_en_th.js')}}', '{{app.request.locale|upper}}', 'first_delivery_form', 'fd_district', 'fd_amphure', 'fd_province', 'fd_postcode');
+
+		//modal delivery address
+		initJueryThailandEnTh('{{asset('jquery.ThaiAddress.En-Th.js/js/thai_address_database_en_th.js')}}', '{{app.request.locale|upper}}', 'modal_delivery_form', 'modal_district', 'modal_amphure', 'modal_province', 'modal_postcode');
+	});
+
+	// Set public key
+    Omise.setPublicKey("{{omise_pkey}}");
+
+</script>
+{% endblock %}

@@ -1,0 +1,107 @@
+<input type='hidden' name='update_variant_sku_status' value="{{'{{update_variant_sku_status}}'}}">
+<table ng-show="view_variant_options.length>0" class="table" role="grid">
+	<thead>
+		<tr role="row">
+			<th style="width: 30px"></th>
+			<th style="width: 57px">Image</th>
+			<th style="width: 57px">Pattern</th>
+
+			<th style="max-width:120px">
+				{{"{{view_variants|join:' · '|capitalize:true}}"}}
+			</th>
+			{#<th style="width: 20px" ng-repeat="vn in view_variants">{{'{{vn}}'}}</th>#}
+
+			<th ng-if="glob_inventory_policy_status=='1' || variant_is_inventory" style="width: 50px">Inventory</th>
+
+			<th style="width: 90px; {# background-color: rosybrown;#} ">Price</th>
+			<th style="width: 90px">Compare at price</th>
+			{#<th style="width: 90px">Title</th>#}
+			<th style="width: 150px">SKU</th>
+			<th style="width: 20px"></th>
+		</tr>
+	</thead>
+	<tbody style="overflow-y:auto;">
+		<tr ng-repeat="v in view_variant_options" ng-mouseover="open=true" ng-mouseleave="open=false" style="height: 52px;">
+			<td>
+				<input type='hidden' name='update_variant_sku[update_status][{{'{{$index}}'}}]' value="{{'{{v.update_sku_status}}'}}">
+				<input type='hidden' name='update_variant_sku[id][{{'{{$index}}'}}]' value='{{'{{v.id}}'}}'>
+
+				<input type='hidden' name='update_variant_sku[status][{{'{{$index}}'}}]' value='off'><!-- default status -->
+				<input ng-show="open || focus_sku" type="checkbox" name="update_variant_sku[status][{{'{{$index}}'}}]" ng-model="v.status" ng-change="setUpdateVariantSkuStatus(true);v.update_sku_status='true'" ng-true-value="'on'" ng-false-value="'off'">
+				<span ng-show="!open && !focus_price">
+					<span ng-switch on="v.status">
+						<span ng-switch-when="on" class="{#text-green#}"><i class="fa fa-check-square-o"></i></span>
+						<span ng-switch-default class="{#text-danger#}"><i class="fa fa-minus-square-o"></i></span>
+					</span>
+				</span>
+			</td>
+
+			<td>
+				<a href="javascript:void(0)" dir-select-file dataindex="update_variant_sku_image_{{'{{$index}}'}}" datathumb="update_sku_image_thumbnail_{{'{{$index}}'}}" ng-click="setUpdateVariantSkuStatus(true);v.update_sku_status='true'">
+					<img id="update_sku_image_thumbnail_{{'{{$index}}'}}" ng-if="v.image_small" ng-src="{{'{{v.image_small}}'}}" width="50px;">
+					<img id="update_sku_image_thumbnail_{{'{{$index}}'}}" ng-if="!v.image_small" src="https://placehold.it/50x50?text=1000x1000" width="50px;">
+				</a>
+				<input type='hidden' name='update_variant_sku[image][{{'{{$index}}'}}]' id="update_variant_sku_image_{{'{{$index}}'}}" value="">
+			</td>
+
+			<td>
+				<a href="javascript:void(0)" dir-select-file dataindex="update_variant_sku_pattern_image_{{'{{$index}}'}}" datathumb="update_sku_pattern_image_thumbnail_{{'{{$index}}'}}" ng-click="setUpdateVariantSkuStatus(true);v.update_sku_status='true'">
+					<img id="update_sku_pattern_image_thumbnail_{{'{{$index}}'}}" ng-if="v.pattern_image_s" ng-src="{{'{{v.pattern_image_s}}'}}" width="50px;">
+					<img id="update_sku_pattern_image_thumbnail_{{'{{$index}}'}}" ng-if="!v.pattern_image_s" src="https://placehold.it/50x50?text=120x120" width="50px;">
+				</a>
+				<input type='hidden' name='update_variant_sku[pattern_image][{{'{{$index}}'}}]' id="update_variant_sku_pattern_image_{{'{{$index}}'}}" value="">
+			</td>
+
+			<td>
+				{{"{{v.option | join:' · '}}"}} &nbsp;&nbsp;<span ng-if="v.default_option" class="label label-default">DEFAULT</span>
+				<br/><small ng-if="v.is_only_gallery">Only Gallery </small>
+
+			</td>
+			{#
+			<td ng-repeat="vv in v.option">
+				{{'{{vv}}'}}
+				&nbsp;&nbsp;<span ng-show="$last" ng-if="v.default_option" class="label label-default">DEFAULT</span>
+			</td>
+			#}
+
+			<td ng-if="glob_inventory_policy_status=='1' || variant_is_inventory">
+				<div ng-show="!open && !focus_ips">
+					<span ng-show="v.inventory_policy_status=='1'">{{'{{v.inventory_quantity|number:0}}'}}</span>
+					<span ng-show="v.inventory_policy_status=='0'">N/A</span>
+				</div>
+				<input ng-show="open || focus_ips" name="update_variant_sku[inventory_quantity][{{'{{$index}}'}}]" ng-model="v.inventory_quantity" ng-focus="focus_ips=true" ng-blur="focus_ips=false" ng-change="setUpdateVariantSkuStatus(true);v.inventory_policy_status='1';v.update_sku_status='true'"  class="form-control input-sm" type="number" style="width:60px;">
+			</td>
+
+			<td>
+				<div ng-show="!open && !focus_price">{{'{{v.price}}'}}</div>
+				<input ng-show="open || focus_price" name="update_variant_sku[price][{{'{{$index}}'}}]" ng-model="v.price" ng-focus="focus_price=true" ng-blur="focus_price=false" ng-change="setUpdateVariantSkuStatus(true);v.update_sku_status='true'" class="form-control input-sm" type="number" step="any" style="width:70px;" required>
+			</td>
+			<td>
+				<div ng-show="!open && !focus_c_price">{{'{{v.compare_at_price}}'}}</div>
+				<input ng-show="open || focus_c_price" name="update_variant_sku[compare_at_price][{{'{{$index}}'}}]" ng-model="v.compare_at_price" ng-focus="focus_c_price=true" ng-blur="focus_c_price=false" ng-change="setUpdateVariantSkuStatus(true);v.update_sku_status='true'" class="form-control input-sm" type="number" step="any" style="width:70px;">
+			</td>
+
+			{#
+			<td>
+				<div ng-show="!open && !focus_title">{{'{{v.title}}'}}</div>
+				<input ng-show="open || focus_title" name="update_variant_sku[title][{{'{{$index}}'}}]" ng-model="v.title" ng-focus="focus_title=true" ng-blur="focus_title=false" ng-change="setUpdateVariantSkuStatus(true);v.update_sku_status='true'" class="form-control input-sm" type="text" style="width:70px;">
+			</td>
+			#}
+
+			<td>
+				<div ng-show="!open && !focus_sku">{{'{{v.sku}}'}}</div>
+				<input ng-show="open || focus_sku" name="update_variant_sku[sku][{{'{{$index}}'}}]" ng-model="v.sku" ng-focus="focus_sku=true" ng-blur="focus_sku=false" ng-change="setUpdateVariantSkuStatus(true);v.update_sku_status='true'" class="form-control input-sm" type="text" style="width:130px;">
+			</td>
+
+
+			<td>
+				<a ng-href="{{'{{getRouteSkuEdit(v.id)}}'}}">
+					<button type="button" class="btn btn-default btn-xs">
+						<i class="fa fa-pencil-square-o"></i>
+					</button>
+				</a>
+			</td>
+		</tr>
+
+	</tbody>
+</table>

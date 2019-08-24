@@ -1,0 +1,1050 @@
+{# {% form_theme form 'bootstrap_3_layout.html.twig' %} #}
+
+{% if form.vars.value.id %}
+	{% set is_variant = product_service.isVariants(product) %}
+	{% set gallery_images = product.productImages %}
+	{% set variant_type = product.variantType %}
+	{% if not product.variantType %}
+		{% set variant_type = con_product_variant_type_cover %}
+	{% endif %}
+
+{% else %}
+	{% set is_variant = false %}
+	{% set gallery_images = false %}
+	{% set variant_type = con_product_variant_type_cover %}
+{% endif %}
+
+<style>
+	.ele_level_2 {
+		padding-left: 10;
+	}
+</style>
+
+<div class="product-cover-form" ng-app="productApp" ng-controller="mainCtrl" ng-init="init('{{acctoken}}', '{{form.vars.value.id}}', '{% if form.vars.value.id %}{{form.vars.value.price}}{% endif %}', '{% if form.vars.value.id %}{{form.vars.value.compareAtPrice}}{% endif %}', '{% if form.vars.value.id %}{{form.vars.value.sku}}{% endif %}', '{% if form.vars.value.id %}{{form.vars.value.inventoryPolicyStatus}}{% endif %}', '{% if form.vars.value.id %}{{form.vars.value.inventoryQuantity}}{% endif %}', '{% if form.vars.value.id and form.vars.value.productType.id is defined %}{{form.vars.value.productType.id}}{% endif %}', '{% if form.vars.value.id and form.vars.value.productStyleNumber.id is defined %}{{form.vars.value.productStyleNumber.id}}{% endif %}')">
+
+	<div class="row">
+		<div class="col-md-8">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Title</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="form-group">
+						<!-- <label for=""></label> -->
+						{{ form_widget(form.translations) }}
+					</div>
+				</div>
+			</div>
+
+			<!-- product images -->
+			{{ include('ProjectBundle:AdminProduct:_form_images.html.twig') }}
+
+			<div class="box {% if is_variant %}hidden{% endif %}">
+				<div class="box-header with-border">
+					<h3 class="box-title">Pricing</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="price"><span class="require">*</span> Price</label>
+								{{form_widget(form.price, {'id' : 'price'})}}
+								<div class="error-form">{{form_errors(form.price)}}</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="compareAtPrice">Compare at price</label>
+								{{form_widget(form.compareAtPrice, {'id' : 'compareAtPrice'})}}
+								<div class="error-form">{{form_errors(form.compareAtPrice)}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="box {#{% if is_variant %}hidden{% endif %}#}">
+				<div class="box-header with-border">
+					<h3 class="box-title">Inventory</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="productType"> Type  </label>
+									<span class="pull-right"><a href="{{path('admin_product_type_new')}}" target="_blank">Add </a></span>
+									{{form_widget(form.productType, {'id' : 'productType'})}}
+									<div class="error-form">{{form_errors(form.productType)}}</div>
+								</div>
+								<div class="col-md-6">
+									<label for="productStyleNumber"> Style Number  </label>
+									<span class="pull-right"><a href="{{path('admin_product_style_number_new')}}" target="_blank">Add </a></span>
+									{{form_widget(form.productStyleNumber, {'id' : 'productStyleNumber'})}}
+									<div class="error-form">{{form_errors(form.productStyleNumber)}}</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="sku"> SKU</label>
+								{{form_widget(form.sku, {'id' : 'sku'})}}
+								<div class="error-form">{{form_errors(form.sku)}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="inventoryPolicyStatus">Inventory policy</label>
+								{{form_widget(form.inventoryPolicyStatus, {'id' : 'inventoryPolicyStatus'})}}
+								<div class="error-form">{{form_errors(form.inventoryPolicyStatus)}}</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group" ng-show="glob_inventory_policy_status=='1'">
+								<label for="inventoryQuantity">Quantity</label>
+								{{form_widget(form.inventoryQuantity, {'id' : 'inventoryQuantity'})}}
+								<div class="error-form">{{form_errors(form.inventoryQuantity)}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="box {% if is_variant %}hidden{% endif %}">
+				<div class="box-header with-border">
+					<h3 class="box-title">Shipping</h3>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="weight"> Weight</label>
+								<div class="input-group">
+									{{form_widget(form.weight, {'id' : 'weight'})}}
+									<div class="btn-group">
+										{{form_widget(form.weightUnit, {'id' : 'weightUnit'})}}
+									</div><!-- /btn-group -->
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- product variants -->
+			{{ include('ProjectBundle:AdminProduct:_form_variants.html.twig') }}
+
+		</div> <!-- /.col-md-8 -->
+
+		<div class="col-md-4">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Publishing</h3>
+					<div class="box-tools pull-right">
+						<button ng-click="publish_date_toggle=!publish_date_toggle" class="btn btn-link" type="button"><i class="fa fa-calendar"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-7">
+							<!-- radio -->
+							<div class="form-group icheck">
+								<!-- <label for="status"></label> -->
+								<div class="radio-group">
+									{{form_widget(form.status, {'id' : 'status'})}}
+									<div class="error-form">{{form_errors(form.status)}}</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div ng-show="publish_date_toggle" class="form-group" ng-cloak>
+								<label for="publishDate">Publish product on</label>
+								{{form_widget(form.publishDate, {'id' : 'publishDate'})}}
+								<div class="error-form">{{form_errors(form.publishDate)}}</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<!-- /.box-body -->
+			</div>
+
+			<div class="box">
+				<div class="box-body">
+					<div class="icheck">
+
+						<div class="form-group">
+							{{form_widget(form.isOnlineShopping, {'id' : 'isOnlineShopping'})}}
+							<div class="error-form">{{form_errors(form.isOnlineShopping)}}</div>
+						</div>
+
+						<div class="form-group">
+							{{form_widget(form.isNew, {'id' : 'isNew'})}}
+							<div class="error-form">{{form_errors(form.isNew)}}</div>
+						</div>
+						<div class="form-group">
+							{{form_widget(form.isSale, {'id' : 'isSale'})}}
+							<div class="error-form">{{form_errors(form.isSale)}}</div>
+						</div>
+						<div class="form-group">
+							{{form_widget(form.isImported, {'id' : 'isImported'})}}
+							<div class="error-form">{{form_errors(form.isImported)}}</div>
+						</div>
+						<div class="form-group">
+							{{form_widget(form.isTopSeller, {'id' : 'isTopSeller'})}}
+							<div class="error-form">{{form_errors(form.isTopSeller)}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Dimensions</h3>
+				</div>
+				<div class="box-body">
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimBodyWidth"> Body Width</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimBodyWidth, {'id' : 'dimBodyWidth'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimBodyWidth)}}</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimBodyDepth"> Body Depth</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimBodyDepth, {'id' : 'dimBodyDepth'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimBodyDepth)}}</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimBodyHeight"> Body Height</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimBodyHeight, {'id' : 'dimBodyHeight'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimBodyHeight)}}</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimSeatWidth"> Seat Width</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimSeatWidth, {'id' : 'dimSeatWidth'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimSeatWidth)}}</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimSeatDepth"> Seat Depth</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimSeatDepth, {'id' : 'dimSeatDepth'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimSeatDepth)}}</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimSeatHeight"> Seat Height</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimSeatHeight, {'id' : 'dimSeatHeight'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimSeatHeight)}}</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-md-4" for="dimFullExtension"> Full Extension</label>
+						<div class="input-group col-md-8">
+							{{form_widget(form.dimFullExtension, {'id' : 'dimFullExtension'})}}
+							<span class="input-group-addon">Inch</span>
+						</div>
+						<div class="error-form">{{form_errors(form.dimFullExtension)}}</div>
+					</div>
+				</div>
+
+				{#
+				<div class="box-body">
+					<div class="form-control-static icheck">
+						<p><label for="image">Image Dimension</label></p>
+						{{form_widget(form.imageDimension, {'id' : 'imageDimension'})}}
+						<a href="javascript:void(0)" onclick="selectFileWithCKFinder('imageDimension', 'image_dimension_thumbnail');" style="" >
+							{% if form.vars.value.imageDimension %}
+								<img id="image_dimension_thumbnail" class="img-responsive" src="{{asset(form.vars.value.imageDimension) | imagine_filter('img_w_320')}}" alt="{{form.vars.value.getTitle}}" />
+							{% else %}
+								<img id="image_dimension_thumbnail" class="img-responsive" src="https://placehold.it/650x350?text=650x350" width="320px;">
+							{% endif %}
+						</a>
+
+						{% if form.vars.value.imageDimension %}
+							<span>
+								<br>
+								<input type="checkbox" id="removefileImageDimension" name="removefileImageDimension" value="1">
+								<label class="control-label" for="removefileImageDimension">  Remove</label>
+							</span>
+						{% endif %}
+						<p class="help-block">Image size 650x350 px</p>
+					</div>
+				</div>
+				#}
+
+			</div>
+
+			<!-- organization -->
+			{{ include('ProjectBundle:AdminProduct:_form_organization.html.twig') }}
+
+			<!-- options -->
+			{{ include('ProjectBundle:AdminProduct:_form_product_option.html.twig') }}
+
+		</div><!-- /.col-md-4 -->
+
+	</div><!-- /.row -->
+
+	<div class="product-footer-fixed">
+		{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+		{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+		{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+		<a href="{%if app.session.get('back_to_url')['admin_product'] is defined%}{{app.session.get('back_to_url')['admin_product']}}{%else%}{{path('admin_product')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+	</div>
+
+	{#
+	<div class="row">
+		<div class="col-md-offset-2 col-md-9">
+			{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+			{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+			{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+			<a href="{%if app.session.get('back_to_url')['admin_product'] is defined%}{{app.session.get('back_to_url')['admin_product']}}{%else%}{{path('admin_product')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+		</div>
+	</div><!-- /.row -->
+	#}
+
+</div><!-- /productApp controller -->
+
+<script>
+	$(function() {
+		$('.icheckbox input').iCheck('destroy');
+		$('.remove_icheck input').iCheck('destroy');
+		$('#weight').removeClass('form-control');
+
+		setGroupCheckAll('showroom_select_all', 'showroom_check_item');
+		setGroupCheckAll('product_options_select_all', 'product_option_check_item');
+
+		// setGroupCheckAll('muscle_select_all', 'muscle_check_item');
+		// setGroupCheckAll('age_group_select_all', 'age_group_check_item');
+		// setGroupCheckAll('customer_select_all', 'customer_check_item');
+
+		$('#publishDate').datetimepicker({
+			format: 'YYYY-MM-DD HH:mm',
+		});
+		// $('#publishDate').datepicker({
+		// 	dateFormat: 'yy-mm-dd',
+		// 	autoclose: true,
+		// 	todayHighlight: true,
+		// });
+
+		//set require to Translations
+		$("#admin_product_translations_th_title").prop('required',true);
+		$("#admin_product_translations_en_title").prop('required',true);
+
+	});
+
+	var app = angular.module('productApp', ['ngTagsInput']);
+
+	app.factory('hashtag_data', ['$http', function hashtag_data($http) {
+		return {
+			getProductHashtags: function(token, product_id){
+	      		return $http({
+					method:'GET',
+					url: Routing.generate('api_1_get_product_tags',{'product_id':product_id}),
+					headers: {
+						'Authorization':'Bearer ' + token
+					}
+				});
+	    	}
+		}
+	}]);
+	app.factory('variant_data', ['$http', function variant_data($http) {
+		return {
+			getProductVariants: function(token, product_id){
+	      		return $http({
+					method:'GET',
+					url: Routing.generate('api_1_get_product_variants',{'product_id':product_id}),
+					headers: {
+						'Authorization':'Bearer ' + token
+					}
+				});
+	    	},
+			getGroupVariants: function(token){
+	      		return $http({
+					method:'GET',
+					url: Routing.generate('api_1_get_group_variants'),
+					headers: {
+						'Authorization':'Bearer ' + token
+					}
+				});
+	    	}
+		}
+	}]);
+
+	app.controller('mainCtrl', function($scope, $http) {
+		$scope.init = function(token, product_id, price, compare_at_price, sku, inventory_policy_status, inventory_quantity, product_type, product_style_number) {
+
+			$scope.glob_access_token = token;
+			$scope.glob_product_id = product_id;
+
+			$scope.product_type = product_type;
+			$scope.product_style_number = product_style_number;
+			$scope.data_product_type = {{arr_product_type|json_encode|raw}};
+			$scope.data_product_style_number = {{arr_product_style_number|json_encode|raw}};
+
+			if(product_id){
+				$scope.glob_price = price;
+				if(compare_at_price){
+					$scope.glob_compare_at_price = compare_at_price;
+				}
+				$scope.glob_sku = sku;
+				$scope.glob_inventory_policy_status = inventory_policy_status;
+				$scope.glob_inventory_quantity = inventory_quantity;
+
+			}else{
+				$scope.glob_inventory_policy_status = '0';
+			}
+		}
+
+		$scope.setSkuData = function(){
+			var str_sku = '';
+			if($scope.product_type){
+				str_sku = $scope.data_product_type[$scope.product_type];
+			}
+			if($scope.product_style_number){
+				if($scope.product_type){
+					str_sku = str_sku+'-';
+				}
+				str_sku = str_sku+$scope.data_product_style_number[$scope.product_style_number];
+			}
+			if(str_sku){
+				$scope.glob_sku = str_sku;
+			}
+		};
+	});
+
+	app.controller('variantsCtrl',  function($scope, $http, variant_data) {
+
+		$scope.init_variants = function(variant_type, con_variant_type_cover, con_variant_type_option) {
+
+			// debug choice value
+			// $scope.showVariants = true;
+			// $scope.choices = [
+			// 	{"id": 'choice1', "option_name": "Color", "option_value": ["White","Blue","Yellow"]},
+			// 	{"id": "choice2","option_name": "Size","option_value": ["S","M","L"]}
+			// ];
+
+			// data for cover variant
+			$scope.cover_variant_selected = [];
+			$scope.cover_variant_element = '';
+			$scope.cover_variants = []; //master data
+			$scope.cover_variant_group_option = [];
+			$scope.is_changed_basic_price_code_id = '';
+			$scope.is_changed_basic_compare_at_price_code_id = '';
+
+			// data for option variant
+			$scope.showVariants = false;
+			$scope.haveVariants = false;
+			$scope.variantType = variant_type; //cover_variant or option_variant
+			$scope.variant_is_inventory = false;
+			$scope.products_variants_loading_icon = false;
+			$scope.setUpdateVariantSkuStatus(false);
+			$scope.initVariantsData();
+
+			$scope.con_variant_type_cover = con_variant_type_cover;
+			$scope.con_variant_type_option = con_variant_type_option;
+
+			if($scope.glob_product_id){
+				$scope.products_variants_loading_icon = true;
+
+				variant_data.getProductVariants($scope.glob_access_token, $scope.glob_product_id).then(function onSuccess(response){
+
+					// data for cover variant
+					$scope.cover_variants = response.data.arr_cover_variants; //master data
+
+					if(response.data.variants.length>0){
+						$scope.haveVariants = true;
+						$scope.variant_is_inventory = JSON.parse(response.data.variant_is_inventory);
+						$scope.variant_options = response.data.variant_options;
+						$scope.view_variant_options = response.data.view_variant_options;
+						$scope.view_variants = response.data.view_variants;
+						if($scope.variantType == $scope.con_variant_type_cover){
+							// cover_variants
+							$scope.cover_variant_selected = response.data.cover_selected_data;
+							$scope.setNotAnOptionFromCoverVariantSelected();
+						}else{
+							// option_variants
+							$scope.choices = response.data.variants;
+							$scope.addItemNo($scope.choices.length);
+						}
+					}
+
+					$scope.products_variants_loading_icon = false;
+
+					// // compare array or object
+					// var a = [ {a:["red","s","10lb"],b:[1,2,3]} ];
+					// var b = [ {a:["red","s","10lb"],b:[1,2,3]} ];
+					// if( _.isEqual(a.sort(), b.sort()) ){
+					// 	console.log('_equal');
+					// }else{
+					// 	console.log('_not_equal');
+					// }
+
+				}).catch(function onError(response){
+					console.log('Error get variants data');
+					$scope.products_variants_loading_icon = false;
+				});
+			}else{
+				//for create new product
+				//get cover_variants
+				variant_data.getGroupVariants($scope.glob_access_token).then(function onSuccess(response){
+					$scope.cover_variants = response.data.arr_cover_variants;
+				}).catch(function onError(response){
+					console.log('Error get group variants');
+				});
+			}
+
+		}
+
+		// ------------------------cover_variants------------------------ //
+		// set not_an_option from cover_variant_selected
+		$scope.setNotAnOptionFromCoverVariantSelected = function(){
+			$scope.cover_variant_selected.forEach(function(selected_cover){
+				//set disabled option
+				index = $scope.cover_variants.findIndex(x => x.id==selected_cover.id);
+				if (typeof index !== 'undefined') {
+					$scope.cover_variants[index].not_an_option=true;
+				}
+			});
+		}
+		$scope.addNewCoverVariant = function(){
+			if($scope.cover_variant_element){
+				$scope.cover_variant_selected.push($scope.cover_variant_element);
+
+				//set disabled option
+				index = $scope.cover_variants.findIndex(x => x.id==$scope.cover_variant_element.id);
+				if (typeof index !== 'undefined') {
+					$scope.cover_variants[index].not_an_option=true;
+				}
+			}
+		}
+		$scope.removeCoverVariant = function(index){
+			obj = $scope.cover_variant_selected[index];
+			//set enabled option
+			cover_variants_index = $scope.cover_variants.findIndex(x => x.id==obj.id);
+			if (typeof cover_variants_index !== 'undefined') {
+				$scope.cover_variants[cover_variants_index].not_an_option=false;
+				$scope.cover_variants[cover_variants_index].variant_option_basic_price="";
+				$scope.cover_variants[cover_variants_index].variant_option_basic_compare_at_price="";
+			}
+			//remove element
+			$scope.cover_variant_selected.splice(index,1);
+		}
+		$scope.setChangedBasicPriceCodeId = function(code_id){
+			$scope.is_changed_basic_price_code_id = code_id;
+		};
+		$scope.setChangedBasicCompareAtPriceCodeId = function(code_id){
+			$scope.is_changed_basic_compare_at_price_code_id = code_id;
+		};
+		$scope.$watch('cover_variant_selected', function (newValue, oldValue, scope) {
+		    //Do anything with $scope.cover_variant_selected
+			if (oldValue && oldValue != newValue) {
+				$scope.setRangeGroupVariants();
+			}
+		}, true);
+		$scope.setRangeGroupVariants = function() {
+			$scope.cover_variant_group_option = $scope.createRangeGroupVariants();
+		};
+		$scope.createRangeGroupVariants = function() {
+			var option_len = $scope.choices.length,
+				variants = [],
+				result = [],
+				cartesianProduct = [],
+				tmp_sku_variant_option = '',
+				tmp_key_name = '',
+				tmp_variant_options = [],
+				tmp_id = '',
+				tmp_price = '',
+				tmp_compare_at_price = '',
+				tmp_inventory_quantity = '',
+				tmp_sku = '',
+				tmp_status = '',
+				tmp_image = '',
+				tmp_image_small='',
+				tmp_default_option=false,
+				tmp_title = '',
+				tmp_pattern_image = '',
+				tmp_pattern_image_s='',
+				tmp_is_only_gallery=false,
+				tmp_sku_postfix = '',
+				tmp_variant_group_option_key_name = '',
+				data = [];
+
+			if($scope.cover_variant_selected.length>0) {
+				$scope.cover_variant_selected.forEach(function(cover){
+// console.log(cover);
+					if(cover.sub_child.length>0) {
+						cover.sub_child.forEach(function(sub_child, index){
+
+							data = [cover.code, sub_child.title];
+							tmp_key_name = data.join('-').toLowerCase();
+							tmp_id = '';
+
+							data_map_tmp = $scope.cover_variant_group_option.filter(function(dat) {
+								if(dat.option.join('-').toLowerCase() == tmp_key_name) return dat;
+							})[0];
+
+							if(data_map_tmp){
+// console.log(1);
+								//choose a cover, assign previous data
+								if(!sub_child.is_only_gallery){
+									tmp_price = ($scope.is_changed_basic_price_code_id && ($scope.is_changed_basic_price_code_id == cover.id)) ? parseFloat(cover.variant_option_basic_price) : parseFloat(data_map_tmp.price);
+									tmp_compare_at_price = ($scope.is_changed_basic_compare_at_price_code_id && ($scope.is_changed_basic_compare_at_price_code_id == cover.id)) ? parseFloat(cover.variant_option_basic_compare_at_price) : parseFloat(data_map_tmp.compare_at_price) ;
+								}else{
+									tmp_price = parseFloat(data_map_tmp.price);
+									tmp_compare_at_price = parseFloat(data_map_tmp.compare_at_price);
+								}
+
+								tmp_inventory_quantity = parseInt(data_map_tmp.inventory_quantity);
+								tmp_status = data_map_tmp.status;
+								tmp_default_option= data_map_tmp.default_option;
+								tmp_sku = data_map_tmp.sku;
+								tmp_image = data_map_tmp.image;
+								tmp_image_small = data_map_tmp.image_small;
+								tmp_pattern_image = data_map_tmp.pattern_image;
+								tmp_pattern_image_s = data_map_tmp.pattern_image_s;
+								tmp_is_only_gallery=data_map_tmp.is_only_gallery;
+								tmp_title = data_map_tmp.title;
+
+							}else{
+// console.log(2);
+								//for new and edit mode
+								if(!sub_child.is_only_gallery){
+									tmp_price = parseFloat($scope.glob_price);
+									tmp_compare_at_price = parseFloat($scope.glob_compare_at_price);
+								}else{
+									tmp_price = 0;
+									tmp_compare_at_price = '';
+								}
+
+								tmp_inventory_quantity = parseInt($scope.glob_inventory_quantity);
+								tmp_status ="on";
+								tmp_default_option=false;
+								tmp_sku_postfix = (cover.code && sub_child.code) ? cover.code+'-'+sub_child.code : '' ;
+								tmp_sku = ($scope.glob_sku) ? $scope.glob_sku+'-'+tmp_sku_postfix : tmp_sku_postfix ;
+								tmp_image = '';
+								tmp_image_small = '';
+								tmp_pattern_image = sub_child.pattern_image;
+								tmp_pattern_image_s = sub_child.pattern_image_small;
+								tmp_is_only_gallery=sub_child.is_only_gallery;
+								tmp_title = sub_child.title;
+
+								if($scope.glob_product_id){
+									// edit mode set default
+
+									// edit mode, set data from database if data exists
+									if (tmp_key_name in $scope.variant_options){
+										//exist data
+										tmp_variant_options = $scope.variant_options[tmp_key_name];
+										tmp_id = tmp_variant_options['id'];
+										tmp_price = tmp_variant_options['price'];
+										tmp_compare_at_price = tmp_variant_options['compare_at_price'];
+										tmp_inventory_quantity = tmp_variant_options['inventory_quantity'];
+										// tmp_inventory_quantity = (tmp_variant_options['inventory_quantity']) ? tmp_variant_options['inventory_quantity'] : 0;
+
+										//tmp_sku = tmp_variant_options['sku']; //get from tmp_sku
+										tmp_status = tmp_variant_options['status'];
+										tmp_image = tmp_variant_options['image'];
+										tmp_image_small = tmp_variant_options['image_small'];
+										tmp_default_option = tmp_variant_options['default_option'];
+										tmp_pattern_image = (tmp_variant_options['pattern_image']) ? tmp_variant_options['pattern_image'] : tmp_pattern_image;
+										tmp_pattern_image_s = (tmp_variant_options['pattern_image_s']) ? tmp_variant_options['pattern_image_s'] : tmp_pattern_image_s ;
+										// ## tmp_title = tmp_variant_options['title']; //used data from sub_child.title
+									}
+
+								}else{
+									// new mode, set default data
+										// tmp_price = parseFloat($scope.glob_price);
+										// tmp_compare_at_price = parseFloat($scope.glob_compare_at_price);
+										// tmp_inventory_quantity = parseInt($scope.glob_inventory_quantity);
+										// tmp_status ="on";
+										// tmp_default_option=false;
+										// tmp_sku_postfix = (cover.code && sub_child.code) ? cover.code+'-'+sub_child.code : '' ;
+										// tmp_sku = ($scope.glob_sku) ? $scope.glob_sku+'-'+tmp_sku_postfix : tmp_sku_postfix ;
+										// tmp_image = '';
+										// tmp_image_small = '';
+										// tmp_pattern_image = sub_child.pattern_image;
+										// tmp_pattern_image_s = sub_child.pattern_image_small;
+										// tmp_title = '';
+								}
+							}
+
+							//set data
+							tmp_sku_variant_option = {
+								'option':data, 'id':tmp_id, 'status':tmp_status,
+								'price':tmp_price, 'compare_at_price':tmp_compare_at_price,
+								'inventory_quantity':tmp_inventory_quantity,
+								'sku':tmp_sku, 'image':tmp_image,
+								'image_small':tmp_image_small, 'default_option':tmp_default_option,
+								'title':tmp_title, 'pattern_image':tmp_pattern_image,
+								'pattern_image_s':tmp_pattern_image_s,
+								'is_only_gallery':tmp_is_only_gallery
+							};
+							result.push(tmp_sku_variant_option);
+						});
+					}
+
+				});
+
+				//reset is_changed_basic_price_code_id to false
+				if($scope.is_changed_basic_price_code_id){
+					$scope.setChangedBasicPriceCodeId('');
+				}
+				if($scope.is_changed_basic_compare_at_price_code_id){
+					$scope.setChangedBasicCompareAtPriceCodeId('');
+				}
+
+			}
+
+			return result;
+		};
+		// end cover_variants
+
+
+		// ------------------------option_variants------------------------ //
+		$scope.setUpdateVariantSkuStatus = function(data){
+			$scope.update_variant_sku_status = data;
+		}
+		$scope.initVariantsData = function() {
+			if($scope.haveVariants){
+				//reset data from database
+			}else{
+				$scope.choices = [ {"id": 'choice1', "option_name": "Size", "option_value": []} ];
+				$scope.variant_options = [];
+				$scope.view_variants = [];
+				$scope.view_variant_options = [];
+				$scope.itemNo=0; //init value
+				$scope.addItemNo($scope.choices.length);
+			}
+		}
+		$scope.addItemNo = function(itemNo) {
+			$scope.itemNo+=itemNo;
+		}
+		$scope.addNewChoice = function() {
+			$scope.addItemNo(1);
+			var newItemNo = $scope.itemNo;
+			$scope.choices.push({'id':'choice'+newItemNo});
+		};
+		$scope.removeChoice = function(index) {
+			$scope.choices.splice(index,1);
+		};
+		$scope.$watch('choices', function (newValue, oldValue, scope) {
+		    //Do anything with $scope.choices
+			if (oldValue && oldValue != newValue) {
+console.log('choices');
+				$scope.setRangeVariants();
+			}
+		}, true);
+
+		$scope.setRangeVariants = function() {
+			$scope.variant_option = $scope.createRangeVariants();
+		};
+		$scope.createRangeVariants = function() {
+			var option_len = $scope.choices.length,
+				variants = [],
+				result = [],
+				cartesianProduct = [],
+				tmp_sku_variant_option = '',
+				tmp_key_name = '',
+				tmp_variant_options = [],
+				tmp_id = '',
+				tmp_price = '',
+				tmp_compare_at_price = '',
+				tmp_inventory_quantity = '',
+				tmp_sku = '',
+				tmp_status = '',
+				tmp_image = '',
+				tmp_image_small='',
+				tmp_default_option=false,
+				tmp_title = '',
+				tmp_pattern_image = '',
+				tmp_pattern_image_s='';
+
+			$scope.choices.forEach(function(choice){
+				if(choice.option_value){
+					variants.push(choice.option_value);
+				}
+			});
+
+			if(variants.length>0)
+			{
+				//get recursive variant options
+				cartesianProduct = $scope.cartesianProduct(variants);
+
+				//set variant options
+				cartesianProduct.forEach(function(data, index)
+				{
+					//prepare default input data
+					tmp_id = '';
+					tmp_price = parseFloat($scope.glob_price);
+					tmp_compare_at_price = parseFloat($scope.glob_compare_at_price);
+					tmp_inventory_quantity = parseInt($scope.glob_inventory_quantity);
+					tmp_status = "on";
+					tmp_default_option=false;
+					tmp_sku = ($scope.glob_sku) ? $scope.glob_sku+'-'+(index+1) : '' ;
+					tmp_image = '';
+					tmp_image_small = '';
+					tmp_pattern_image = '';
+					tmp_pattern_image_s = '';
+					tmp_title = '';
+
+					if($scope.glob_product_id){
+						//edit mode
+						tmp_key_name = data.join('-');
+						tmp_key_name = tmp_key_name.toLowerCase();
+						if (tmp_key_name in $scope.variant_options){
+							//exist data
+							tmp_variant_options = $scope.variant_options[tmp_key_name];
+							tmp_id = tmp_variant_options['id'];
+							tmp_price = tmp_variant_options['price'];
+							tmp_compare_at_price = tmp_variant_options['compare_at_price'];
+							tmp_inventory_quantity = tmp_variant_options['inventory_quantity'];
+							tmp_sku = tmp_variant_options['sku'];
+							tmp_status = tmp_variant_options['status'];
+							tmp_image = tmp_variant_options['image'];
+							tmp_image_small = tmp_variant_options['image_small'];
+							tmp_default_option = tmp_variant_options['default_option'];
+							tmp_title = tmp_variant_options['title'];
+							tmp_pattern_image = tmp_variant_options['pattern_image'];
+							tmp_pattern_image_s = tmp_variant_options['pattern_image_s'];
+						}
+					}
+
+					//set data
+					tmp_sku_variant_option = {
+						'option':data, 'id':tmp_id, 'status':tmp_status,
+						'price':tmp_price, 'compare_at_price':tmp_compare_at_price,
+						'inventory_quantity':tmp_inventory_quantity,
+						'sku':tmp_sku, 'image':tmp_image,
+						'image_small':tmp_image_small, 'default_option':tmp_default_option,
+						'title':tmp_title, 'pattern_image':tmp_pattern_image,
+						'pattern_image_s':tmp_pattern_image_s};
+					result.push(tmp_sku_variant_option);
+				});
+			}
+			return result;
+		};
+
+		$scope.cartesianProduct = function(arr) {
+		    return arr.reduce(function(a,b){
+		        return a.map(function(x){
+		            return b.map(function(y){
+		                return x.concat(y);
+		            })
+		        }).reduce(function(a,b){ return a.concat(b) },[])
+		    }, [[]])
+		}
+		$scope.range = function(min, max, step) {
+		    step = step || 1;
+		    var input = [];
+		    for (var i = min; i <= max; i += step) {
+				input.push(i);
+		    }
+		    return input;
+		};
+		$scope.getRouteSkuEdit = function(id){
+			return Routing.generate('admin_sku_edit',{'id':id});
+		};
+		$scope.ngSelectFileWithCKFinder = function(ele_id){
+			// selectFileWithCKFinder(ele_id);
+			angular.element(selectFileWithCKFinder(ele_id));
+		};
+
+		// $scope.removeLastChoice = function() {
+		// 	var lastItem = $scope.choices.length-1;
+		// 	$scope.choices.splice(lastItem);
+		// };
+
+		/*
+		// only 2 dimention
+		$scope.generateVariants = function(data, prefix) {
+		    if (typeof prefix === 'undefined') {
+          		prefix = '';
+	        }
+	        var result = [];
+	        var attribute = data.shift();
+	        $.each(attribute, function(key,val) {
+	            if (data instanceof Array && data.length > 0) {
+					// Instead of passing the original array, clone it and pass the cloned array as argument.
+
+					_data = data.slice(0);
+
+					result = result.concat($scope.generateVariants(_data, val + ' '));
+	            } else {
+					result.push(prefix + val);
+	            }
+        	});
+        	return result;
+		}
+		*/
+
+		$scope.handleDrop = function (index, datamode) {
+			CKFinder.popup( {
+				width: 800,
+				height: 600,
+				chooseFiles: true,
+				rememberLastFolder: true,
+		    	startupFolderExpanded: true,
+				onInit: function( finder ) {
+					finder.on( 'files:choose', function( evt ) {
+						var file = evt.data.files.first();
+						var fileThumbUrl = finder.request( 'file:getThumb', { file: file } );
+						// set value of $scope variable from jquery
+						$scope.$apply( function() {
+							if(datamode=='pattern_image'){
+								// pattern image
+								if($scope.variantType == $scope.con_variant_type_cover){
+									// cover_variant
+									$scope.cover_variant_group_option[index].pattern_image = file.getUrl();
+									$scope.cover_variant_group_option[index].pattern_image_s = fileThumbUrl;
+								}else{
+									// option_variant
+									$scope.variant_option[index].pattern_image = file.getUrl();
+									$scope.variant_option[index].pattern_image_s = fileThumbUrl;
+								}
+							}else{
+								// image
+								if($scope.variantType == $scope.con_variant_type_cover){
+									// cover_variant
+									$scope.cover_variant_group_option[index].image = file.getUrl();
+									$scope.cover_variant_group_option[index].image_small = fileThumbUrl;
+								}else{
+									// option_variant
+									$scope.variant_option[index].image = file.getUrl();
+									$scope.variant_option[index].image_small = fileThumbUrl;
+								}
+							}
+				        });
+					});
+					finder.on( 'file:choose:resizedImage', function( evt ) {
+						$scope.$apply( function() {
+							// resized image
+							if(datamode=='pattern_image'){
+								// pattern image
+								if($scope.variantType == $scope.con_variant_type_cover){
+									// cover_variant
+									$scope.cover_variant_group_option[index].pattern_image = evt.data.resizedUrl;
+									$scope.cover_variant_group_option[index].pattern_image_s = evt.data.resizedUrl;
+								}else{
+									// option_variant
+									$scope.variant_option[index].pattern_image = evt.data.resizedUrl;
+									$scope.variant_option[index].pattern_image_s = evt.data.resizedUrl;
+								}
+							}else{
+								// image
+								if($scope.variantType == $scope.con_variant_type_cover){
+									// cover_variant
+									$scope.cover_variant_group_option[index].image = evt.data.resizedUrl;
+									$scope.cover_variant_group_option[index].image_small = evt.data.resizedUrl;
+								}else{
+									// option_variant
+									$scope.variant_option[index].image = evt.data.resizedUrl;
+									$scope.variant_option[index].image_small = evt.data.resizedUrl;
+								}
+							}
+				        });
+					});
+				}
+			} );
+		}
+	});
+
+	app.controller('hashTagCtrl', function($scope, $http, hashtag_data) {
+		$scope.init_hashtag = function() {
+			$scope.tags = [];
+			if($scope.glob_product_id){
+				hashtag_data.getProductHashtags($scope.glob_access_token, $scope.glob_product_id).then(function onSuccess(response){
+					$scope.tags = response.data.data;
+			    }).catch(function onError(response) {
+					console.log('Error get current hashtag');
+			    });
+			}else{
+				$scope.tags = [];
+			}
+		}
+        $scope.loadTags = function(query) {
+			return $http.get('{{path('api_1_get_tags')}}?query=' + query, {
+				headers: {
+					"Authorization": "Bearer " + $scope.glob_access_token
+				}
+			}).then(function (response) {
+				return response.data.data;
+			}, function(response) {
+				console.log('Error loading tag');
+			});
+        };
+		// $scope.tags = [{text:'just'}, {text:'some'}]; //option use-strings=false
+		// $scope.tags = ['just', 'some', 'cool', 'tags'];  //option use-strings=true
+	});
+
+	app.filter('join', function () {
+	    return function join(array, separator, prop) {
+	        if (!Array.isArray(array)) {
+				return array; // if not array return original - can also throw error
+	        }
+			return (!!prop ? array.map(function (item) {
+				return item[prop];
+			}) : array).join(separator);
+		};
+	});
+	app.filter('capitalize', function () {
+		return function (input, all) {
+		  if (!input) return '';
+		  const REGEX_ALL = /([^\W_]+[^\s-]*) */g;
+		  const REGEX_FIRST = /([^\W_]+[^\s-]*)/;
+		  const REGEX = (all) ? REGEX_ALL : REGEX_FIRST;
+		  return input.replace(REGEX, (txt) =>
+		    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		};
+    });
+
+	app.directive('dirSelectFileModel', [function() {
+	    return {
+	        restrict: 'A',
+			scope: {
+				onDrop: '&'
+			},
+	        link: function(scope, element, attrs) {
+	            element.bind('click', function() {
+					scope.onDrop({index:attrs.index, mode:attrs.datamode});
+	            });
+	        }
+	    };
+	}]);
+	app.directive('dirSelectFile', [function() {
+	    return {
+	        restrict: 'A',
+	        link: function(scope, element, attrs) {
+	            element.bind('click', function() {
+	                angular.element(selectFileWithCKFinder(attrs.dataindex, attrs.datathumb));
+	            });
+	        }
+	    };
+	}]);
+
+</script>

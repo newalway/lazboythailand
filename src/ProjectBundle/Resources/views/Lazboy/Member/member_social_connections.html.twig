@@ -1,0 +1,58 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout_member.html.twig" %}
+
+{% block title %}{% trans %}member.social.connections{% endtrans %} | {{ parent() }}{% endblock %}
+
+{% block member_social_connections_active %}text-dark{% endblock %}
+
+{% block breadcrumbs_custom %}
+    {{ parent() }}
+	<li class="active">{% trans %}member.social.connections{% endtrans %}</li>
+{% endblock %}
+
+{% block member_header %}{% trans %}member.social.connections{% endtrans %}{% endblock %}
+
+{% block content_member %}
+    <div class="row login-social social-connections">
+
+        <div class="col-md-6 mb-3">
+            <div class="login-social">
+            {% if app.user.oauth == 1 and app.user.servicename == 'facebook' %}
+                <a class="facebook">
+                    <i class="fa fa-facebook"></i> Connected as {{ app.user.firstname }} {{ app.user.lastname }}
+                </a>
+            {% else %}
+                <a class="facebook" href="{{ hwi_oauth_login_url('facebook') }}">
+                    <i class="fa fa-facebook"></i> {% trans %}member.social.connect.facebook{% endtrans %}
+                </a>
+                <div>{% trans %}member.social.connect.facebook_desc{% endtrans %}</div>
+            {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="login-social">
+                {% if app.user.oauth == 1 and app.user.servicename == 'google' %}
+                    <a class="google">
+                        <i class="fa fa-google"></i> Connected as {{ app.user.firstname }} {{ app.user.lastname }}
+                    </a>
+                {% else %}
+                    <a class="google" href="{{ hwi_oauth_login_url('google') }}">
+                        <i class="fa fa-google"></i> {% trans %}member.social.connect.google{% endtrans %}
+                    </a>
+                    <div>{% trans %}member.social.connect.google_desc{% endtrans %}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {#<div class="col-sm-6 clear-both">
+            <div class="member-box text-center">
+                <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+                    <input type="hidden" id="username" name="username" value="{{app.user.email}}"/>
+                    <button type="submit" id="_submit" name="_submit" class="thm-btn arrow-push-in-right btn-send-email"><span>{{ 'member.password.setpassword.submit'|trans() }} <i class="fa fa-caret-right"></i></span></button>
+                </form>
+            </div>
+        </div>#}
+
+    </div>
+
+{% endblock %}

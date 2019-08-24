@@ -1,0 +1,47 @@
+{# {% trans_default_domain 'FOSUserBundle' %} #}
+
+<div class="section-sm pt-0 border-top-0">
+
+    <div class="row">
+        <div class="col-6 col-md-4 mb-3">
+            <label>{% trans %}member.personal.fullname{% endtrans %}</label>
+            <div class="text-dark">{{ user.firstName }} {{ user.lastName }}</div>
+        </div>
+
+        <div class="col-6 col-md-4 mb-3">
+            <label>{% trans %}member.personal.email{% endtrans %}</label>
+            <div class="text-dark">{{ user.email }}</div>
+        </div>
+
+        <div class="col-6 col-md-4 mb-3">
+            <label>{% trans %}member.personal.company_name{% endtrans %}</label>
+            <div class="text-dark">{{ user.companyName }}</div>
+        </div>
+
+        {% if is_granted('ROLE_CUSTOMER') %}
+            <div class="col-6 col-md-4 mb-3">
+                <label>{% trans %}member.personal.gender{% endtrans %}</label>
+                <div class="text-dark">{{ user.gender|gender|trans }}</div>
+            </div>
+            <div class="col-6 col-md-4 mb-3">
+                <label>{% trans %}member.personal.birth_date{% endtrans %}</label>
+                <div class="text-dark">{{ user.birthDate|date('d/m/Y') }}</div>
+            </div>
+        {% endif %}
+
+        <div class="col-6 col-md-4 mb-3">
+            <label>{% trans %}member.personal.phone{% endtrans %}</label>
+            <div class="text-dark">{{ user.phoneNumber }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="section-sm">
+    {{ render(controller('ProjectBundle:Member:_address_book')) }}
+</div>
+
+{#
+<div class="section-sm">
+    {{ render(controller('ProjectBundle:Member:_recent_orders')) }}
+</div>
+#}

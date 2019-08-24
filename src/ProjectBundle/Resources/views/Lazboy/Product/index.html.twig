@@ -1,0 +1,280 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.product{% endtrans %} | {{ parent() }}{% endblock %}
+{% block product_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.product{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.product{% endtrans %}</li>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+	{% if app.request.get('cate_id') %}
+	<style>
+		.menu-categories ul li a.active{{app.request.get('cate_id')}}{
+		    color: #0070af;
+		}
+
+	</style>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="pt-4 bg-default">
+    <div class="container">
+		{#
+		<div class="owl-carousel carousel-post-gallery carousel-slider-blog-post" data-items="1" data-stage-padding="0" data-loop="true" data-margin="10px" data-mouse-drag="false" data-nav="true" data-dots="true" data-photo-swipe-gallery="gallery">
+			{% for i in 1..3 %}
+			<div class="item">
+				<a class="img-thumbnail-variant-1" href="{{path('gallery_detail',{'id':loop.index,'slug':'La-Z-Boy'})}}">
+					<figure>
+						<img src="https://placehold.it/1350x550" alt="" class="w-100"/>
+					</figure>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+		#}
+
+		<figure id="{{con_banner_product_top_ad}}">
+			{% set cat_id = app.request.get('cate_id') %}
+			{% if cat_id %}
+				{{ render(controller('ProjectBundle:Product:_bannerProductCategory', {'category_id':app.request.get('cate_id')})) }}
+			{% else %}
+				{% if currIsShopOnline %}
+					{{ render(controller('ProjectBundle:Product:_bannerProductCategory', {'category_id':app.request.get('cate_id'), 'banner_name':con_banner_shop_online_top_ad})) }}
+				{% else %}
+					{{ render(controller('ProjectBundle:Product:_bannerProductCategory', {'category_id':app.request.get('cate_id'), 'banner_name':con_banner_product_top_ad})) }}
+				{% endif %}
+			{% endif %}
+		</figure>
+
+		<div class="row row-60 flex-lg-row-reverse">
+			<div class="col-lg-9 section-divided__main section-divided__main-left">
+				<div class="section-sm">
+					<div class="d-none d-md-block ">
+						<div class="filter-shop-box">
+							<p>{{ "product.showing_results"|trans({'%s%':paginated.getCurrentPageOffsetStart,'%e%':paginated.getCurrentPageOffsetEnd,'%all%':paginated.getNbResults}) }}</p>
+							<div class="form-wrap">
+								<!--Select 2-->
+
+								{% if currIsShopOnline %}
+									{% if category %}
+										{% set searchPricePath = path('product_shop_online_category', {cate_id:category.id, slug:category.slug}) %}
+									{% else %}
+										{% set searchPricePath = path('product_shop_online') %}
+									{% endif %}
+								{% else %}
+									{% if category %}
+										{% set searchPricePath = path('product_category', {cate_id:category.id, slug:category.slug}) %}
+									{% else %}
+										{% set searchPricePath = path('product') %}
+									{% endif %}
+							    {% endif %}
+
+								<form class="" id="formSearch" action="{{searchPricePath}}" method="get">
+									{# {{ form_label(search_form.ddlPriceSort, 'product.default_sorting')}} #}
+									{{ form_widget(search_form.ddlPriceSort) }}
+
+									<div style="display:none;">
+										{% for shop_by_key, shop_by_child in search_form.shop_by %}
+											{{ form_widget(shop_by_child, {'id': 'hide_product_search_shop_by_'~ shop_by_key})}}
+										{% endfor %}
+
+										{% if search_form.vars.value.startprice is defined and search_form.vars.value.startprice != null %}
+											{{ form_widget(search_form.startprice)}}
+											{{ form_widget(search_form.endprice)}}
+										{% endif %}
+									</div>
+
+
+									{#<select id="product_search_ddlPriceSort" name="ddlPriceSort" class="form-input select-filter" data-placeholder="Default sorting" data-minimum-results-for-search="Infinity">
+										<option>{% trans %}product.default_sorting{% endtrans %}</option>
+										<option value="popularity">{% trans %}product.sort_popularity{% endtrans %}</option>
+										<option value="new">{% trans %}product.sort_newness{% endtrans %}</option>
+										<option value="asc">{% trans %}product.model_asc{% endtrans %}</option>
+										<option value="desc">{% trans %}product.model_desc{% endtrans %}</option>
+										<option value="low_high">{% trans %}product.sort_price_low_high{% endtrans %}</option>
+										<option value="high_low">{% trans %}product.sort_price_high_low{% endtrans %}</option>
+									</select>#}
+
+								</form>
+							</div>
+						</div>
+					</div>{# .filter-shop-box #}
+					<div class="d-lg-none d-md-none" id="category-navigation-filter">
+						<div class="category-navigation-container">
+							<div class="category-filter">
+								<a class="facets-toggle" href="javascript:void(0);" onclick="openNav()" data-target="facet-sidebar" aria-haspopup="true">
+									{% trans %}product.filter{% endtrans %}
+									<i class="fa fa-sliders" aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="category-sort">
+								<a class="sort-toggle" href="javascript:void(0);" onclick="openNav2()" data-target="facet-sidebar" aria-haspopup="true">
+									{% trans %}product.sort{% endtrans %}
+									<i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</div>
+							<div class="product-results-count">
+								<span class="result-count">{{paginated.getNbResults }} {% trans %}product.items{% endtrans %}</span>
+							</div>
+						</div>
+					</div>
+					{% if app.request.get('cate_id') %}
+					<h4 class="mt-3 mb-3">{{category.getTitle}}</h4>
+					{% endif %}
+
+					<div class="row justify-content-sm-center row-70">
+						{% for data in paginated.currentpageresults %}
+						{% set item = data[0] %}
+			            {% set price_data = getPriceData(data) %}
+						<div class="col-md-6 col-xl-4">
+
+							{% include "ProjectBundle:"~ view_product ~":_partial_product.html.twig" with {item:item, price_data:price_data,section_name:"product_page"} %}
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				{% if paginated.havetopaginate %}
+				<!-- Pagination-->
+				<section class="section-sm text-center p-5">
+					<!-- Classic Pagination-->
+					<nav>
+						{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+
+					</nav>
+				</section>
+				{% endif %}
+			</div>
+			<div class="col-lg-3 section-divided__aside section__aside-left menu-products">
+				<div class="d-none d-md-block">
+					{{ render(controller('ProjectBundle:Product:_sidebar_menu', {'obj_category':category, 'arr_path_category_id':arr_path_category_id, 'arr_query':arr_query, 'route_name':route_name, 'arr_url_params':arr_url_params})) }}
+				</div>
+
+			</div>
+		</div>
+    </div>
+	{# button for click open sidebar #}
+
+	{{ render(controller('ProjectBundle:Product:_sidebar_menu_filter_for_mobile', {'obj_category':category, 'arr_path_category_id':arr_path_category_id, 'arr_query':arr_query, 'route_name':route_name, 'arr_url_params':arr_url_params})) }}
+	<style media="screen">
+	.filter-position{
+	position: fixed;
+	z-index: 140;
+	width: 100%;
+	left: 0;
+	background: #fff;
+	webkit-box-shadow: 0px 2px 10px 0 rgba(0,0,0,0.25);
+		-o-box-shadow: 0px 2px 10px 0 rgba(0,0,0,0.25);
+		-moz-box-shadow: 0px 2px 10px 0 rgba(0,0,0,0.25);
+		box-shadow: 0px 2px 10px 0 rgba(0,0,0,0.25);
+
+	}
+	</style>
+
+</section>
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+		$("input[type=radio][class='ddlPriceSortMobile']").change(function(){
+			var rId = $(this).attr('id');
+			$("#formSearchMobile").submit();
+		});
+
+		<!-- $('input[name=vote]:checked').val() -->
+		$('#product_search_ddlPriceSort').on('change', function() {
+			$("#formSearch").submit();
+		});
+
+		//$( ".wl" ).click(function() {
+
+
+	});
+	$(window).load(function () {
+		$(document.body).on('touchmove', filterPosition); // for mobile
+		$(window).on('scroll', filterPosition);
+	});
+
+	function openNav2() {
+		var height = $('.rd-navbar-panel').height();
+		var scroll = $(window).scrollTop();
+		var heightFilter = $('#category-navigation-filter').height();
+		if (scroll >= 20){
+			$("#mySidenav-2").css("top",height+heightFilter);
+			document.getElementById("mySidenav-2").style.width = "100%";
+			document.getElementById("mySidenav").style.width = "0";
+		}else{
+			$("#mySidenav-2").css("top",height);
+			document.getElementById("mySidenav-2").style.width = "100%";
+			document.getElementById("mySidenav").style.width = "0";
+		}
+	}
+
+	function closeNav2() {
+	  document.getElementById("mySidenav-2").style.width = "0";
+	}
+	function openNav() {
+		var height = $('.rd-navbar-panel').height();
+		var scroll = $(window).scrollTop();
+		var heightFilter = $('#category-navigation-filter').height();
+
+		if (scroll >= 20){
+			$("#mySidenav").css("top",height+heightFilter);
+			document.getElementById("mySidenav").style.width = "100%";
+			document.getElementById("mySidenav-2").style.width = "0";
+		}else{
+			$("#mySidenav").css("top",height);
+			document.getElementById("mySidenav").style.width = "100%";
+			document.getElementById("mySidenav-2").style.width = "0";
+		}
+
+	  //document.getElementById("mySidenav").style.top = height;
+	}
+
+	function closeNav() {
+	  document.getElementById("mySidenav").style.width = "0";
+	}
+	function filterPosition(){
+		var filter = $('#category-navigation-filter');
+		var heightMainMenu = $('div.rd-navbar-panel').height();
+
+
+
+		//var cover = $('.select-cover');
+		//var menu = $('#menu');
+		//var hieghtThreshold = $(".product-single").offset().top;
+		//var hieghtThreshold_end  = $(".section-divided__main").offset().top +$(".section-divided__main").height() ;
+			   //console.log(heightMainMenu);
+		$(window).scroll(function() {
+			var scroll = $(window).scrollTop();
+
+			if(scroll >= 20){
+			//if (scroll >= hieghtThreshold && scroll <=  hieghtThreshold_end ) {
+
+				filter.addClass('filter-position');
+				$(".filter-position").css("top",heightMainMenu);
+			   // menu.addClass('dark');
+			} else {
+				filter.removeClass('filter-position');
+				closeNav();
+				closeNav2();
+			   // menu.removeClass('dark');
+			}
+		});
+			/////// use when not scroll if you refrash page
+			// var scroll = $(window).scrollTop();
+			// if(scroll >= 20){
+			//
+			// 	filter.addClass('filter-position');
+			// 	$(".filter-position").css("top",heightMainMenu);
+			// } else {
+			// 	filter.removeClass('filter-position');
+			// 	closeNav();
+			// 	closeNav2();
+			// }
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "FOSUserBundle::bundle-layout.html.twig" %}
+
+{% block title %}{% trans %}menu.login{% endtrans %} | {{ parent() }}{% endblock %}
+
+{% block body_class %}{{ parent() }} fos-login{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}login.title{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}login.title{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default section-md">
+    <div class="container">
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="row row-70">
+
+            <div class="col-lg-6 col-xl-6 section-divided__main">
+                <div class="login-box">
+                    <h4 class="text-center">{% trans %}login.title{% endtrans %}</h4>
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                    {% endif %}
+                    <form action="{{ path("fos_user_security_check") }}" method="post" class="rd-mailform rd-mailform_responsive">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        <div class="form-wrap form-wrap_icon linear-icon-envelope">
+                            <input class="form-input" id="username" type="text" name="_username" autocomplete="off" required="required" autofocus >
+                            <label class="form-label" for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+                        </div>
+                        <div class="form-wrap form-wrap_icon linear-icon-lock">
+                            <input class="form-input" id="password" type="password" name="_password" required="required">
+                            <label class="form-label" for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-sm-6">
+								<label class="checkbox-inline" for="remember_me">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+									{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                                </label>
+                            </div>
+                            <div class="col col-sm-6 text-right">
+                                <a href="{{path('fos_user_resetting_request')}}" class="forget-pass">{{ 'security.login.forgot_password'|trans({}, 'FOSUserBundle')}} ?</a>
+                            </div>
+                        </div>
+                        <button class="button button-primary" name="_submit" type="submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                    </form>
+
+                    <div class="login-social">
+                        <div class="coln">
+                            <a class="facebook" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">
+                                <i class="fa fa-facebook"></i> {% trans %}login.with.facebook{% endtrans %}
+                            </a>
+                        </div>
+
+                        <div class="coln">
+                            <a class="google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
+                                <i class="fa fa-google"></i> {% trans %}login.with.google{% endtrans %}
+                            </a>
+                        </div>
+                    </div>
+
+                    {#
+                    <form action="{{ path("fos_user_security_check") }}" method="post">
+
+                        <div class="form-grp">
+                            <input type="text" name="_username" id="username" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }} *" value="{{ last_username }}" autocomplete="off" required="required" autofocus />
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <!-- /.form-grp -->
+                        <div class="form-grp">
+                            <input type="password" name="_password" id="password" autocomplete="off" required="required" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }} *" autocomplete="off" required="required" />
+                            <i class="fa fa-lock"></i>
+                        </div>
+                        <!-- /.form-grp -->
+                        <div class="clearfix submit-box">
+                            <div class="pull-left">
+                                <button class="thm-btn" type="submit" id="_submit" name="_submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                            </div>
+                            <!-- /.pull-left -->
+                            <div class="pull-right">
+                                <label>Or login with</label>
+                                <ul class="list-small login-social">
+                                    <li><a class="facebook" href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"><i class="fa fa-facebook" title="Log in with your Facebook account"></i></a></li>
+                                    <li><a class="google-plus" href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"><i class="fa fa-google" title="Log in with your Google+ account"></i></a></li>
+                                </ul>
+                                <!-- /.social-icon -->
+                            </div>
+                            <!-- /.pull-right -->
+                        </div>
+                        <!-- /.clearfix -->
+                        <div class="clearfix remember-box">
+                            <div class="pull-left">
+                                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                                <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+                            </div>
+                            <!-- /.pull-left -->
+                            <div class="pull-right">
+                                <a href="{{path('fos_user_resetting_request')}}">{{ 'security.login.forgot_password'|trans({}, 'FOSUserBundle')}} ?</a>
+                            </div>
+                            <!-- /.pull-right -->
+                        </div>
+                        <!-- /.clearfix -->
+                    </form>#}
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-6 section-divided__aside section-divided__aside-left">
+                <div class="fos-box-link">
+                    <h4>Are you a new customer?</h4>
+                    <p>Start your shopping with La-Z-Boy Thailand</p>
+                    <a href="{{path('fos_user_registration_register')}}" class="button button-primary">{% trans %}menu.register{% endtrans %}</a>
+                </div>
+            </div>
+
+        </div>
+        {% else %}
+            <p class="text-center">
+                You are already logged in. Please sign out of your other session first.
+            </p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

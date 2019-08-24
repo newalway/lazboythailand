@@ -1,0 +1,293 @@
+default_target_login:
+    path:     /default_target_login
+    defaults: { _controller: ProjectBundle:Main:default_target_login }
+    requirements:
+      _method: get
+
+default_target_logout:
+    path:     /default_target_logout
+    defaults: { _controller: ProjectBundle:Main:default_target_logout }
+    requirements:
+      _method: get
+
+default_target_password_resetting:
+    path:     /default_target_password_resetting
+    defaults: { _controller: ProjectBundle:Main:default_target_password_resetting }
+    requirements:
+      _method: get
+
+product_routes:
+    resource: '@ProjectBundle/Resources/config/product.yml'
+    prefix:     /product
+
+cart_routes:
+    resource: '@ProjectBundle/Resources/config/cart.yml'
+    prefix:     /cart
+
+checkout_routes:
+    resource: '@ProjectBundle/Resources/config/checkout.yml'
+    prefix:     /checkout
+
+member_routes:
+    resource: '@ProjectBundle/Resources/config/member.yml'
+    prefix:     /member
+
+campaign_routes:
+    resource: '@ProjectBundle/Resources/config/campaign.yml'
+    prefix:     /campaign
+
+b2b_register:
+   path:     /b2b/signup
+   defaults: { _controller: ProjectBundle:Main:b2b_register }
+
+b2b_register_create:
+   path:     /b2b/signup-create
+   defaults: { _controller: ProjectBundle:Main:b2b_register_create }
+   methods:  [POST]
+
+b2b_register_complete:
+   path:     /b2b/signup-complete
+   defaults: { _controller: ProjectBundle:Main:b2b_register_complete }
+
+
+request_service:
+    path:     /request-service
+    defaults: { _controller: ProjectBundle:RequestService:request_service}
+
+request_service_create:
+    path: /request-service-create
+    defaults: { _controller: ProjectBundle:RequestService:request_service_create }
+    requirements:
+      _method: post
+    options:
+      expose: true
+
+style:
+    path:     /style
+    defaults: { _controller: ProjectBundle:Main:style }
+
+style_detail:
+    path:     /style/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:style_detail }
+    requirements:
+      id: \d+
+
+blog:
+    path:     /health-tip
+    defaults: { _controller: ProjectBundle:Main:blog }
+
+blog_detail:
+    path:     /health-tip/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:blog_detail }
+    requirements:
+      id: \d+
+
+search:
+    path:     /search
+    defaults: { _controller: ProjectBundle:Main:search }
+
+search_api:
+    path:     /search-api
+    defaults: { _controller: ProjectBundle:Main:search_api }
+    requirements:
+      _method: get
+    options:
+      expose: true
+
+about_us:
+    path:     /about-us
+    defaults: { _controller: ProjectBundle:Main:about_us }
+
+service:
+    path:     /service
+    defaults: { _controller: ProjectBundle:Main:service }
+
+how_to_buy:
+    path:     /how-to-buy
+    defaults: { _controller: ProjectBundle:Main:how_to_buy }
+
+shipping_delivery:
+    path:     /shipping-delivery
+    defaults: { _controller: ProjectBundle:Main:shipping_delivery }
+
+terms_conditions:
+    path:     /terms-conditions
+    defaults: { _controller: ProjectBundle:Main:terms_conditions }
+
+privacy_policy:
+    path:     /privacy-policy
+    defaults: { _controller: ProjectBundle:Main:privacy_policy }
+
+contact:
+    path:     /contact-us
+    defaults: { _controller: ProjectBundle:Main:contact }
+
+contact_create:
+    path: /contact-create
+    defaults: { _controller: ProjectBundle:Main:contact_create }
+    requirements:
+      _method: post
+    options:
+      expose: true
+
+showroom:
+    path:     /showroom
+    defaults: { _controller: ProjectBundle:Main:showroom }
+
+find_showroom_distance:
+    path:     /find_showroom_distance
+    defaults: { _controller: ProjectBundle:Main:find_showroom_distance }
+    requirements:
+        _method: get
+    options:
+        expose: true
+
+promotion:
+    path:     /promotion
+    defaults: { _controller: ProjectBundle:Main:promotion }
+
+promotion_detail:
+    path:     /promotion/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:promotion_detail }
+    requirements:
+      id: \d+
+
+promotion_download_create:
+    path:   /promotion/download/create/{id}
+    defaults: {_controller: ProjectBundle:Main:promotion_download_create}
+    requirements:
+        _method: get
+        id: \d+
+    options:
+        expose: true
+
+promotion_download_content:
+    path: /promotion/download/content/{id}
+    defaults: { _controller: ProjectBundle:Main:promotion_download_content }
+    requirements:
+        _method: get
+        id: \d+
+
+confirm_payment:
+  path: /confirm-payment
+  defaults: {_controller: ProjectBundle:Main:confirm_payment}
+  requirements:
+    _method: get,post
+
+search_payment_data:
+  path: /search-payment-data
+  defaults: {_controller: ProjectBundle:Main:search_paymentData}
+  requirements:
+    _method: get,post
+  options:
+    expose: true
+
+subscriber_create:
+    path: /subscriber-create
+    defaults: { _controller: ProjectBundle:Main:subscriber_create }
+    requirements:
+      _method: post
+    options:
+      expose: true
+
+track:
+    path:     /track
+    defaults: { _controller: ProjectBundle:Main:track }
+    requirements:
+        _method: get
+    options:
+        expose: true
+
+portfolio:
+    path:     /portfolio
+    defaults: { _controller: ProjectBundle:Main:portfolio }
+
+portfolio_detail:
+    path:     /portfolio/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:portfolio_detail }
+    requirements:
+      id: \d+
+
+faq:
+    path:     /faq
+    defaults: { _controller: ProjectBundle:Main:faq }
+
+warrantry_information:
+    path:     /warrantry-information
+    defaults: { _controller: ProjectBundle:Main:warrantry_information }
+
+product_information:
+    path:     /product-information
+    defaults: { _controller: ProjectBundle:Main:product_information }
+
+iclean_warrantee:
+    path:     /iclean-warrantee-information
+    defaults: { _controller: ProjectBundle:Main:iclean_warrantee }
+
+news:
+    path:     /news
+    defaults: { _controller: ProjectBundle:Main:news }
+
+news_category:
+    path:     /news-category/{cate_id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:news }
+
+news_detail:
+    path:     /news/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:news_detail }
+
+gallery:
+    path:     /gallery
+    defaults: { _controller: ProjectBundle:Main:gallery }
+
+gallery_detail:
+    path:     /gallery/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:gallery_detail }
+
+inspiration:
+    path:     /inspiration
+    defaults: { _controller: ProjectBundle:Main:inspiration }
+
+inspiration_category:
+    path:     /inspiration-type/{cate_id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:inspiration_category }
+
+inspiration_detail:
+    path:     /inspiration/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:inspiration_detail }
+
+features:
+    path:     /features
+    defaults: { _controller: ProjectBundle:Main:features }
+
+features_detail:
+    path:     /features/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:features_detail }
+
+distributor:
+    path:     /distributor
+    defaults: { _controller: ProjectBundle:Main:distributor }
+
+history:
+    path:     /history
+    defaults: { _controller: ProjectBundle:Main:history }
+
+history_detail:
+    path:     /history/{id}/{slug}
+    defaults: { _controller: ProjectBundle:Main:history }
+
+customer_care_videos:
+    path:     /customer-care-videos
+    defaults: { _controller: ProjectBundle:Main:customer_care_videos }
+
+email_test:
+    path:     /email-test
+    defaults: { _controller: ProjectBundle:Main:email_test }
+
+homepage:
+    path:     /
+    defaults: { _controller: ProjectBundle:Main:index }
+
+#project_homepage:
+#    path:     /
+#    defaults: { _controller: ProjectBundle:Default:index }

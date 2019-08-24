@@ -1,0 +1,14 @@
+Dear Administrator, <br/><br/>
+
+You have just received afollowing customer review for <b>{{product.getTitle}}</b> <br/><br/>
+
+Please log in to <a href="{{ admin_panel_url }}">admin panel</a> to approve the product review to show the review on the website. <br/><br/>
+
+Customer Name : {{review.reviewername}} <br/><br/>
+Rating : {% for i in 1 .. review.ratingScore %}&#9733{% endfor %}<br/><br/>
+Review Title : {{review.getTitle}} <br/><br/>
+Review Detail : {{review.getContent|nl2br}} <br/><br/>
+
+<br/>
+Thank you, <br/>
+Automatically generated email <br/>

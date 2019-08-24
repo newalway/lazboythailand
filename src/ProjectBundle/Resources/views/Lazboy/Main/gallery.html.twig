@@ -1,0 +1,58 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.gallery{% endtrans %} | {{ parent() }}{% endblock %}
+{% block gallery_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.gallery{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.gallery{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		<figure id="{{con_banner_gallery_top_ad}}">
+			{% include "ProjectBundle:"~ view_main ~":_banner_ad_page.html.twig" with {'banner_ad': gallery_top_ad} %}
+		</figure>
+
+		<div class="row row-60">
+
+			{% for gallery in paginated.currentPageResults %}
+			<div class="col-md-6 col-xl-4">
+				<!-- Post classic-->
+				<article class="post-classic post-minimal">
+					<a href="{{path('gallery_detail',{'id':gallery.id,'slug':gallery.getslug})}}">
+						{% if gallery.Image %}
+							{% set image = asset(gallery.Image)|imagine_filter('img_450x276') %}
+						{% else %}
+							{% set image = asset('lazboy/images/img_450x276.png') %}
+						{% endif %}
+						<img src="{{image}}" alt="{{gallery.getTitle}}" width="670" height="345" />
+						<!-- <img src="{{asset('lazboy/template/images/post-minimal-2-418x315.jpg')}}" alt="" width="418" height="315"/> -->
+					</a>
+					<div class="post-classic-title">
+						<h6 class="text-center"><a href="{{path('gallery_detail',{'id':gallery.id,'slug':gallery.getslug})}}">{{gallery.getTitle}}</a></h6>
+					</div>
+				</article>
+			</div>
+			{% endfor %}
+		</div>
+
+    </div>
+</section>
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+{% if paginated.havetopaginate %}
+<section class="section-sm text-center">
+	<div class="container">
+		<!-- Classic Pagination-->
+		<nav>
+			{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+		</nav>
+	</div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+<div class="form-group">
+	<label class="control-label col-md-2" for="parent">Position </label>
+	<div class="col-md-6 form-control-static">
+
+		<select id="moveto" name="product_cat[moveto]" ng-model="moveto"
+			ng-options="mv.title for mv in movetos track by mv.value">
+		</select>
+
+		{#
+		<select id="moveto" name="product_cat[moveto]" ng-model="moveto">
+			<option value="lastchild">Last Child</option>
+			<option value="firstchild">First Child</option>
+			<option value="nextsibling">Next Sibling</option>
+		</select>
+		#}
+
+		&nbsp;&nbsp;of&nbsp;&nbsp;
+
+		<select id="parent" name="product_cat[parent]" ng-model="parent"
+			ng-options="parent.title|addClassParent:{class_name:parent.class, value:parent.value, data_moveto:moveto.value, level:parent.level}  for parent in parents track by parent.value"
+			{# option-class="parent" #}>
+		</select>
+
+		{#
+		<select id="parent" name="product_cat[parent]" ng-model="parent">
+			  <option ng-value="{{'{{parent}}'}}" ng-repeat="parent in parents" ng-class="parent.class">{{'{{parent.title}}'}}</option>
+		</select>
+		#}
+
+		{#
+		<select id="parent" name="product_cat[parent]" ng-model="parent">
+			{{option_tree|raw}}
+		</select>
+		#}
+
+		&nbsp;&nbsp;node
+	</div>
+</div>
+
+{#
+<div class="">
+	{{'{{moveto}}'}}
+	<br/>
+	{{'{{parent}}'}}
+</div>
+#}
+
+<script>
+$(document).ready(
+	function(){
+		$('.level_2').each(function(){$(this).text('― '+$(this).text());});
+		$('.level_3').each(function(){$(this).text('―― '+$(this).text());});
+		$('.level_4').each(function(){$(this).text('――― '+$(this).text());});
+		$('.level_5').each(function(){$(this).text('―――― '+$(this).text());});
+		$('.level_6').each(function(){$(this).text('――――― '+$(this).text());});
+		$('.level_7').each(function(){$(this).text('―――――― '+$(this).text());});
+		$('.level_8').each(function(){$(this).text('――――――― '+$(this).text());});
+	}
+);
+</script>

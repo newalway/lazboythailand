@@ -1,0 +1,110 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div ng-app="productVariantApp" ng-controller="productVariantController" ng-init="init_product_variants('{{data.lvl}}', '{{form.vars.value.id}}', '{{ arr_option_tree_persist_node|json_encode }}')" ng-cloak>
+
+	<div class="box-body">
+		{% if form.vars.value.id is empty %}
+			{% include 'ProjectBundle:AdminProductVariant:_content_position.html.twig'%}
+		{% endif %}
+
+		<div class="form-group">
+	    	<label class="control-label col-md-2" for="status"> Translation</label>
+			<div class="col-md-6">
+				{{ form_widget(form.translations) }}
+		    </div>
+		</div>
+
+		<!-- condition for show cover_code or color_code  -->
+		{% if form.vars.value.id %}
+		<!-- element for edit -->
+		<div ng-if="data_product_category_lvl!=1">
+		{% else %}
+		<!-- element for add -->
+		<div ng-if="( (moveto.value=='nextsibling' || moveto.value=='prevsibling') && (parent.level==2 || parent.level==3))  ||  ((moveto.value=='lastchild' || moveto.value=='firstchild') && (parent.level==1 || parent.level==2)) ">
+		{% endif %}
+
+			<div class="form-group">
+				<label class="control-label col-md-2" for="categoryCode">
+					{% if form.vars.value.id %}
+						<!-- element for edit -->
+						{% if form.vars.value.lvl == 2 %}
+							<span class="require">*</span> Cover code
+						{% elseif form.vars.value.lvl == 3 %}
+							<span class="require">*</span> Color code
+						{% endif %}
+					{% else %}
+						<!-- element for add -->
+						<span ng-show="( (moveto.value=='nextsibling' || moveto.value=='prevsibling') && parent.level==2 )  ||  ((moveto.value=='lastchild' || moveto.value=='firstchild') && parent.level==1) "><span class="require">*</span> Cover code</span>
+						<span ng-show="( (moveto.value=='nextsibling' || moveto.value=='prevsibling') && parent.level==3 )  ||  ((moveto.value=='lastchild' || moveto.value=='firstchild') && parent.level==2) "><span class="require">*</span> Color code</span>
+					{% endif %}
+				</label>
+				<div class="col-md-6 form-control-static">
+					{{form_widget(form.categoryCode, {'id' : 'categoryCode'})}}
+					<div class="error-form">{{form_errors(form.categoryCode)}}</div>
+				</div>
+			</div>
+		</div><!-- end div if form.vars.value.id  -->
+
+
+		<!-- condition for pattern_image and isOnlyGallery  -->
+		{% if form.vars.value.id %}
+		<!-- element for edit -->
+		<div ng-if="data_product_category_lvl==3">
+		{% else %}
+		<!-- element for add -->
+		<div ng-if="( (moveto.value=='nextsibling' || moveto.value=='prevsibling') && parent.level==3 )  ||  ((moveto.value=='lastchild' || moveto.value=='firstchild') && parent.level==2) ">
+		{% endif %}
+
+			<div class="form-group">
+				<label class="control-label col-md-2" for="parent">Pattern image </label>
+				<div class="col-md-6 form-control-static">
+					<!-- <label for="image"></label> -->
+					{{form_widget(form.patternImage, {'id' : 'patternImage'})}}
+					<a href="javascript:void(0)" onclick="selectFileWithCKFinder('patternImage', 'image_thumbnail');" style="" >
+						{% if form.vars.value.patternImage %}
+							<img id="image_thumbnail" class="img-responsive" src="{{asset(form.vars.value.patternImage) | imagine_filter('img_120x120')}}" alt="{{form.vars.value.getTitle}}" />
+						{% else %}
+							<img id="image_thumbnail" class="img-responsive" src="https://placehold.it/120x120" width="120px;">
+						{% endif %}
+					</a>
+
+					{% if form.vars.value.patternImage %}
+						<span>
+							<input type="checkbox" id="removefileimage" name="removefileimage" value="1">
+							<label class="control-label" for="removefileimage">  Remove</label>
+						</span>
+					{% endif %}
+					<p class="help-block">image size 120x120 px</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-md-2" for="isOnlyGallery"> </label>
+				<div class="col-md-6 ">
+					{{form_widget(form.isOnlyGallery, {'id' : 'isOnlyGallery'})}}
+					<div class="error-form">{{form_errors(form.isOnlyGallery)}}</div>
+					<p class="help-block"><small>Hide product variant price</small></p>
+				</div>
+			</div>
+
+		</div> <!-- end div if form.vars.value.id  -->
+
+	</div><!-- end box-body -->
+</div><!-- end productVariantApp -->
+
+<div class="box-footer">
+	<div class="row">
+		<div class="col-md-offset-2 col-md-9">
+			{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+			{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+			{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+			<a href="{%if app.session.get('back_to_url')['admin_product_variant'] is defined%}{{app.session.get('back_to_url')['admin_product_variant']}}{%else%}{{path('admin_product_variant')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	// window.parents = {{arr_option_tree_persist_node|json_encode|raw}};
+</script>
+<script src="{{ asset('javascripts/adminProductVariantTypeApp/app.js') }}"></script>

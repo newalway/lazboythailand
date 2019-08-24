@@ -1,0 +1,194 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.iclean.warantee{% endtrans %} | {{ parent() }}{% endblock %}
+{% block iclean_warrantee_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}<span class="clear-transform">{% trans %}menu.iclean.warantee{% endtrans %}</span>{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.iclean.warantee{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="pt-4 pb-5 section-divided">
+    <div class="container">
+        <div class="section-divided__main">
+			{{data.getContent|raw}}
+
+			{#
+			{% if app.request.locale == 'th' %}
+            <section class="section-sm">
+				<img src="/lazboy/images/iClean/hero_v2-1.jpg" alt="" width="100%"/>
+                <h4 class="iclean-title">การรับประกันผ้า iClean™</h4>
+				<p>
+                    ผ้า iClean รับประกัน 2 ปี สำหรับคราบรอยเปื้อนบางชนิดที่ระบุเท่านั้น<br />
+                    รับประกัน 1 ปี สำหรับขนผ้าเสียหาย (nap loss) ตะเข็บรอยต่อผ้า (seam failure) เนื้อผ้าแยกแตก (fabric separtion)<br />
+                    <span class="text-red2">การรับประกันจะสิ้นสุด เมื่อมีการทำความสะอาดผ้าด้วยสารเคมี ( Fabric treatment )</span>
+				</p>
+                <h6>การรับประกันคราบรอยเปื้อน (covered stains) ประกอบด้วย -</h6>
+				<p>
+                    เบียร์ ชา กาแฟ น้ำผลไม้ นม โซดา ไวน์ น้ำเชื่อมช็อคโกแลต ไอศครีม เยลลี่  ซอสมะเขือเทศ  ซอสSalsa ปากกามาร์คเกอร์แบบลบได้ (Washable Magic Marker) ปัสสาวะ (Urine) และฝุ่น (Dirt)
+                </p>
+                <h6 class="text-red2"><b>คราบรอยเปื้อนที่ไม่อยู่ในการรับประกัน ประกอบด้วย -</b></h6>
+                <p>
+                    ผลิตภัณท์ที่มีส่วนผสมของน้ำมัน ( Oil-based products) เช่น น้ำสลัด และครีมทาผิว เป็นต้น ผลิตภัณฑ์ที่มีส่วนผสมของขี้ผึ้ง (Wax-based products) เช่น เทียนหอม สีเทียน เป็นต้น ปากกาทุกประเภท ซอสมัสตาร์ด ( Mustard)
+                </p>
+                <p>
+                    <b class="text-dark">ข้อสำคัญ</b>
+                    ต้องดูแลรักษา ทำความสะอาดตามคำแนะนำของ เล-ซี-บอย เท่านั้น
+                </p>
+                <p>
+                    ติดต่อเรื่อง การรับประกันได้ที่ ฝ่ายลูกค้าสัมพันธ์ โทร 02-3760118 ต่อ 104 เฉพาะวันทำการ<br />
+                    การทำเคลมประกันรอยคราบ อาจต้องการตัวอย่างผ้าที่เป็นรอยคราบเพื่อพิสูจน์
+                </p>
+            </section>
+
+            <section class="section-sm">
+                <h4 class="iclean-title">คำแนะนำวิธีทำความสะอาดผ้าประเภท iClean™ by La-Z-Boy</h4>
+
+				<div class="row row-30">
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill01.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="lazboy/images/iClean/spill02.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="lazboy/images/iClean/spill03.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill04.jpg" alt="" width="100%"/>
+					</div>
+				</div>
+
+				<p>
+                    ทำความสะอาดทันทีเมื่อเกิดการหกเลอะ  มิฉะนั้น อาจไม่สามารถกำจัดคราบเปื้อนออกได้หมด ผ้าหุ้มไม่สามารถอดซักได้
+				</p>
+
+				<p>
+                    <b class="text-dark">ประเภทของการเปื้อนโดยทั่วไป มีดังนี้</b>
+                </p>
+
+                <ol class="list-ordered">
+                    <li>
+                        ประเภทของเหลว (liquid spill): เบียร์ ชา กาแฟ น้ำผลไม้ นม โซดา ไวน์ และปัสสาวะ เมื่อมีการหกเลอะ ให้รีบซับออกด้วยผ้าขาวสะอาดทันที อย่าทิ้งไว้จนซึมเข้าเนื้อผ้า
+                    </li>
+                    <li>
+                        ประเภทไม่ใช่ของเหลว (non-liquid spill): น้ำเชื่อมช็อคโกแลต  ไอศครีม เยลลี่  ซอสมะเขือเทศ  ซอสSalsa ปากกาลบได้ ฝุ่น เมื่อมีการหกเลอะ
+                        ให้รีบเอาออกทันที ด้วยวัสดุที่สามารถตักคราบเปื้อนออกก่อน เช่น ช้อน มีดตัดเนย เป็นต้น อย่าทิ้งไว้จนซึมเข้าเนื้อผ้า
+                        <b class="text-dark">จากนั้นให้ทำความสะอาดเฉพาะจุดที่เปื้อน</b>
+                        โดยใช้ผ้าชุ่มน้ำสบู่อ่อนเช็ดบริเวณคราบ โดยหมุนเบาๆ เป็นวงกลม  (circular motion) ถ้าต้องการล้างคราบสบู่ อาจใช้ผ้าหมาดๆ เช็ดทำความสะอาดอีกครั้ง
+                    </li>
+                </ol>
+                <ul class="list-marked">
+                    <li>
+                        สำหรับผ้าที่มีขนนิ่ม (Pile fabric) อาจใช้แปรงอ่อน (ที่ไม่ผสมของโลหะ) ทำความสะอาดบริเวณที่มีคราบ ซึ่งต้องแปรงไปทางเดียวกันกับลายผ้าเท่านั้น
+                    </li>
+                    <li>
+                        สามารถทำซ้ำได้จนกว่ารอยคราบจะหายไป
+                    </li>
+                    <li>
+                        ห้ามทำให้ผ้าเปียกมากเกินไป
+                    </li>
+                </ul>
+            </section>
+            {% else %}
+            <section class="section-sm">
+				<img src="/lazboy/images/iClean/hero_v2-1.jpg" alt="" width="100%"/>
+
+                <h4 class="iclean-title">iClean™ Warranty</h4>
+				<p>
+                    iClean™ fabrics are warranted for two (2) years for specific stains.
+                    Standard one (1) year fabric warranty for nap loss, seam failure and fabric separation applies.
+                    Labor: One (1) Year. <span class="text-red2">Warranty is void if fabric treatment is applied.</span>
+				</p>
+                <h6>COVERED STAINS INCLUDE:</h6>
+				<p>
+                    Beer<br />
+                    Chocolate Syrup<br />
+                    Coffee<br />
+                    Washable Magic Marker
+                </p>
+                <h6 class="text-red2"><b>STAINS THAT ARE NOT COVERED INCLUDE, BUT ARE NOT LIMITED TO:</b></h6>
+                <p>
+                    Oil-based products (such as salad dressing and lotion)<br />
+                    Wax-based products (such as candle wax and crayons)<br />
+                    Ink marks<br />
+                    Mustard
+                </p>
+                <p>
+                    <b class="text-dark">IMPORTANT:</b> The customer is responsible for cleaning as outlined in the Fabric and Leather Care of La-Z-Boy only.
+                </p>
+                <p>
+                    <b class="text-dark">Note:</b> Contact Customer service at 02-3760118 Ext 104 ( Mon – Fri) for claim.<br />
+                    A sample is required of the stained area for reimbursement of part cost under the terms of the warranty
+                </p>
+            </section>
+
+            <section class="section-sm">
+                <h4 class="iclean-title">Recommended Cleaning Instructions</h4>
+
+				<div class="row row-30">
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill01.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill02.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill03.jpg" alt="" width="100%"/>
+					</div>
+					<div class="col-xs-6 col-md-3">
+						<img src="/lazboy/images/iClean/spill04.jpg" alt="" width="100%"/>
+					</div>
+				</div>
+
+				<p>
+                    There are two types of stains:
+				</p>
+                <ol class="list-ordered">
+                    <li>
+                        A liquid spill: Beer, Coffee, Juices, Milk, Soda, Tea, Urine, Wine
+                    </li>
+                    <li>
+                        A non-liquid spill: Chocolate Syrup, Dirt, Ice Cream, Jelly, Ketchup, Salsa, Washable Magic marker.
+                    </li>
+                </ol>
+                <p>
+                    When cleaning a liquid spill, immediately blot the fabric surface with a white cloth/towel to remove the spilled liquid.
+                    To spot clean the spilled area, soak a white clean cloth/towel in a soap and water mixture and clean the stained area
+                    in a gentle circular motion. If needed, take a damp, clean white cloth and go over the affected area to remove any soap
+                    residue from the fabric. Do not over wet the material. Pile fabrics may require additional light brushing in the stained area
+                    with a non-metallic, soft bristle brush to restore the appearance of the fabric or to reset the nap/pile direction. If the soap
+                    and water mixture does not remove the stain completely, then repeat the above process using a multi-purpose cleaner
+                    (such as Woolite Fabric and Upholstery Cleaner). Cushion covers should not be removed and laundered. On pile fabrics,
+                    the entire panel may need to be cleaned in a seam to seam fashion to restore the overall appearance of the fabric.
+                </p>
+                <p>
+                    When cleaning a non-liquid spill, immediately remove the excess spilled material from the fabric by lifting the spilled
+                    material off the affected area with a butter knife and accumulating the spilled material onto a white cloth/towel.
+                    To spot clean the spilled area, soak a white clean cloth/towel in a soap and water mixture and clean the stained area
+                    in a gentle circular motion. If needed, take a damp, clean white cloth and go over the affected area to remove any soap
+                    residue from the fabric. Do not over wet the material. Pile fabrics may require additional light brushing in the stained area
+                    with a non-metallic, soft bristle brush to restore the appearance of the fabric or to reset the nap/pile direction. If the soap
+                    and water mixture does not remove the stain completely, then repeat the above process using a multi-purpose cleaner
+                    (such as Woolite Fabric and Upholstery Cleaner). Cushion covers should not be removed and laundered. On pile fabrics,
+                    the entire panel may need to be cleaned in a seam to seam fashion to restore the overall appearance of the fabric.
+                </p>
+
+            </section>
+            {% endif %}
+
+			<section class="section-sm post-single-body">
+				<div class="entry-video embed-responsive embed-responsive-16by9">
+					<iframe width="886" height="668" src="//www.youtube.com/embed/UrvQtImGHPI" allowfullscreen=""></iframe>
+				</div>
+			</section>
+			#}
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

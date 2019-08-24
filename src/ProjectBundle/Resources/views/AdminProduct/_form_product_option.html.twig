@@ -1,0 +1,51 @@
+<div class="box">
+	<div class="box-header with-border">
+		<h3 class="box-title">Options</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body icheck">
+
+		<!-- checkbox -->
+		<div class="form-group">
+			{#<label for="productOptions"></label>#}
+			<div class="checkbox-group {#pre-scrollable#}" {#style="overflow: scroll;height: 300px;"#}>
+				<div class="checkbox">
+					{#
+					<div>
+						<input type="button" onclick="checkAll()" class="btn btn-link" value="Check All">
+						<input type="button" onclick="uncheckAll()" class="btn btn-link" value="Uncheck All">
+					</div>
+					#}
+
+					<label for="product_options_select_all">
+						<input type="checkbox" id="product_options_select_all" /> All
+					</label>
+
+				</div>
+
+				{{form_widget(form.productOptions, {'id' : 'productOptions'})}}
+				<div class="error-form">{{form_errors(form.productOptions)}}</div>
+			</div>
+		</div><hr>
+
+	</div><!-- /.box-body -->
+</div>
+<script>
+	/*
+	function checkAll() {
+	  var inputs = document.querySelectorAll('.product_option_check_item');
+	  for(var i = 0; i < inputs.length; i++) {
+	    inputs[i].checked = true;
+	  }
+	}
+	function uncheckAll() {
+	  var inputs = document.querySelectorAll('.product_option_check_item');
+	  for(var i = 0; i < inputs.length; i++) {
+	    inputs[i].checked = false;
+	  }
+	}
+	window.onload = function() {
+	  window.addEventListener('load', checkAll, false);
+	}
+	*/
+</script>

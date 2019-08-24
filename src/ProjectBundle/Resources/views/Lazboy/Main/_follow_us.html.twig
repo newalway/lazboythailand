@@ -1,0 +1,18 @@
+{% if follow_us %}
+    {% for item in follow_us %}
+        {% if item.optionValue %}
+            {% if item.optionName == "follow_us_facebook" %}
+                {% set icon = 'fa-facebook-f' %}
+            {% elseif item.optionName == "follow_us_twitter" %}
+                {% set icon = 'fa-twitter' %}
+            {% elseif item.optionName == "follow_us_line" %}
+                {% set icon = 'fa-line' %}
+            {% elseif item.optionName == "follow_us_instagram" %}
+                {% set icon = 'fa-instagram' %}
+            {% elseif item.optionName == "follow_us_youtube" %}
+                {% set icon = 'fa-youtube' %}
+            {% endif %}
+            <li><a class="icon {{class_size}} {{class_color}} fab {{icon}}" href="{{item.optionValue}}" target="_blank"></a></li>
+        {% endif %}
+    {% endfor %}
+{% endif %}

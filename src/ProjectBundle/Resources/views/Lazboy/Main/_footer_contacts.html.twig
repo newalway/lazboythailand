@@ -1,0 +1,63 @@
+
+<ul class="list-xs">
+    {% if contact_address.optionValue %}
+        <li>
+            <dl class="list-terms-minimal">
+                <dt>{% trans %}contact.address{% endtrans %}</dt>
+                <dd>
+                    {{contact_address.optionValue}}
+                </dd>
+            </dl>
+        </li>
+    {% endif %}
+
+    {% if contact_phone.optionValue %}
+        <li>
+            <dl class="list-terms-minimal">
+                <dt>{% trans %}contact.phone{% endtrans %}</dt>
+                <dd>
+                    <ul class="list-semicolon">
+                        <li>
+                            <a href="tel:{{contact_phone.optionValue|telFilter}}">{{contact_phone.optionValue}}</a>
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+    {% endif %}
+
+    {% if contact_fax.optionValue %}
+        <li>
+            <dl class="list-terms-minimal">
+                <dt>{% trans %}contact.fax{% endtrans %}</dt>
+                <dd>
+                    <ul class="list-semicolon">
+                        <li>
+                            {{contact_fax.optionValue}}
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </li>
+    {% endif %}
+
+    {% if contact_email.optionValue %}
+        <li>
+            <dl class="list-terms-minimal">
+                <dt>{% trans %}contact.email{% endtrans %}</dt>
+                <dd>
+                    <a href="mailto:{{contact_email.optionValue}}">{{contact_email.optionValue}}</a>
+                </dd>
+            </dl>
+        </li>
+    {% endif %}
+
+    {% if contact_business_hours.optionValue %}
+        <li>
+            <dl class="list-terms-minimal">
+                <dt>{% trans %}contact.open{% endtrans %}</dt>
+                <dd>{{contact_business_hours.optionValue}}</dd>
+            </dl>
+        </li>
+    {% endif %}
+</ul>

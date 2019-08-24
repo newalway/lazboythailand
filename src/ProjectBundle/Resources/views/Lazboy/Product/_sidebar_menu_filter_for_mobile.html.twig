@@ -1,0 +1,187 @@
+<style>
+.sidenav,.sidenav-2 {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0px;
+  left: 0;
+  /* background-color: #111; */
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  color: #fff;
+  background: #fff;
+  border-color: #f3f3f3;
+}
+
+/* .sidenav a {
+padding: 8px 8px 8px 32px;
+text-decoration: none;
+font-size: 25px;
+color: #818181;
+display: block;
+transition: 0.3s;
+}
+
+.sidenav a:hover {
+color: #f1f1f1;
+} */
+
+.sidenav .closebtn,.sidenav-2 .closebtn2 {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+/* width */
+#mySidenav::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+#mySidenav::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+#mySidenav::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+#mySidenav::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.btn-color{
+  color: #fff !important;
+  background-color: #0070af !important;
+  border-color: #0070af !important;
+  }
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+  .sidenav-2 {padding-top: 15px;}
+  .sidenav-2 a {font-size: 18px;}
+}
+
+</style>
+</head>
+<body>
+
+    {% if currIsShopOnline %}
+        {% if obj_category %}
+            {% set searchPricePath = path('product_shop_online_category', {cate_id:obj_category.id, slug:obj_category.slug}) %}
+        {% else %}
+            {% set searchPricePath = path('product_shop_online') %}
+        {% endif %}
+    {% else %}
+        {% if obj_category %}
+            {% set searchPricePath = path('product_category', {cate_id:obj_category.id, slug:obj_category.slug}) %}
+        {% else %}
+            {% set searchPricePath = path('product') %}
+        {% endif %}
+    {% endif %}
+
+<form class="" id="formSearchMobile" action="{{searchPricePath}}" method="get">
+    <div id="mySidenav" class="sidenav">
+
+        <div class="container">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            {#<div class="menu-categories">
+                <h5>{% trans %}product.categories{% endtrans %}</h5>
+                <div class="accordion" id="accordionFilter" role="tablist">
+                    {{tree_product_category|raw}}
+                </div>
+            </div>#}
+            <div class="mb-5 filter-shop-by">
+                <h5 class="mt-3 mb-3">{% trans %}product.shop_by{% endtrans %}</h5>
+                  {% for key, child in search_form.shop_by %}
+                      <label class="container-label-checkbox" >{{child.vars.label|trans}}
+                          {{ form_widget(child) }}
+                        <span class="checkmark-checked"></span>
+                      </label>
+                  {% endfor %}
+            </div>
+
+            <div class="filter-price">
+                {#<h5 class="mt-3 mb-3">Filter By Price</h5>
+                <div class="rd-range-wrap">
+                    <div class="rd-range-inner">
+                        <span></span>
+                        {{ form_widget(search_form.shop_by)}}
+                    </div>
+                </div>#}
+
+                {% if currIsShopOnline %}
+                    <h5 class="mt-3 mb-3">{% trans %}product.filter_by_price{% endtrans %}</h5>
+                    <!--RD Range-->
+                    <div class="pb-5 rd-range-wrap">
+                        <div class="rd-range-inner">
+                            <span>{% trans %}product.price{% endtrans %}: </span>
+
+                            <!-- <input type="text" name="startprice"  class="rd-range-input-value-1 form-control form-control-sm" value=""> -->
+                            {{ form_widget(search_form.startprice)}}
+                            <!-- <span class="rd-range-input-value-3"></span> -->
+                            <span>—</span>
+
+                            <!-- <input type="text" name="endprice" class="rd-range-input-value-2 form-control form-control-sm"  value=""> -->
+                            {{ form_widget(search_form.endprice)}}
+                            <!-- <span class="rd-range-input-value-4"></span> -->
+                        </div>
+
+                        {% if arr_query_data['startprice'] is defined and arr_query_data['endprice'] is defined and arr_query_data['startprice'] != null and arr_query_data['endprice'] != null %}
+                            <div class="rd-range" name="price-range" data-min="10" data-max="150000" data-start="[{{arr_query_data['startprice']}}, {{arr_query_data['endprice']}}]" data-step="1" data-tooltip="true" data-min-diff="10" data-input=".rd-range-input-value-1" data-input-2=".rd-range-input-value-2" ></div>
+                        {% else %}
+                            <div class="rd-range" name="price-range" data-min="10" data-max="150000" data-start="[0, 100000]" data-step="1" data-tooltip="true" data-min-diff="10" data-input=".rd-range-input-value-1" data-input-2=".rd-range-input-value-2" ></div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="">
+                <div class="pb-5 rd-range-wrap">
+                    <div class="rd-range-inner">
+                        <input type="submit"class="mb-5 button button-gray-light-outline btn-color" value="{% trans %}product.search{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="mySidenav-2" class="sidenav-2">
+        <div class="container">
+            <a href="javascript:void(0)" class="closebtn2" onclick="closeNav2()">&times;</a>
+            <div class="filter-price">
+                <h5 class="mt-3 mb-3">{% trans %}product.sort{% endtrans %}</h5>
+
+                {% for key, child in search_form.ddlPriceSortMobile %}
+                    <div>
+                        <label class="container-label" for="{{child.vars.id}}">
+                            <small>{{child.vars.label|trans}}</small>
+                            {{ form_widget(child) }}
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                {% endfor %}
+
+                <!--RD Range-->
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+<!-- <script>
+function openNav() {
+document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+document.getElementById("mySidenav").style.width = "0";
+}
+</script> -->

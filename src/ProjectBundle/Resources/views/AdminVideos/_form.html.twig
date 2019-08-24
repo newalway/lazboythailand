@@ -1,0 +1,62 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+<div class="row">
+	<div class="col-md-12 col-lg-9">
+	  	<div class="box box-primary">
+			<div class="box-header with-border">
+			  	<h3 class="box-title">Infomation</h3>
+			</div>
+
+			<div class="box-body">
+				<div class="form-group">
+			    	<label class="control-label col-md-2" for="status"> Translation</label>
+					<div class="col-md-10">
+						{{ form_widget(form.translations) }}
+				    </div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-2" for="embed"> VDO Embed</label>
+					<div class="col-md-10">
+						{{form_widget(form.embed, {'id' : 'embed'})}}
+						<div class="error-form">{{form_errors(form.embed)}}</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-2" for="public_date"> Publish date</label>
+					<div class="col-md-3">
+						{{form_widget(form.public_date, {'id' : 'public_date'})}}
+						<div class="error-form">{{form_errors(form.public_date)}}</div>
+					</div>
+				</div>
+
+				<div class="form-group icheck">
+			    	<label class="control-label col-md-2" for="status"> Status</label>
+					<div class="col-md-10">
+						{{form_widget(form.status, {'id' : 'status'})}}
+						<div class="error-form">{{form_errors(form.status)}}</div>
+				    </div>
+				</div>
+
+			</div>
+	  	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-offset-2 col-md-9">
+			{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+			{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+			{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+			<a href="{%if app.session.get('back_to_url')['admin_videos'] is defined%}{{app.session.get('back_to_url')['admin_videos']}}{%else%}{{path('admin_videos')}}{%endif%}" class="btn btn-default margin-bottom-10">{{btn_label_close}} </a>
+		</div>
+	</div>
+
+</div>
+
+
+
+<script>
+	//html5 date for safari and other browser not support html5 date
+	webshims.setOptions('forms-ext', {types: 'date'});
+	webshims.polyfill('forms forms-ext');
+</script>

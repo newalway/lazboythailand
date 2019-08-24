@@ -1,0 +1,52 @@
+admin_hashtag:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminHashtag:index}
+  requirements:
+    _method: get
+
+admin_hashtag_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminHashtag:new}
+
+admin_hashtag_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminHashtag:create}
+  requirements:
+    _method: post
+
+admin_hashtag_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminHashtag:edit}
+  requirements:
+    id: \d+
+
+admin_hashtag_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminHashtag:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_hashtag_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminHashtag:delete}
+  requirements:
+    _method: get
+
+admin_hashtag_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminHashtag:group_delete}
+  requirements:
+    _method: post
+
+admin_hashtag_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminHashtag:sort}
+  requirements:
+    _method: get
+
+admin_hashtag_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminHashtag:sort_prosess}
+  requirements:
+    _method: post

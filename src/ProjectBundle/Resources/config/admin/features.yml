@@ -1,0 +1,59 @@
+admin_features:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminFeatures:index}
+  requirements:
+    _method: get
+
+admin_features_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminFeatures:new}
+
+admin_features_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminFeatures:create}
+  requirements:
+    _method: post
+
+admin_features_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminFeatures:edit}
+  requirements:
+    id: \d+
+
+admin_features_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminFeatures:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_features_move_position:
+  path: /{id}/move
+  defaults: {_controller: ProjectBundle:AdminFeatures:move_position}
+  requirements:
+    id: \d+
+
+admin_features_move_position_update:
+  path: /{id}/move_update
+  defaults: {_controller: ProjectBundle:AdminFeatures:move_position_update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_features_move_up_position:
+  path: /{id}/move/up
+  defaults: {_controller: ProjectBundle:AdminFeatures:move_up_position}
+  requirements:
+    id: \d+
+
+admin_features_move_down_position:
+  path: /{id}/move/down
+  defaults: {_controller: ProjectBundle:AdminFeatures:move_down_position}
+  requirements:
+    id: \d+
+
+admin_features_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminFeatures:delete}
+  requirements:
+    _method: get

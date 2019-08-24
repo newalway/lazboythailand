@@ -1,0 +1,307 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.distributor{% endtrans %} | {{ parent() }}{% endblock %}
+{% block news_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.distributor{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="">{% trans %}menu.distributor{% endtrans %}</li>
+    <li class="active">{{distributors[0].zone.getTitle}}</li>
+
+{% endblock %}
+
+{% block content %}
+<style media="screen">
+i.slick-next {right: 0px;}
+i.slick-prev {left: 0px;}
+i.slick-prev, i.slick-next {
+    position: absolute;
+    display: block;
+    width: 25px;
+    height: 25px;
+    line-height: 26px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0;
+    cursor: pointer;
+    color: transparent;
+    background-color: #fff;
+    top: 50%;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    transition: 300ms ease-in-out;
+    padding: 0;
+    border: none;
+    outline: none;
+    z-index: 9;
+}
+i.slick-prev:before, i.slick-next:before {
+    font-size: 15px;
+
+}
+</style>
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		<div class="row row-60 justify-content-sm-center">
+            <div class="col-lg-8 section-divided__main">
+				<div class="section-map">
+					<!-- RD Google Map-->
+					<div id="map"  class="rd-google-map__model"  data-styles="[{&quot;featureType&quot;:&quot;water&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#e9e9e9&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;landscape&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:29},{&quot;weight&quot;:0.2}]},{&quot;featureType&quot;:&quot;road.arterial&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:18}]},{&quot;featureType&quot;:&quot;road.local&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;featureType&quot;:&quot;poi&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:21}]},{&quot;featureType&quot;:&quot;poi.park&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#dedede&quot;},{&quot;lightness&quot;:21}]},{&quot;elementType&quot;:&quot;labels.text.stroke&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;on&quot;},{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;elementType&quot;:&quot;labels.text.fill&quot;,&quot;stylers&quot;:[{&quot;saturation&quot;:36},{&quot;color&quot;:&quot;#333333&quot;},{&quot;lightness&quot;:40}]},{&quot;elementType&quot;:&quot;labels.icon&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;off&quot;}]},{&quot;featureType&quot;:&quot;transit&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f2f2f2&quot;},{&quot;lightness&quot;:19}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:17},{&quot;weight&quot;:1.2}]}]">
+					</div>
+				</div>
+
+				<div class="pt-5 pb-4">
+					<h5 class="text-center">{{distributors[0].zone.getTitle}}</h5>
+				</div>
+
+                <section class="section-md pt-0 border-top-0">
+                    <div class="tabs-custom tabs-horizontal" id="tabs-1">
+                        <!-- Nav tabs-->
+                        <ul class="nav-custom nav-custom-tabs nav nav-tabs">
+                            {% for category in distributors_categorys %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link  {{loop.index0  == 0 ? "active"}}" href="#tabs-1-{{loop.index0}}" data-toggle="tab">{{category.getTitle}}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="tab-content text-left">
+                        {% for category in distributors_categorys %}
+                            <div class="tab-pane fade show {{loop.index0  == 0 ? "active"}} " id="tabs-1-{{loop.index0}}">
+                                {% for distributor in category.distributor  %}
+                                <div class="row align-items-center">
+									<div class="col-xs-12 col-md-4 col-lg-4 text-center mb-3 mb-md-0">
+										{% if distributor.image |length > 0 %}
+											<img src="{{distributor.image}}" alt="{{distributor.getTitle}}">
+										{% else %}
+											<img src="https://via.placeholder.com/150" alt="{{distributor.getTitle}}">
+										{% endif %}
+									</div>
+									<div class="col-xs-12 col-md-8 col-lg-8 bg-light">
+										<div class="p-4">
+											<div class="row mt-2 font-size-16 text-muted">
+												{% if distributor.getProvince %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.province{% endtrans %}</b></div>
+													<div class="col-sm-9 text-wrap">{{distributor.getProvince}}</div>
+												{% endif %}
+												<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.name{% endtrans %}</b></div>
+												<div class="col-sm-9 text-wrap">{{distributor.getTitle}}</div>
+
+												{% if distributor.getAddress %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.address{% endtrans %}</b></div>
+													<div class="col-sm-9 text-wrap">{{distributor.getAddress}}</div>
+												{% endif %}
+
+												{% if distributor.mobile %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.mobile{% endtrans %}</b></div>
+													<div class="col-sm-9"><a href="tel:{{distributor.mobile}}" class="text-muted">{{distributor.mobile}}</a></div>
+												{% endif %}
+
+												{% if distributor.phone %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.phone{% endtrans %}</b></div>
+													<div class="col-sm-9">{{distributor.phone}}</div>
+												{% endif %}
+
+												{% if distributor.fax %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.fax{% endtrans %}</b></div>
+													<div class="col-sm-9">{{distributor.fax}}</div>
+												{% endif %}
+
+												{% if distributor.email %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.email{% endtrans %}</b></div>
+													<div class="col-sm-9 text-wrap"><a href="mailto:{{distributor.email}}" class="text-muted">{{distributor.email}}</a></div>
+												{% endif %}
+
+												{% if distributor.website %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.website{% endtrans %}</b></div>
+													<div class="col-sm-9 text-wrap"><a href="{{distributor.website}}" target="_blank" class="text-muted">{{distributor.website}}</a></div>
+												{% endif %}
+
+												{% if distributor.latitude and  distributor.longitude %}
+													<div class="col-sm-3"><b class="text-dark">{% trans %}distributor_page.direction{% endtrans %}</b></div>
+													<div class="col-sm-9 text-wrap">
+                                                        <a href="https://www.google.com/maps/search/?api=1&query={{distributor.latitude}},{{distributor.longitude}}&query_place_id={{distributor.placeId}}" target="_blank" class="text-muted">
+                                                            <img src="{{asset('images/google-maps.png')}}" alt="" width="35">
+                                                            {% trans %}distributor_page.direction_text{% endtrans %}
+                                                        </a>
+                                                    </div>
+												{% endif %}
+
+											</div>
+										</div>
+										{% if distributor.distributorImage|length > 0 %}
+										<div class="portfolio-slides">
+											{% for distributor_gallery in distributor.distributorImage %}
+												  <div class="single p-1 text-center">
+														<a href="{{distributor_gallery.image}}">
+															<img class="img-fluid" src="{{distributor_gallery.image | imagine_filter('img_h_70')}}" />
+														</a>
+												  </div>
+											{% endfor %}
+												</div>
+										{% endif %}
+									</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+			</div>
+
+            <div class="col-lg-4 section-divided__aside section-divided__aside-left">
+				<section class="section-sm">
+                    <h5>Location</h5>
+					<ul class="list-linked">
+						{% for zone in zones %}
+						    <li><a href="{{path('distributor',{'id':zone.id})}}">{{zone.getTitle}}</a></li>
+						{% endfor %}
+					</ul>
+				</section>
+
+				{% include 'ProjectBundle:'~ view_layout ~'/Main:_social.html.twig' %}
+
+			</div>
+
+		</div>
+    </div>
+</section>
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+<section class="section-sm text-center">
+
+</section>
+
+<script src="https://maps.google.com/maps/api/js?key={{google_maps_api_key}}&libraries=geometry"></script>
+<link href="{{asset('slick-lightbox/slick-lightbox.css')}}" rel="stylesheet" type="text/css" media="all">
+<script src="{{asset('slick-lightbox/slick-lightbox.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+function slick() {
+	"use strict";
+	//Slick Code
+		$('.portfolio-slides').slick({
+			infinite        : true,
+			slidesToShow    : 4,
+			slidesToScroll  : 1,
+			arrows: true,
+            prevArrow:"<i class='slick-prev pull-left fa fa-angle-left'></i>",
+            nextArrow:"<i class='slick-next pull-right fa fa-angle-right'></i>",
+			mobileFirst     : true
+		});
+
+
+		$('.portfolio-slides').slickLightbox({
+			itemSelector        : 'a',
+			navigateByKeyboard  : true,
+			// prevArrow:"<div  class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></div>",
+			// nextArrow:"<div  class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></div>",
+		});
+		// $('.portfolio-slides').not('.slick-initialized').slick({
+		// 	centerMode: true,
+		// 	adaptiveHeight: false,
+		// 	speed: 800,
+		// 	fade: true,
+		// 	autoplay: true,
+		// 	slidesToShow: 3,
+		//     slidesToScroll: 1,
+		// 	autoplaySpeed: 4000,
+		// 	/*responsive: [
+		// 		{
+		// 	breakpoint: 992,
+		// 	settings:
+		// 	 	{
+		// 			autoplay: false,
+		// 			adaptiveHeight: true
+		// 		}
+		// 	}
+		// ]*/
+		// });
+		// $('.portfolio-slides').slickLightbox({
+		// 	  itemSelector        : 'a',
+		// 	  navigateByKeyboard  : true
+		// });
+};
+
+$(document).ready(function() {
+slick();
+//Another Codes
+});
+
+var map;
+
+// The JSON data
+// var json = [{"id":48,"title":"Helgelandskysten","longitude":"12.63376","latitude":"66.02219"},{"id":46,"title":"Tysfjord","longitude":"16.50279","latitude":"68.03515"},{"id":44,"title":"Sledehunds-ekspedisjon","longitude":"7.53744","latitude":"60.08929"},{"id":43,"title":"Amundsens sydpolferd","longitude":"11.38411","latitude":"62.57481"},{"id":39,"title":"Vikingtokt","longitude":"6.96781","latitude":"60.96335"},{"id":6,"title":"Tungtvann- sabotasjen","longitude":"8.49139","latitude":"59.87111"}];
+var json = {{ distributor_zone|json_encode()|raw }};
+
+var longitude_values = [];
+var latitude_values = [];
+
+// json.forEach(function (item) {
+//     longitude_values.push(item.longitude);
+//     latitude_values.push(item.latitude);
+// });
+//
+//
+//
+//  var max_longitude_value = Math.max.apply(Math, longitude_values);
+//  var max_latitude_values = Math.max.apply(Math, latitude_values);
+
+
+
+// 13.03887,101.490104
+function initialize() {
+
+  // Giving the map som options
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(json[1].latitude,json[1].longitude),
+    styles: JSON.parse($('#map').attr("data-styles")) ,
+  };
+
+  // Creating the map
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+
+  // Looping through all the entries from the JSON data
+  for(var i = 0; i < json.length; i++) {
+
+    // Current object
+    var obj = json[i];
+
+    // Adding a new marker for the object
+    var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(obj.latitude,obj.longitude),
+      map: map,
+      icon: "/lazboy/images/galleries_fg.png",
+      title: obj.title // this works, giving the marker a title with the correct title
+    });
+
+    // Adding a new info window for the object
+    var clicker = addClicker(marker, obj.title);
+
+  } // end loop
+
+
+  // Adding a new click event listener for the object
+  function addClicker(marker, content) {
+    google.maps.event.addListener(marker, 'click', function() {
+    var infowindow = new google.maps.InfoWindow();
+      if (infowindow) {infowindow.close();}
+      infowindow = new google.maps.InfoWindow({content: content});
+      infowindow.open(map, marker);
+
+    });
+  }
+}
+
+// Initialize the map
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+{% endblock %}

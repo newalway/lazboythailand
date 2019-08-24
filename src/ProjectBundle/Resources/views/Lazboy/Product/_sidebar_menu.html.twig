@@ -1,0 +1,101 @@
+<!-- Categories-->
+<section class="menu-categories">
+    <h5>{% trans %}product.categories{% endtrans %}</h5>
+    <div class="accordion" role="tablist">
+        {{tree_product_category|raw}}
+    </div>
+</section>
+
+<!-- Filter color-->
+{#<section class="section-sm">
+<h5>Filter By Color</h5>
+<ul class="small list">
+<li><a href="#">Black (9)</a></li>
+<li><a href="#">Blue (3)</a></li>
+<li><a href="#">Brown (5)</a></li>
+<li><a href="#">Gray (7)</a></li>
+<li><a href="#">White (6)</a></li>
+</ul>
+</section>#}
+
+<!-- Range-->
+<section class="section-sm">
+    {% if currIsShopOnline %}
+        {% if obj_category %}
+            {% set searchPricePath = path('product_shop_online_category', {cate_id:obj_category.id, slug:obj_category.slug}) %}
+        {% else %}
+            {% set searchPricePath = path('product_shop_online') %}
+        {% endif %}
+    {% else %}
+        {% if obj_category %}
+            {% set searchPricePath = path('product_category', {cate_id:obj_category.id, slug:obj_category.slug}) %}
+        {% else %}
+            {% set searchPricePath = path('product') %}
+        {% endif %}
+    {% endif %}
+    <!--RD Range-->
+    <form class="" id="formSearchByPrice" action="{{searchPricePath}}" method="get">
+        <h5>{% trans %}product.shop_by{% endtrans %}</h5>
+        {% for key, child in search_form.shop_by %}
+            <label class="container-label-checkbox" >{{child.vars.label|trans}}
+                {{ form_widget(child) }}
+              <span class="checkmark-checked"></span>
+            </label>
+        {% endfor %}
+
+        {% if currIsShopOnline %}
+            <h5>{% trans %}product.filter_by_price{% endtrans %}</h5>
+            <div class="rd-range-wrap">
+                <div class="rd-range-inner">
+                    <span>{% trans %}product.price{% endtrans %}: </span>
+                    <!-- <input type="text" name="startprice"  class="rd-range-input-value-1 form-control form-control-sm" value=""> -->
+                    {{ form_widget(search_form.startprice)}}
+                    <!-- <span class="rd-range-input-value-3"></span> -->
+                    <span>—</span>
+
+                    <!-- <input type="text" name="endprice" class="rd-range-input-value-2 form-control form-control-sm"  value=""> -->
+                    {{ form_widget(search_form.endprice)}}
+                    <!-- <span class="rd-range-input-value-4"></span> -->
+                </div>
+
+                {% if arr_query_data['startprice'] is defined and arr_query_data['endprice'] is defined and arr_query_data['startprice'] != null and arr_query_data['endprice'] != null %}
+                    <div class="rd-range" name="price-range" data-min="10" data-max="150000" data-start="[{{arr_query_data['startprice']}}, {{arr_query_data['endprice']}}]" data-step="1" data-tooltip="true" data-min-diff="10" data-input=".rd-range-input-value-1" data-input-2=".rd-range-input-value-2" ></div>
+                {% else %}
+                    <div class="rd-range" name="price-range" data-min="10" data-max="150000" data-start="[0, 100000]" data-step="1" data-tooltip="true" data-min-diff="10" data-input=".rd-range-input-value-1" data-input-2=".rd-range-input-value-2" ></div>
+                {% endif %}
+            </div>
+            <div style="display:none;">
+                {{ form_widget(search_form.ddlPriceSort)}}
+            </div>
+        {% endif %}
+
+        <input type="submit"class="button button-gray-light-outline" value="{% trans %}product.search{% endtrans %}">
+    </form>
+</section>
+
+<!-- Product left side ads  -->
+{% if banner_product_left_side_ads|length > 0 %}
+    {% for ads in banner_product_left_side_ads %}
+        {% if ads.image %}
+            <section class="section-sm" id="{{con_banner_product_left_side_ad}}">
+                {% set ads_image =  asset(ads.image) | imagine_filter('img_w_600') %}
+                <a {% if ads.getWebsite %}href="{{ads.getWebsite}}"{% endif %}>
+                    <img src="{{ads_image}}" alt="{{ads.bannerValue}}" width="573"/>
+                </a>
+            </section>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{#
+<section class="section-sm" id="{{con_banner_product_left_side_ad}}">
+    {% if ads.image %}
+        {% set ads_image =  asset(ads.image) | imagine_filter('img_w_600') %}
+    {% else %}
+        {% set ads_image = 'https://placehold.it/573x914' %}
+    {% endif %}
+    <a {% if ads.getWebsite %}href="{{ads.getWebsite}}"{% endif %}>
+        <img src="{{ads_image}}" alt="{{ads.bannerValue}}" width="573"/>
+    </a>
+</section>
+#}

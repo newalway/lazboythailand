@@ -1,0 +1,165 @@
+<div class="product product-grid">
+
+    <div class="product-img-wrap ">
+        <a href="{{path('product_detail',{'id':item.id,'slug':item.slug})}}">
+            {% if item.image %}
+                <img src="{{asset(item.image) | imagine_filter('img_300x300')}}" alt="{{item.getTitle}}" width="300"/>
+            {% else %}
+                <img src="{{asset('lazboy/images/img_1x1.png')}}" alt="{{item.getTitle}}" width="300" height="300"/>
+            {% endif %}
+        </a>
+        <div class="product-icon-wrap">
+        {#    {{dump(item.users|length)}}#}
+            <!-- <form  method='post' id="myForm" name='myForm'>
+                <input type="hidden" name="_token" id="_token" value="{{ csrf_token('_token') }}">
+                <a class="wl">
+                <input type="hidden" name="id" id="id" value="{{item.id}}">
+                <a href="{{path('member_wishlist_add',{'id':item.id})}}">
+                    <span class="icon icon-md linear-icon-heart active" data-toggle="tooltip" data-original-title="Add to Wishlist"></span>
+
+                </a>
+                </a>
+            </form> -->
+            {% if app.user %}
+                {% set arr_product_wishlist_id = {} %}
+                {% for key,product_wishlist in  app.user.products %}
+                    {% set arr_product_wishlist_id = arr_product_wishlist_id|merge({(key):product_wishlist.id})  %}
+                {% endfor %}
+
+                {% set section_name_id = section_name ~'-'~ item.id %}
+                <a class="wl" id="{{section_name_id}}">
+                    <input type="hidden" class="input-item-value" name="id-{{item.id}}" id="id-{{item.id}}" value="{{item.id}}">
+                    {% if  (item.id in arr_product_wishlist_id ) %}
+                        <span class="icon icon-md fa fa-heart-o fa-heart active" id="active-{{item.id}}" data-toggle="tooltip" data-original-title="Remove to Wishlist"></span>
+                    {% else %}
+                        <span class="icon icon-md fa-heart-o" id="active-{{item.id}}" data-toggle="tooltip" data-original-title="Add to Wishlist"></span>
+                    {% endif %}
+                </a>
+            {% else %}
+                {% set section_name_id_no_login = section_name ~'-'~ item.id ~'-no-login' %}
+
+                <a class="wl-no-login"  id="{{section_name_id_no_login}}">
+                    <span class="icon icon-md linear-icon-heart" id="active-{{item.id}}" data-toggle="tooltip" data-original-title="Add to Wishlist"></span>
+                </a>
+            {% endif %}
+        </div>
+        <div class="position-buy-now">
+          {% if item.isOnlineShopping %}
+              <div class="circle_container">
+                <div class="circle_main">
+                  <div class="circle_text_container">
+                    <div class = "circle_text">
+                      <i class="icon icon-md linear-icon-cart link-primary top-position"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+        </div>
+
+        <div class="product-label-wrap">
+            {#<span class="featured">Featured</span>#}
+            {% if item.isNew %}
+                <span class="new">New</span>
+            {% endif %}
+
+            {% if item.isSale %}
+                <span class="sale">Sale</span>
+            {% endif %}
+
+            {% if item.isTopSeller %}
+                <span class="best-seller">Best Seller</span>
+            {% endif %}
+
+            {% if item.isImported %}
+                <span class="imported">Imported</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="product-caption">
+        {% if item.productCategories|length > 0 %}
+            <ul class="product-categories">
+                {% for cate in item.productCategories %}
+                    <li>
+                        <a>{{cate.getTitle}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if item.getShortDesc %}
+            <div style="font-size: 12px;">{{item.getShortDesc}}</div>
+        {% endif %}
+
+        <h6 class="product-title">
+            <a href="{{path('product_detail',{'id':item.id,'slug':item.slug})}}">
+                {{getProductTypeAndStyleNumber(item)}}
+                {{item.getTitle}}
+            </a>
+        </h6>
+
+        {#{% if item.getShortDesc %}
+            <div style="font-size: 12px;">{{item.getShortDesc}}</div>
+        {% endif %}#}
+
+        {% if item.isOnlineShopping %}
+            {% if price_data.price and price_data.price > 0 %}
+                <small class="line-height-normal font-size-12 mt-1">{% trans %}product.starting_at{% endtrans %}</small>
+                {% if (price_data.compare_at_price > price_data.price) %}
+                    <p class="product-price sale-price mt-0 line-height-normal">
+                        <span>{{price_data.price|number_format(0,'.',',')}}</span>
+                        <span>{{price_data.compare_at_price|number_format(0,'.',',')}}</span>
+                    </p>
+                {% else %}
+                    <p class="product-price mt-0 line-height-normal">
+                        <span>{{price_data.price|number_format(0,'.',',')}}</span>
+                    </p>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{% if app.user %}
+    <script type="text/javascript">
+        //console.log('{{section_name_id}}');
+        var allInputs = $( ":input" );
+        $('#'+ '{{section_name_id}}').on('click',$(":input"), function() {
+           var val = $(this).find("input").attr('value');
+           //var el_id = $(this).find("span.icon").attr('id');
+           var el_icon = $(this).find("span.icon");
+
+            //console.log($(this));
+            $.ajax({
+                   type: "POST",
+                   url: Routing.generate('member_wishlist_add',{id:val}),
+                   //data: form.serialize(), // serializes the form's elements.
+                   headers: {
+                       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+
+                   },
+                   success: function(data)
+                   {
+                        if(data.status == "remove success"){
+                            el_icon.removeClass('fa-heart active');
+                            el_icon.attr('data-original-title', 'Add to Wishlist');
+                            //console.log(el_id);
+                        }else{
+                            el_icon.addClass('fa-heart active');
+                            el_icon.attr('data-original-title', 'Remove to Wishlist');
+                            //console.log("#"+el_id);
+                        }
+                       //console.log(data.status);
+                   },
+                });
+        });
+    </script>
+{% else %}
+    <script type="text/javascript">
+        $('#'+ '{{section_name_id_no_login}}').click(function() {
+            //$("#modalLogin").show();
+            //console.log($(this));
+            $('#modalLogin').modal('show');
+        });
+    </script>
+{% endif %}

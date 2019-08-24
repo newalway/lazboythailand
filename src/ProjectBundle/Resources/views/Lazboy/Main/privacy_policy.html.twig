@@ -1,0 +1,17 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.privacy.policy{% endtrans %} | {{ parent() }}{% endblock %}
+{% block news_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.privacy.policy{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.privacy.policy{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		{{data.getContent|raw}}
+	</div>
+</section>
+{% endblock %}

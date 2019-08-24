@@ -1,0 +1,5 @@
+
+Authorization Grant
+
+GET
+https://lazboythailand.secure.dev/app_dev.php/oauth/v2/token?client_id=1_64xhzlnqatooogw8ssk8c0o8gc4k0004gwcss4s4kw80gkg44s&client_secret=148k6ifrglhc4kwk04ogsogscsss0wwog04ggggo8ook800okk&grant_type=password&redirect_uri=http://www.example.com&username=support@zap-interactive.com&password=zap

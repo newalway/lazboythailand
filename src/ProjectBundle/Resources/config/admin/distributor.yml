@@ -1,0 +1,64 @@
+admin_distributor:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminDistributor:index}
+  requirements:
+    _method: get
+
+admin_distributor_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminDistributor:new}
+
+admin_distributor_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminDistributor:create}
+  requirements:
+    _method: post
+
+admin_distributor_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminDistributor:edit}
+  requirements:
+    id: \d+
+
+admin_distributor_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminDistributor:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_distributor_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminDistributor:delete}
+  requirements:
+    _method: get
+
+admin_distributor_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminDistributor:group_delete}
+  requirements:
+    _method: post
+
+admin_distributor_group_enable:
+  path: /group-enable
+  defaults: {_controller: ProjectBundle:AdminDistributor:group_enable}
+  requirements:
+    _method: post
+
+admin_distributor_group_disable:
+  path: /group-disable
+  defaults: {_controller: ProjectBundle:AdminDistributor:group_disable}
+  requirements:
+    _method: post
+
+admin_distributor_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminDistributor:sort}
+  requirements:
+    _method: get
+
+admin_distributor_sort_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminDistributor:sort_prosess}
+  requirements:
+    _method: post

@@ -1,0 +1,96 @@
+<ul class="rd-navbar-nav navbar-{{app.request.locale}}">
+
+    {#<li class="rd-li shopping-cart dropdown">
+        {{ render(controller('ProjectBundle:Cart:blog_cart')) }}
+    </li>#}
+
+    <li class="rd-li {% block home_active %}{% endblock %}">
+        <a href="{{path('homepage')}}">{% trans %}menu.home{% endtrans %}</a>
+    </li>
+    <li class="rd-li {% block product_active %}{% endblock %}">
+        <a href="{{path('product')}}">{% trans %}menu.product{% endtrans %}</a>
+        {#<ul class="rd-navbar-dropdown">
+            <li><a href="{{path('product',{'cate_id':1})}}">Recliners</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Power Recliners</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Reclining Loveseat</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Reclining Sofa</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Power Loveseat</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Power Sofa</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Home Theater</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Stationary</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Sectionals</a></li>
+            <li><a href="{{path('product',{'cate_id':1})}}">Urban Attitude</a></li>
+        </ul>#}
+        {{tree_product_category|raw}}
+    </li>
+    <li class="rd-li {% block shop_online_active %}{% endblock %}">
+        <a href="{{path('product_shop_online')}}">{% trans %}menu.shop_online{% endtrans %}</a>
+    </li>
+    <li class="rd-li {% block features_active %}{% endblock %}">
+        <a href="{{path('features')}}" class="cursor-pointer">{% trans %}menu.features{% endtrans %}</a>
+        {{tree_features|raw}}
+    </li>
+
+    <li class="rd-li {% block promotion_active %}{% endblock %}">
+        <a href="{{path('promotion')}}">{% trans %}menu.promotion{% endtrans %}</a>
+        {#<ul class="rd-navbar-dropdown">
+            {% set prs = ['Let\'s Celebrate with La-Z-Boy','Gallery Exclusive Card'] %}
+            {% for pr in prs %}
+            <li><a href="{{path('promotion_detail',{'id':loop.index,'slug':'xxxxx'})}}">{{pr}}</a></li>
+            {% endfor %}
+        </ul>#}
+    </li>
+
+    <li class="rd-li {% block pr_news_active %}{% endblock %}">
+        <a href="{{path('news')}}">{% trans %}menu.news{% endtrans %}</a>
+        {{tree_news_categorys|raw}}
+    </li>
+
+    <li class="rd-li {% block inspiration_active %}{% endblock %}">
+        <a href="{{path('inspiration')}}">{% trans %}menu.inspiration{% endtrans %}</a>
+        {{tree_inspiration_category|raw}}
+    </li>
+
+    {#<li class="rd-li {% block inspiration_active %}{% endblock %}">
+        <a href="{{path('inspiration')}}">{% trans %}menu.inspiration{% endtrans %}</a>#}
+        {# {% if inspirations %}
+        <ul class="rd-navbar-dropdown">
+            {% for inspiration in inspirations %}
+            <li><a href="{{path('inspiration_detail',{'id':inspiration.id,'slug':inspiration.getTitle|slug})}}">{{inspiration.getTitle}}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %} #}
+    {#</li>#}
+
+    <li class="rd-li {% block gallery_active %}{% endblock %}">
+        <a  href="{{path('gallery')}}">{% trans %}menu.gallery{% endtrans %}</a>
+        {#<ul class="rd-navbar-dropdown">
+            <li><a href="{{path('gallery')}}">{% trans %}gallery.all{% endtrans %}</a></li>
+            {% set gallerys = ['Sukhumvit 30/1','Megabangna','Boonthavorn Lifestyle Furniture','Motorway-Rama 9 (Outbound)','Ubon Ratchathani','Ladprao 101/3 ( La-Z-Boy Outlet )'] %}
+            {% for gal in gallerys %}
+            <li><a href="{{path('gallery_detail',{'id':1,'slug':'gallery'})}}">{{gal}}</a></li>
+            {% endfor %}
+        </ul>#}
+    </li>
+    <li class="rd-li {% block distributor_active %}{% endblock %}">
+        <a>{% trans %}menu.distributor{% endtrans %}</a>
+        <ul class="rd-navbar-dropdown">
+            {#{% set distributors = ['Greafe Bangkok Area','Central Region','Northern Region','Southem Region','Easthern Region','Northeasthern Region','Western Region'] %}
+            {% for dis in distributors %}
+            <li><a href="{{path('distributor',{'id':1})}}">{{dis}}</a></li>
+            {% endfor %}#}
+            	 {{ render(controller('ProjectBundle:Main:_render_distributor_mainSubmenu')) }}
+        </ul>
+    </li>
+    <li class="rd-li {% block customer_care_active %}{% endblock %}">
+        <a class="cursor-pointer">{% trans %}menu.customer.care{% endtrans %}</a>
+        <ul class="rd-navbar-dropdown">
+            <li><a href="{{path('contact')}}">{% trans %}menu.contact.us{% endtrans %}</a></li>
+            <li><a href="{{path('faq')}}">{% trans %}menu.faq{% endtrans %}</a></li>
+            <li><a href="{{path('customer_care_videos')}}">{% trans %}menu.customer.care.videos{% endtrans %}</a></li>
+            <li><a href="{{path('warrantry_information')}}">{% trans %}menu.warrantry.info{% endtrans %}</a></li>
+            <li><a href="{{path('product_information')}}">{% trans %}menu.product.info{% endtrans %}</a></li>
+            <li><a href="{{path('iclean_warrantee')}}">{% trans %}menu.iclean.warantee{% endtrans %}</a></li>
+        </ul>
+    </li>
+</ul>

@@ -1,0 +1,136 @@
+<div class="panel-group" id="accordion">
+
+{#
+{{'{{arr_cart_data.summary.payment_option}}'}} -- {{payment_omise_code}}
+{{dump(payment_options)}}
+#}
+
+	{% if payment_bank_transfer_code in payment_options %}
+		<div class="payment-box panel panel-default">
+			<div class="form-wrap">
+				<label class="panel-heading payment-bank-transfer radio-inline" ng-click="getPaymentOptionCode($event, '{{payment_bank_transfer_code}}', '{{payment_bank_transfer_code}}', '{{payment_omise_code}}')">
+					<i class="fas fa-circle-thin" ng-hide="arr_cart_data.summary.payment_option=='{{payment_bank_transfer_code}}'"></i>
+					<i class="fas fa-check-circle" ng-show="arr_cart_data.summary.payment_option=='{{payment_bank_transfer_code}}'"></i>
+					{% trans %}payment.method.bank.title{% endtrans %}
+					{#<a data-toggle="collapse" data-parent="#accordion" href="#bank-payment"></a>#}
+					{#<input class="radio-custom" name="input-group-radio" value="radio-1" type="radio">Cheque Payment#}
+				</label>
+			</div>
+			<div class="payment-box-inner">
+				<p>Make your payment directly into our bank account. Please use your order Number as the payment reference. order won’t be shipped until the funds have cleared.</p>
+				<!-- <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p> -->
+			</div>
+
+			<div id="bank-payment" class="panel-collapse collapse" ng-class="{'show': arr_cart_data.summary.payment_option=='{{payment_bank_transfer_code}}'}">
+				<div class="panel-body">
+
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	{% if payment_omise_code in payment_options %}
+		<div class="payment-box panel panel-default">
+			<div class="form-wrap">
+				<label class="panel-heading payment-credit-omise radio-inline" ng-click="getPaymentOptionCode($event, '{{payment_omise_code}}', '{{payment_bank_transfer_code}}', '{{payment_omise_code}}')">
+					<i class="fas fa-circle-thin" ng-hide="arr_cart_data.summary.payment_option=='{{payment_omise_code}}'"></i>
+					<i class="fas fa-check-circle" ng-show="arr_cart_data.summary.payment_option=='{{payment_omise_code}}'"></i>
+					{% trans %}payment.method.credit.title{% endtrans %}
+					{#<a data-toggle="collapse" data-parent="#accordion" href="#credit-payment"></a>#}
+					{#<input class="radio-custom" name="input-group-radio" value="radio-1" type="radio">PayPal#}
+
+					<img src="{{asset('images/payment_method/visa_symbol.png')}}" alt="" width="52px" />
+					<img src="{{asset('images/payment_method/mc_symbol.png')}}" alt="" width="55px" />
+					<img src="{{asset('images/payment_method/jcb_symbol.gif')}}" alt="" width="40px" />
+				</label>
+			</div>
+			<div class="payment-box-inner">
+				Please review your address detail before place an order.
+				{#{% trans %}payment.method.credit.description{% endtrans %}#}
+				{#<p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>#}
+			</div>
+
+			{% if payment_omise_code in payment_options %}
+			    {% for flashMessage in app.session.flashbag.get('omise_errors') %}
+			        <div class="alert alert-dismissible text-danger" style="margin-bottom: 0px;">
+			            <i class="fa fa-exclamation-circle"></i> {{ flashMessage|raw }}
+			        </div>
+			    {% endfor %}
+			{% endif %}
+
+			<div id="credit-payment" class="panel-collapse collapse" ng-class="{'show': arr_cart_data.summary.payment_option=='{{payment_omise_code}}'}">
+				<div class="panel-body" style="padding-left: 35px;">
+					<form action="{{path('checkout_place_order')}}" method="post" id="checkout">
+						<div class="container alert alert-dismissible text-danger" id="token_errors"></div>
+						<input type="hidden" name="omise_token">
+						<div>
+							{% trans %}payment.method.card.name_on_card{% endtrans %}<br>
+							<input type="text" data-omise="holder_name">
+						</div>
+						<div>
+							{% trans %}payment.method.card.card_number{% endtrans %}<br>
+							<input type="text" data-omise="number" maxlength="16">
+						</div>
+						<div>
+							{% trans %}payment.method.card.expiry_date{% endtrans %}<br>
+							<input type="text" data-omise="expiration_month" maxlength="2" size="4" placeholder="MM"> /
+							<input type="text" data-omise="expiration_year" maxlength="2" size="4" placeholder="YY">
+						</div>
+						<div>
+							{% trans %}payment.method.card.security_code{% endtrans %}<br>
+							<input type="text" data-omise="security_code" maxlength="4" size="8">
+							<img src="{{asset('images/credit-card.png')}}" width="40px">
+						</div>
+						<br/>
+						<div class="">
+							<button type="submit" id="create_token" class="button button-primary">
+								{% trans %}cart.place_order{% endtrans %}
+							</button>
+						</div>
+
+						<div style="padding-top:25px;">
+							<img src="{{asset('/images/payment_method/visa_verified_logo.png')}}" alt="visa_verified_logo" width="70px">
+							<img src="{{asset('/images/payment_method/mastercard_securecode.png')}}" alt="master_securecode_logo" width="70px">
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	{% endif %}
+</div>
+
+<form action="{{path('checkout_place_order')}}" ng-submit="submitCheckoutPlaceOrderForm()" name="checkout_place_order_form" id="checkout_place_order_form" method="post" enctype="multipart/form-data">
+	{{form_widget(place_order_form._token)}}
+	{{form_widget(place_order_form.omise_token, {'id' : 'place_order_omise_token'} )}}
+
+	{# get data note from $parent.frm_order_notes #}
+	<div ng-hide="true">
+		{{form_widget(place_order_form.note, {'id' : 'note', 'attr':{'ng-model':'$parent.frm_order_notes'}} )}}
+	</div>
+
+	<div ng-show="arr_cart_data.summary.payment_option=='{{payment_bank_transfer_code}}'" class="payment-box-button">
+		<button ng-disabled="validatePlaceOrder()" class="button button-primary" type="submit">
+			{% trans %}cart.place_order{% endtrans %}
+		</button>
+	</div>
+
+</form>
+
+{#
+{{"{{$parent.frm_order_notes}}"}}
+<br/>
+{{dump('{{arr_cart_data.summary}}')}}
+#}
+
+<script type="text/javascript">
+	// move to javascripts/cartApp/controllers/payment_controller.js
+    // $('.payment-bank-transfer').on('click', function(){
+    //     $( "#bank-payment" ).slideDown();
+    //     $( "#credit-payment" ).slideUp();
+    // });
+    // $('.payment-credit-omise').on('click', function(){
+    //     $( "#bank-payment" ).slideUp();
+    //     $( "#credit-payment" ).slideDown();
+    // });
+</script>

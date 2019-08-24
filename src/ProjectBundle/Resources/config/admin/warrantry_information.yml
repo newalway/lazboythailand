@@ -1,0 +1,12 @@
+admin_warrantry_information:
+  path:  /
+  defaults: { _controller: ProjectBundle:AdminWarrantryInformation:index }
+  requirements:
+    _method: get
+
+admin_warrantry_information_update:
+  path: /update
+  defaults: {_controller: ProjectBundle:AdminWarrantryInformation:update}
+  requirements:
+    _method: post
+    id: \d+

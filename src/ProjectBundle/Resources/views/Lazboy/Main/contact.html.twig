@@ -1,0 +1,243 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.contact.us{% endtrans %} | {{ parent() }}{% endblock %}
+{% block contact_active %}active{% endblock %}
+{% block m_faq_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.contact.us{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.contact.us{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+
+<section class="section-md bg-default" ng-app="contactApp" ng-controller="contactController">
+    <div class="container">
+
+        <div class="row row-50">
+            <div class="col-md-5 col-lg-4">
+                <h3>Contacts</h3>
+                <ul class="list-xs contact-info">
+					{% if contact_address.optionValue %}
+						<li>
+	                        <dl class="list-terms-minimal">
+	                            <dt>{% trans %}contact.address{% endtrans %}</dt>
+	                            <dd>{{contact_address.optionValue}}</dd>
+	                        </dl>
+	                    </li>
+					{% endif %}
+					{% if contact_phone.optionValue %}
+	                    <li>
+	                        <dl class="list-terms-minimal">
+	                            <dt>{% trans %}contact.phone{% endtrans %}</dt>
+	                            <dd>
+	                                <ul class="list-semicolon">
+	                                    <li><a href="tel:{{contact_phone.optionValue|telFilter}}">{{contact_phone.optionValue}}</a></li>
+	                                </ul>
+	                            </dd>
+	                        </dl>
+	                    </li>
+					{% endif %}
+					{% if contact_fax.optionValue %}
+	                    <li>
+	                        <dl class="list-terms-minimal">
+	                            <dt>{% trans %}contact.fax{% endtrans %}</dt>
+	                            <dd>
+	                                <ul class="list-semicolon">
+	                                    <li>{{contact_fax.optionValue}}</li>
+	                                </ul>
+	                            </dd>
+	                        </dl>
+	                    </li>
+					{% endif %}
+					{% if contact_email.optionValue %}
+	                    <li>
+	                        <dl class="list-terms-minimal">
+	                            <dt>{% trans %}contact.email{% endtrans %}</dt>
+	                            <dd><a href="mailto:{{contact_email.optionValue}}">{{contact_email.optionValue}}</a></dd>
+	                        </dl>
+	                    </li>
+					{% endif %}
+					{% if contact_business_hours.optionValue %}
+	                    <li>
+	                        <dl class="list-terms-minimal">
+	                            <dt>{% trans %}contact.open{% endtrans %}</dt>
+	                            <dd>{{contact_business_hours.optionValue}}</dd>
+	                        </dl>
+	                    </li>
+					{% endif %}
+                    <li>
+                        <ul class="list-inline-sm">
+							{{render(controller('ProjectBundle:Main:_follow_us',{'class_size':'icon-sm','class_color':''}))}}
+                            {#<li><a class="icon-sm fab fa-facebook-f icon" href="https://www.facebook.com/LaZBoyofThailand" target="_blank"></a></li>
+                            <li><a class="icon-sm fab fa-line icon" href="http://line.me/ti/p/@lazboy_th" target="_blank"></a></li>
+                            <li><a class="icon-sm fab fa-instagram icon" href="https://www.instagram.com/lazboy_th/" target="_blank"></a></li>
+                            <li><a class="icon-sm fab fa-youtube icon" href="https://www.youtube.com/channel/UCHuAyUwIZ_l_5Z6G1VmqXNQ/featured" target="_blank"></a></li>#}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h3>La-Z-Boy Gallery</h3>
+				<div class="row row-60">
+					{% for gallery in galleries %}
+						<div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+							<article class="post-classic post-minimal">
+								<a href="{{path('gallery_detail',{'id':gallery.id,'slug':gallery.getslug})}}">
+									{% if gallery.Image %}
+										{% set image = asset(gallery.Image)|imagine_filter('img_200x150') %}
+										<img style="position:relative; margin:0 auto;" src="{{image}}" alt="{{gallery.getTitle}}" width="200px;" />
+									{% else %}
+										<img src="https://placehold.it/400x300" width="200px;">
+									{% endif %}
+								</a>
+
+								<div class="post-classic-title">
+									<h6><a href="{{path('gallery_detail',{'id':gallery.id,'slug':gallery.getslug})}}">{{gallery.getTitle}}</a></h6>
+									{% if gallery.getAddress %}
+										<div class="address">
+											{{gallery.getAddress}}
+										</div>
+									{% endif %}
+									{% if gallery.phone %}
+										<div class="phone">
+											{% trans %}contact.phone{% endtrans %} <a href="tel:{{gallery.phone}}">{{gallery.phone}}</a>
+										</div>
+									{% endif %}
+									{% if gallery.mobile %}
+										<div class="phone">
+											{% trans %}contact.mobile{% endtrans %} <a href="tel:{{gallery.mobile}}">{{gallery.mobile}}</a>
+										</div>
+									{% endif %}
+									{% if gallery.fax %}
+										<div class="phone">
+											{% trans %}contact.fax{% endtrans %} {{gallery.fax}}
+										</div>
+									{% endif %}
+									{% if gallery.email %}
+										<div class="phone">
+											{% trans %}contact.email{% endtrans %} <a href="mailto:{{gallery.email}}">{{gallery.email}}</a>
+										</div>
+									{% endif %}
+									{% if gallery.getWorkingDays %}
+										<div class="working-days">
+											{% trans %}contact.open{% endtrans %} {{gallery.getWorkingDays|nl2br}}
+										</div>
+									{% endif %}
+
+									{% if gallery.latitude and gallery.longitude %}
+										<div>
+											<a ng-href="https://www.google.com/maps/search/?api=1&query={{gallery.latitude}},{{gallery.longitude}}&query_place_id={{gallery.placeId}}&hl={{app.request.locale}}" target="_blank">
+												<img src="{{asset('images/google_maps_logo.png')}}" width="25px;">
+												{% trans %}contact.direction_googlemap{% endtrans %}
+											</a>
+										</div>
+									{% endif %}
+								</div>
+							</article>
+						</div>
+					{% endfor %}
+				</div>
+            </div>
+        </div>
+
+		<div class="row row-50">
+			<div class="col-md-7 col-lg-8">
+				<h3>Get in Touch</h3>
+				<!-- RD Mailform-->
+                <form class="rd-mailform rd-mailform_style-1" ng-submit="processForm()">
+					<input type="hidden" name="contact[_token]" id="contact__token" value="{{form._token.vars.value}}">
+
+					<div class="alert alert-success ng-cloak" role="alert" ng-show="message" ng-class="success ? 'alert-success' : 'alert-danger'">
+						{{'{{message}}'}}
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true" style="font-family: Roboto;">&times;</span>
+					  	</button>
+					</div>
+
+					<div class="form-wrap">
+                        <input class="form-input" id="name" type="text" name="contact[name]" ng-model="formData.name" >
+                        <label class="form-label" for="name">{% trans %}contact.name{% endtrans %}</label>
+						<div class="text-danger ng-cloak" ng-show="errors.name">* {{'{{errors.name}}'}}</div>
+                    </div>
+                    <div class="form-wrap">
+                        <input class="form-input" id="email" type="email" name="contact[email]" ng-model="formData.email">
+                        <label class="form-label" for="email">{% trans %}contact.email{% endtrans %}</label>
+						<div class="text-danger ng-cloak" ng-show="errors.email">* {{'{{errors.email}}'}}</div>
+                    </div>
+                    <div class="form-wrap">
+                        <input class="form-input" id="telephone_number" type="text" name="contact[telephone_number]" ng-model="formData.telephone_number">
+                        <label class="form-label" for="telephone_number">{% trans %}contact.phone{% endtrans %}</label>
+						<div class="text-danger ng-cloak" ng-show="errors.telephone_number">* {{'{{errors.telephone_number}}'}}</div>
+                    </div>
+                    <div class="form-wrap">
+                        <textarea class="form-input" id="message" name="contact[message]" ng-model="formData.message"></textarea>
+                        <label class="form-label" for="message">{% trans %}contact.message{% endtrans %}</label>
+						<div class="text-danger ng-cloak" ng-show="errors.message">* {{'{{errors.message}}'}}</div>
+                    </div>
+                    <p class="text-red2">{% trans %}contact.help{% endtrans %}</p>
+                    <button class="button button-primary" type="submit" ng-disabled="getDataLoading()">
+						<span ng-hide="getDataLoading()">
+							{% trans %}contact.send{% endtrans %}
+						</span>
+						<span class="fa fa-circle-o-notch fa-spin ml-3" ng-show="getDataLoading()"></span>
+					</button>
+                </form>
+			</div>
+		</div>
+    </div>
+</section>
+
+<section>
+    <!-- RD Google Map-->
+    <div class="rd-google-map rd-google-map__model" data-zoom="16" data-y="{% if contact_map_latitude.optionValue %}{{contact_map_latitude.optionValue}}{% else %}13.775074{% endif %}" data-x="{% if contact_map_longitude.optionValue %}{{contact_map_longitude.optionValue}}{% else %}100.631832{% endif %}" data-styles="[{&quot;featureType&quot;:&quot;water&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#e9e9e9&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;landscape&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:17}]},{&quot;featureType&quot;:&quot;road.highway&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:29},{&quot;weight&quot;:0.2}]},{&quot;featureType&quot;:&quot;road.arterial&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:18}]},{&quot;featureType&quot;:&quot;road.local&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;featureType&quot;:&quot;poi&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f5f5f5&quot;},{&quot;lightness&quot;:21}]},{&quot;featureType&quot;:&quot;poi.park&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#dedede&quot;},{&quot;lightness&quot;:21}]},{&quot;elementType&quot;:&quot;labels.text.stroke&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;on&quot;},{&quot;color&quot;:&quot;#ffffff&quot;},{&quot;lightness&quot;:16}]},{&quot;elementType&quot;:&quot;labels.text.fill&quot;,&quot;stylers&quot;:[{&quot;saturation&quot;:36},{&quot;color&quot;:&quot;#333333&quot;},{&quot;lightness&quot;:40}]},{&quot;elementType&quot;:&quot;labels.icon&quot;,&quot;stylers&quot;:[{&quot;visibility&quot;:&quot;off&quot;}]},{&quot;featureType&quot;:&quot;transit&quot;,&quot;elementType&quot;:&quot;geometry&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#f2f2f2&quot;},{&quot;lightness&quot;:19}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.fill&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:20}]},{&quot;featureType&quot;:&quot;administrative&quot;,&quot;elementType&quot;:&quot;geometry.stroke&quot;,&quot;stylers&quot;:[{&quot;color&quot;:&quot;#fefefe&quot;},{&quot;lightness&quot;:17},{&quot;weight&quot;:1.2}]}]">
+        <ul class="map_locations">
+            <li data-y="{% if contact_map_latitude.optionValue %}{{contact_map_latitude.optionValue}}{% else %}13.775074{% endif %}" data-x="{% if contact_map_longitude.optionValue %}{{contact_map_longitude.optionValue}}{% else %}100.631832{% endif %}">
+				{% if contact_address.optionValue %}
+					<dl>
+	                    <dt>{% trans %}contact.address{% endtrans %}:</dt>
+	                    <dd>{{contact_address.optionValue}}</dd>
+	                </dl>
+				{% endif %}
+				{% if contact_phone.optionValue %}
+	                <dl>
+	                    <dt>{% trans %}contact.phone{% endtrans %}:</dt>
+	                    <dd>
+	                        <a href="tel:{{contact_phone.optionValue|telFilter}}">{{contact_phone.optionValue}}</a>
+	                    </dd>
+	                </dl>
+				{% endif %}
+				{% if contact_fax.optionValue %}
+	                <dl>
+	                    <dt>{% trans %}contact.fax{% endtrans %}:</dt>
+	                    <dd>
+	                        {{contact_fax.optionValue}}
+	                    </dd>
+	                </dl>
+				{% endif %}
+				{% if contact_email.optionValue %}
+	                <dl>
+	                    <dt>{% trans %}contact.email{% endtrans %}:</dt>
+	                    <dd>
+	                        <a href="mailto:{{contact_email.optionValue}}">{{contact_email.optionValue}}</a>
+	                    </dd>
+	                </dl>
+				{% endif %}
+				{% if contact_business_hours.optionValue %}
+	                <dl>
+	                    <dt>{% trans %}contact.open{% endtrans %}:</dt>
+	                    <dd>{{contact_business_hours.optionValue}}</dd>
+	                </dl>
+				{% endif %}
+            </li>
+        </ul>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascripts_body %}
+    {{ parent() }}
+	<script src="https://maps.google.com/maps/api/js?key={{google_maps_api_key}}&libraries=geometry"></script>
+    <script src="{{ asset('javascripts/contactApp.js') }}"></script>
+{% endblock %}

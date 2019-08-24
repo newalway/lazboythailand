@@ -1,0 +1,52 @@
+admin_product_type:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminProductType:index}
+  requirements:
+    _method: get
+
+admin_product_type_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminProductType:new}
+
+admin_product_type_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminProductType:create}
+  requirements:
+    _method: post
+
+admin_product_type_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminProductType:edit}
+  requirements:
+    id: \d+
+
+admin_product_type_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminProductType:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_product_type_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminProductType:delete}
+  requirements:
+    _method: get
+
+admin_product_type_group_delete:
+  path: /group-delete
+  defaults: {_controller: ProjectBundle:AdminProductType:group_delete}
+  requirements:
+    _method: post
+
+admin_product_type_sort:
+  path: /sort
+  defaults: {_controller: ProjectBundle:AdminProductType:sort}
+  requirements:
+    _method: get
+
+admin_product_type_prosess:
+  path: /sort-prosess
+  defaults: {_controller: ProjectBundle:AdminProductType:sort_prosess}
+  requirements:
+    _method: post

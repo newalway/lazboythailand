@@ -1,0 +1,178 @@
+services:
+#    project.example:
+#        class: ProjectBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+    utilities:
+          class: ProjectBundle\Utils\Utilities
+          public: true
+          arguments:
+              - '@kernel'
+              - '@security.encoder_factory'
+              - '@mailer'
+              - '@router'
+              - '@translator'
+
+    collections:
+          class: ProjectBundle\Utils\Collections
+          public: true
+          arguments:
+              - '@kernel'
+              - '@mailer'
+              - '@router'
+
+    app.product:
+          class: ProjectBundle\Utils\Products
+          public: true
+          arguments:
+              - '@kernel'
+              - '@security.encoder_factory'
+              - '@mailer'
+              - '@router'
+              - '@security.authorization_checker'
+
+    app.form.admin_user:
+         class: ProjectBundle\Form\Type\AdminUserType
+         public: true
+         arguments: ["@security.token_storage"]
+         tags: [form.type]
+
+    app.form.admin_product:
+         class: ProjectBundle\Form\Type\AdminProductType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_promotion:
+         class: ProjectBundle\Form\Type\AdminPromotionType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    project.password_resetting:
+        class: ProjectBundle\EventListener\PasswordResettingListener
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    exportexcel:
+          class: ProjectBundle\Utils\ExportExcel
+          #arguments: ['@phpexcel']
+          arguments:
+              - '@kernel'
+              - '@translator'
+          public: true
+
+    importexcel:
+          class: ProjectBundle\Utils\ImportExcel
+          #arguments: ['@phpexcel']
+          arguments:
+              - '@kernel'
+              - '@translator'
+          public: true
+
+    app.omise:
+          class: ProjectBundle\Utils\Omise
+          public: true
+          arguments:
+              - '@kernel'
+              - '@security.encoder_factory'
+              - '@mailer'
+              - '@router'
+
+    cybersource:
+          class: ProjectBundle\Utils\Cybersource
+          public: true
+          arguments:
+              - '@kernel'
+              - '@security.encoder_factory'
+              - '@mailer'
+              - '@router'
+
+    app.custom_fos_user_mailer:
+          class: ProjectBundle\Mailer\CustomFosMailer
+          arguments:
+              - '@mailer'
+              - '@router'
+              - '@templating'
+              - { confirmation.template: %fos_user.registration.confirmation.template%, resetting.template: %fos_user.resetting.email.template%, from_email: { confirmation: %fos_user.registration.confirmation.from_email%, resetting: %fos_user.resetting.email.from_email% }}
+
+    app.form.admin_news:
+         class: ProjectBundle\Form\Type\AdminNewsType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_inspiration:
+         class: ProjectBundle\Form\Type\AdminInspirationType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_features:
+         class: ProjectBundle\Form\Type\AdminFeaturesType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_product_option_category:
+        class: ProjectBundle\Form\Type\AdminProductOptionCategoryType
+        public: true
+        arguments:
+             - '@kernel'
+        tags: [form.type]
+
+    app.form.admin_product_option:
+        class: ProjectBundle\Form\Type\AdminProductOptionType
+        public: true
+        arguments:
+             - '@kernel'
+             - '@request_stack'
+        tags: [form.type]
+
+    app.form.admin_faq:
+         class: ProjectBundle\Form\Type\AdminFaqType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_videos:
+         class: ProjectBundle\Form\Type\AdminVideosType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_search_product_option:
+         class: ProjectBundle\Form\Type\AdminSearchProductOptionType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_history:
+         class: ProjectBundle\Form\Type\AdminHistoryType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_distributor:
+         class: ProjectBundle\Form\Type\AdminDistributorType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]
+
+    app.form.admin_distributor_search:
+         class: ProjectBundle\Form\Type\AdminDistributorSearchType
+         arguments:
+             - '@kernel'
+             - '@request_stack'
+         tags: [form.type]

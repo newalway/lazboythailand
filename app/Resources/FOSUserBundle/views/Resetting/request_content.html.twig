@@ -1,0 +1,21 @@
+
+<section class="bg-default section-md">
+    <div class="container">
+        <h4 class="text-center">{{ 'reset_password.title'|trans }}</h4>
+
+        <div class="row">
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+                <form action="{{ path('fos_user_resetting_send_email') }}" method="post" class="rd-mailform rd-mailform-inline-flex text-center">
+
+                    <div class="form-wrap">
+                        <label class="form-label text-center" for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label>
+                        <input class="form-input" type="text" id="username" name="username" required="required" autocomplete="off">
+                    </div>
+
+                    <button type="submit" id="_submit" name="_submit" class="button button-primary" style="padding-left: 30px;padding-right: 30px; max-width: 165px;">{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>

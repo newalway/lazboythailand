@@ -1,0 +1,24 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div ng-app="productVariantApp" ng-controller="productVariantController" ng-init="init_product_variants('{{data.lvl}}', '{{form.vars.value.id}}', '{{ arr_option_tree_persist_node|json_encode }}')" ng-cloak>
+
+	<div class="box-body icheck">
+		{% include 'ProjectBundle:AdminProductVariant:_content_position.html.twig'%}
+	</div>
+
+	<div class="box-footer">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-9">
+				{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+				{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+				{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+				<a href="{%if app.session.get('back_to_url')['admin_product_variant'] is defined%}{{app.session.get('back_to_url')['admin_product_variant']}}{%else%}{{path('admin_product_variant')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	// window.parents = {{arr_option_tree_persist_node|json_encode|raw}};
+</script>
+<script src="{{ asset('javascripts/adminProductVariantTypeApp/app.js') }}"></script>

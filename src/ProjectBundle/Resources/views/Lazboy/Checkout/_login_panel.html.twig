@@ -1,0 +1,35 @@
+{#
+<!-- Bootstrap panel-->
+<div class="panel panel-custom">
+    <div class="panel-custom-heading" id="1Headingundefined" role="tab">
+        <h5 class="panel-custom-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#1" href="#1Collapseundefined" aria-controls="1Collapseundefined">Returning customer?<span>Click here to login</span></a>
+        </h5>
+    </div>
+    <div class="panel-custom-collapse collapse" id="1Collapseundefined" role="tabpanel" aria-labelledby="1Headingundefined">
+        <div class="panel-custom-body">
+            <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer, please proceed to the Billing & Shipping section.</p>
+            <!-- RD Mailform-->
+            <form class="rd-mailform rd-mailform_responsive rd-mailform_style-2">
+                <div class="form-wrap form-wrap_icon linear-icon-envelope">
+                    <input class="form-input" id="modal-login-email" type="email" name="email" data-constraints="@Email @Required">
+                    <label class="form-label" for="modal-login-email">Your e-mail</label>
+                </div>
+                <div class="form-wrap form-wrap_icon linear-icon-lock">
+                    <input class="form-input" id="modal-login-password" type="password" name="password" data-constraints="@Required">
+                    <label class="form-label" for="modal-login-password">Your password</label>
+                </div>
+                <div class="form-wrap group-xl">
+                    <button class="button button-primary" type="submit">Login</button>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="remember">Remember me
+                    </label>
+                </div>
+            </form>
+            <ul class="list-small">
+                <li><a href="#">Lost your password?</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+#}

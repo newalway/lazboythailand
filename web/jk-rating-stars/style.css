@@ -1,0 +1,16 @@
+.my-custom-stars .button .material-icons {
+  font-size: 28px;
+}
+
+.my-custom-stars .star-button.star-on .material-icons {
+  color: #faca51;
+}
+
+.my-custom-stars .star-button.star-off .material-icons {
+  color: #eee;
+}
+
+.jk-rating-stars-container .star-button {
+    text-shadow: none;
+    /*text-shadow: 0.03em 0.01em #1f1f1f;*/
+}

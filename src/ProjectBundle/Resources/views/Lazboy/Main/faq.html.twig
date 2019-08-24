@@ -1,0 +1,53 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.faq{% endtrans %} | {{ parent() }}{% endblock %}
+{% block faq_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}faq.frequently{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.faq{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="pt-4 pb-5 bg-default">
+	<div class="container">
+		<!-- Accordion-->
+		<div id="accordion" role="tablist">
+			<!-- Bootstrap panel-->
+			{% for data in paginated.currentpageresults %}
+			<div class="panel panel-custom">
+				<div class="panel-custom-heading" id="{{data.id}}Headingundefined" role="tab">
+					<h5 class="panel-custom-title">
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#{{data.id}}" href="#{{data.id}}Collapseundefined" aria-controls="{{data.id}}Collapseundefined">
+							{{data.getTitle}}
+						</a>
+					</h5>
+				</div>
+				<div class="panel-custom-collapse collapse" id="{{data.id}}Collapseundefined" role="tabpanel" aria-labelledby="{{data.id}}Headingundefined">
+					<div class="panel-custom-body">
+						{{data.getShortDesc|nl2br}}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+
+{% if paginated.havetopaginate %}
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+<section class="section-sm text-center">
+	<div class="container">
+		<!-- Classic Pagination-->
+		<nav>
+			{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+		</nav>
+	</div>
+</section>
+{% endif %}
+
+{% endblock %}

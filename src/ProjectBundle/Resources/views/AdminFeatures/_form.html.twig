@@ -1,0 +1,291 @@
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+<div class="row" ng-app="featuresApp" ng-controller="featuresCtrl" ng-init="init('{{acctoken}}', '{{form.vars.value.id}}')">
+	<div class="col-md-12 col-lg-9">
+	  	<div class="box box-primary">
+			<div class="box-header with-border">
+			  	<h3 class="box-title">Infomation</h3>
+			</div>
+			<div class="box-body">
+
+				{% if form.vars.value.id is empty %}
+					{% include 'ProjectBundle:AdminFeatures:_content_position.html.twig'%}
+				{% endif %}
+
+				<div class="form-group">
+			    	<label class="control-label col-md-2" for="status"> Translation</label>
+					<div class="col-md-10">
+						{{ form_widget(form.translations) }}
+				    </div>
+				</div>
+				<hr />
+				<div class="form-group icheck">
+					<label class="control-label col-md-2" for="image"> Image</label>
+					<div class="col-md-10">
+						{% if form.vars.value.image %}
+							<a href="{{asset(form.vars.value.image)}}" class="fancybox pull-left" style="margin-right: 10px;margin-bottom: 10px;" >
+								<img src="{{asset(form.vars.value.image) | imagine_filter('img_thumb')}}" alt="Image" />
+							</a>
+							<span class="checkbox">
+								<input type="checkbox" id="removefileimage" name="removefileimage" value="1">
+								<label class="control-label" for="removefileimage">  Remove</label>
+							</span>
+						{% endif %}
+						<div class="input-group clearfix">
+							{{form_widget(form.image, {'id' : 'image'})}}
+							<span class="input-group-btn">
+								<button onclick="selectFileWithCKFinder('image');" class="btn btn-default" name="image_btn" id="image_btn" type="button">Browse Server</button>
+							</span>
+						</div>
+						<p class="help-block">image size 1000x620 px</p>
+						<div class="error-form">{{form_errors(form.image)}}</div>
+					</div>
+				</div>
+				<hr />
+				<div class="form-group">
+					<label class="control-label col-md-2" for="embed">VDO Embed</label>
+					<div class="col-md-10">
+						<div class="form-control-static">
+							{{form_widget(form.embed, {'id' : 'embed'})}}
+						</div>
+						<div class="error-form">{{form_errors(form.embed)}}</div>
+					</div>
+				</div>
+
+				<div class="form-group icheck">
+					<label class="control-label col-md-2" for="status"> Status</label>
+					<div class="col-md-10">
+						<div class="form-control-static">
+							{{form_widget(form.status, {'id' : 'status'})}}
+						</div>
+						<div class="error-form">{{form_errors(form.status)}}</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="box box-primary">
+			<div class="box-header with-border">
+			  	<h3 class="box-title">Products</h3>
+			</div>
+
+			<div class="box-body">
+				<div class="form-group">
+			    	<label class="control-label col-md-2" for="products"> Search Products</label>
+					<div class="col-md-10">
+
+						<div class="form-inline margin-bottom-30">
+							<div class="input-group">
+				                <input type="text" name="" value="" ng-model="textSearchProducts" placeholder="Search products" class="form-control">
+			                    <span class="input-group-btn">
+									<button type="button" name="button" ng-click="searchProducts(textSearchProducts);isSearchSpecificProducts=true" class="btn btn-default btn-flat">Browse</button>
+			                    </span>
+			              	</div>
+							<img ng-if="search_loading_icon" src="/images/bx_loader.gif" alt="loading" width="25px;">
+						</div>
+
+						<div ng-show="searchSpecificProducts.length>0" style="padding-bottom: 8px;">
+							<div class="row" ng-repeat="product in searchSpecificProducts">
+								<div class="col-md-1">
+									<input ng-hide="checkIsSelectedProduct(product)" ng-model="product.selected" id="specificProduct_{{'{{product.id}}'}}" type="checkbox" name="specificProducts[]" value="{{'{{product.id}}'}}">
+								</div>
+								<div class="col-md-2">
+									<label for="specificProduct_{{'{{product.id}}'}}">
+										<img ng-if="!product.image" src="https://placehold.it/50x50" width="50px;">
+										<img ng-src="{{'{{product.image}}'}}" alt="" ng-show="product.image">
+									</label>
+								</div>
+								<div class="col-md-7">
+									<label for="specificProduct_{{'{{product.id}}'}}"> {{'{{product.title}}'}} </label>
+									<div ng-show="checkIsSelectedProduct(product)">
+										Item already added
+									</div>
+								</div>
+								<div class="col-md-2 text-right">
+									{{'{{product.price | number}}'}}฿
+								</div>
+								<div class="col-md-12">
+									<hr style="margin-top: 10px;margin-bottom: 10px;" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 text-left" style="padding-top:8px">
+									<button type="button" name="button" ng-click="addSpecificProducts(searchSpecificProducts)" class="btn btn-success">+ Add</button>
+								</div>
+							</div>
+						</div>
+				    </div>
+				</div>
+				<hr />
+				<div class="form-group">
+			    	<label class="control-label col-md-2"> Specific products</label>
+					<div class="col-md-10">
+						<img ng-if="specific_products_loading_icon" src="/images/bx_loader.gif" alt="loading" width="25px;">
+						<div ng-show="specificProductsSelectedObject.length>0">
+							<div class="row" ng-repeat="selectedProduct in specificProductsSelectedObject" style="padding-bottom: 8px;">
+								<div class="col-md-1"> </div>
+								<div class="col-md-2">
+									<img ng-if="!selectedProduct.image" src="https://placehold.it/50x50" width="50px;">
+									<img ng-src="{{'{{selectedProduct.image}}'}}" alt="" ng-show="selectedProduct.image">
+								</div>
+								<div class="col-md-5">
+									{{'{{selectedProduct.title}}'}}
+								</div>
+								<div class="col-md-4 text-right">
+									<input type="hidden" name="admin_features[products][]" value="{{'{{selectedProduct.id}}'}}">
+									<button type="button" name="button" ng-click="removeSpecificProducts($index)" class="btn btn-flat btn-danger btn-sm"><i class="fa fa-times"></i></button>
+								</div>
+								<div class="col-md-12" ng-hide="$last"><hr style="margin-top: 10px;margin-bottom: 10px;" /></div>
+							</div>
+
+						</div>
+
+						<div ng-repeat="removeSelectedProduct in removeSpecificProductsSelectedObject">
+							<input type="hidden" name="admin_features[removespecificProducts][]" value="{{'{{removeSelectedProduct.id}}'}}">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-offset-2 col-md-10">
+			{{form_widget(form.save, {'id' : 'save', 'label': btn_label_save})}}
+			{{form_widget(form.save_and_add, {'id' : 'save_and_add', 'label': btn_label_save_add})}}
+			{{form_widget(form.save_and_edit, {'id' : 'save_and_edit', 'label': btn_label_save_edit})}}
+			<a href="{%if app.session.get('back_to_url')['admin_features'] is defined%}{{app.session.get('back_to_url')['admin_features']}}{%else%}{{path('admin_features')}}{%endif%}" class="btn btn-default">{{btn_label_close}} </a>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	//html5 date for safari and other browser not support html5 date
+	webshims.setOptions('forms-ext', {types: 'date'});
+	webshims.polyfill('forms forms-ext');
+
+	var app = angular.module('featuresApp', []);
+
+	app.factory('product_data', ['$http', function product_data($http) {
+		return {
+			getPublicSearchProducts: function(text){
+				return $http({
+					method:'GET',
+					url: Routing.generate('api_1_get_public_search_products', {'text':text}),
+					headers: {
+						// 'Authorization':'Bearer ' + token
+					}
+				});
+			},
+			getProductsFeaturess: function(token, features_id){
+	      		return $http({
+					method:'GET',
+					url: Routing.generate('api_1_get_products_featuress',{'features_id':features_id}),
+					headers: {
+						'Authorization':'Bearer ' + token
+					}
+				});
+	    	}
+		}
+	}]);
+
+	app.controller('featuresCtrl', ['$scope', '$http', 'product_data',  function($scope, $http, product_data) {
+		$scope.init = function(token, features_id){
+
+			$scope.glob_access_token = token;
+			$scope.glob_features_id = features_id;
+
+			$scope.searchSpecificProducts = [];
+			$scope.specificProductsSelectedObject = [];
+			$scope.removeSpecificProductsSelectedObject = [];
+			$scope.cp = {};
+
+			$scope.search_loading_icon = false;
+			$scope.specific_products_loading_icon = false;
+			console.log($scope.glob_features_id);
+
+			if($scope.glob_features_id){
+				$scope.specific_products_loading_icon = true;
+				product_data.getProductsFeaturess($scope.glob_access_token, $scope.glob_features_id).then(function onSuccess(response){
+					$scope.specificProductsSelectedObject = response.data.arr_products;
+					$scope.specific_products_loading_icon = false;
+			    }).catch(function onError(response) {
+					console.log('Error get current hashtag');
+					$scope.specific_products_loading_icon = false;
+			    });
+			}
+		}
+
+		$scope.searchProducts = function(text)
+		{
+			$scope.search_loading_icon = true;
+			// $scope.searchSpecificProducts = [{'id':1, 'title':'T-shirt', 'price':500, 'selected':''}, {'id':2, 'title':'Petan', 'price':1000, 'selected':''}, {'id':3, 'title':'Dumbbell', 'price':800, 'selected':''}];
+
+			product_data.getPublicSearchProducts(text).then(function onSuccess(response){
+				// $scope.tags = response.data.data;
+				$scope.searchSpecificProducts = response.data.arr_products;
+				$scope.search_loading_icon = false;
+			}).catch(function onError(response) {
+				console.log('Error get search product');
+				$scope.search_loading_icon = false;
+			});
+		}
+
+		$scope.addSpecificProducts = function(data)
+		{
+		    for(var i in data){
+				if(data[i].selected==true){
+
+					//find object
+					var index = $scope.specificProductsSelectedObject.find(x => x.id === data[i].id);
+					if (index === undefined){
+						//push data to specificProductsSelectedObject
+						$scope.specificProductsSelectedObject.push(data[i]);
+					}
+
+					//remove this data if exist in removeSpecificProductsSelectedObject
+					var obj_remove = $scope.removeSpecificProductsSelectedObject.find(x => x.id === data[i].id);
+					if (obj_remove){
+						var index_remove = $scope.removeSpecificProductsSelectedObject.findIndex(x => x.id === obj_remove.id);
+						//remove from removeSpecificProductsSelectedObject
+						$scope.removeSpecificProductsSelectedObject.splice(index_remove,1);
+					}
+
+					//find array
+					// $scope.specificProductsSelected.indexOf(data[i].id) === -1 ? $scope.specificProductsSelected.push(data[i].id) : console.log("This item already exists");
+		       }
+		    }
+
+			//reset search result
+			$scope.searchSpecificProducts = [];
+		}
+
+		$scope.checkIsSelectedProduct = function(data)
+		{
+			//find object
+			var index = $scope.specificProductsSelectedObject.find(x => x.id === data.id);
+			if (index === undefined){
+				return false;
+			}else{
+				return true;
+			}
+		}
+
+		$scope.removeSpecificProducts = function(index)
+		{
+			//remove data from specificProductsSelectedObject
+			var removeObj = $scope.specificProductsSelectedObject.splice(index,1);
+			var data = removeObj[0];
+
+			//push data to removeSpecificProductsSelectedObject
+			var index = $scope.removeSpecificProductsSelectedObject.find(x => x.id === data.id);
+			if (index === undefined){
+				$scope.removeSpecificProductsSelectedObject.push(data);
+			}
+		}
+
+	}]);
+</script>

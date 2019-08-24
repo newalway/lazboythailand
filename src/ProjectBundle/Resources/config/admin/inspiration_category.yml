@@ -1,0 +1,59 @@
+admin_inspiration_category:
+  path: /
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:index}
+  requirements:
+    _method: get
+
+admin_inspiration_category_new:
+  path: /new
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:new}
+
+admin_inspiration_category_create:
+  path: /create
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:create}
+  requirements:
+    _method: post
+
+admin_inspiration_category_edit:
+  path: /{id}/edit
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:edit}
+  requirements:
+    id: \d+
+
+admin_inspiration_category_update:
+  path: /{id}
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_inspiration_category_move_position:
+  path: /{id}/move
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:move_position}
+  requirements:
+    id: \d+
+
+admin_inspiration_category_move_position_update:
+  path: /{id}/move_update
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:move_position_update}
+  requirements:
+    _method: post
+    id: \d+
+
+admin_inspiration_category_move_up_position:
+  path: /{id}/move/up
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:move_up_position}
+  requirements:
+    id: \d+
+
+admin_inspiration_category_move_down_position:
+  path: /{id}/move/down
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:move_down_position}
+  requirements:
+    id: \d+
+
+admin_inspiration_category_delete:
+  path: /{id}/delete
+  defaults: {_controller: ProjectBundle:AdminInspirationCategory:delete}
+  requirements:
+    _method: get

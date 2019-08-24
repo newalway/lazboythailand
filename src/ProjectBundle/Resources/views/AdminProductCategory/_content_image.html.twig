@@ -1,0 +1,69 @@
+<div class="form-group">
+	<label class="control-label col-md-2" for="image">Category Image</label>
+	<div class="col-md-6">
+		{% if form.vars.value.image %}
+			<a href="{{asset(form.vars.value.image)}}" class="fancybox pull-left" style="margin-right: 10px;margin-bottom: 10px;" >
+				<img src="{{asset(form.vars.value.image) | imagine_filter('img_thumb')}}" alt="Image" />
+			</a>
+			<span class="checkbox">
+				<input type="checkbox" id="removefileimage" name="removefileimage" value="1">
+				<label class="control-label" for="removefileimage">  Remove</label>
+			</span>
+		{% endif %}
+		<div class="input-group clearfix">
+			{{form_widget(form.image, {'id' : 'image'})}}
+			<span class="input-group-btn">
+				<button onclick="selectFileWithCKFinder('image');" class="btn btn-default" name="image_btn" id="image_btn" type="button">Browse Server</button>
+			</span>
+		</div>
+		<p class="help-block">image size 300x300 px</p>
+		<div class="error-form">{{form_errors(form.image)}}</div>
+	</div>
+</div>
+
+
+<div class="form-group">
+	<label class="control-label col-md-2" for="banner_image"> Banner Image</label>
+	<div class="col-md-6">
+		{% if form.vars.value.bannerImage %}
+			<a href="{{asset(form.vars.value.bannerImage)}}" class="fancybox pull-left" style="margin-right: 10px;margin-bottom: 10px;" >
+				<img src="{{asset(form.vars.value.bannerImage) | imagine_filter('img_thumb')}}" alt="Image" />
+			</a>
+			<span class="checkbox">
+				<input type="checkbox" id="removefilebanner_image" name="removefilebanner_image" value="1">
+				<label class="control-label" for="removefilebanner_image">  Remove</label>
+			</span>
+		{% endif %}
+		<div class="input-group clearfix">
+			{{form_widget(form.banner_image, {'id' : 'banner_image'})}}
+			<span class="input-group-btn">
+				<button onclick="selectFileWithCKFinder('banner_image');" class="btn btn-default" name="banner_image_btn" id="banner_image_btn" type="button">Browse Server</button>
+			</span>
+		</div>
+		<p class="help-block">banner size 1350x550 px</p>
+		<div class="error-form">{{form_errors(form.banner_image)}}</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="control-label col-md-2" for="banner_image"> Banner Image Mobile</label>
+	<div class="col-md-6">
+		{% if form.vars.value.bannerImageMobile %}
+			<a href="{{asset(form.vars.value.bannerImageMobile)}}" class="fancybox pull-left" style="margin-right: 10px;margin-bottom: 10px;" >
+				<img src="{{asset(form.vars.value.bannerImageMobile) | imagine_filter('img_thumb')}}" alt="Image" />
+			</a>
+			<span class="checkbox">
+				<input type="checkbox" id="removefilebanner_image" name="removefilebanner_image" value="1">
+				<label class="control-label" for="removefilebanner_image">  Remove</label>
+			</span>
+		{% endif %}
+		<div class="input-group clearfix">
+			{{form_widget(form.banner_image_mobile, {'id' : 'banner_image_mobile'})}}
+			<span class="input-group-btn">
+				<button onclick="selectFileWithCKFinder('banner_image_mobile');" class="btn btn-default" name="banner_image_btn" id="banner_image_btn" type="button">Browse Server</button>
+			</span>
+		</div>
+		<p class="help-block">banner size 640x410 px</p>
+		<div class="error-form">{{form_errors(form.banner_image_mobile)}}</div>
+	</div>
+</div>

@@ -1,0 +1,5 @@
+{% if about_globiz_ventures|length > 0 %}
+    {% for about_globiz_venture in about_globiz_ventures %}
+        <p>{{about_globiz_venture.optionValue|raw}}</p>
+    {% endfor %}
+{% endif %}

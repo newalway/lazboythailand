@@ -1,0 +1,63 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{% trans %}menu.promotion{% endtrans %} | {{ parent() }}{% endblock %}
+{% block gallery_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.promotion{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}menu.promotion{% endtrans %}</li>
+{% endblock %}
+
+{% block content %}
+<section class="bg-default pt-4 pb-5">
+    <div class="container">
+		{#<figure>
+			<img src="{{asset('lazboy/template/images/blog-slider-justify-1-886x320.jpg')}}" alt="" class="w-100 pc"/>
+			<img src="{{asset('lazboy/template/images/categories-1-301x301.jpg')}}" alt="" class="w-100 m"/>
+		</figure>#}
+
+		<div class="row row-60">
+			{#{{dump(paginated.currentpageresults)}}#}
+			{% for data in paginated.currentpageresults %}
+			<div class="col-lg-6 col-xl-6">
+				<!-- Post classic-->
+				<article class="post-classic post-minimal">
+					<a href="{{path('promotion_detail',{'id':data.id,'slug':data.getTitle|slug})}}">
+						{% if data.getImage %}
+							{% set image = asset(data.getImage)|imagine_filter('img_660x409') %}
+						{% else %}
+							{% set image = 'https://placehold.it/660x409' %}
+						{% endif %}
+						<img src="{{image}}" alt="{{data.getTitle}}" width="660" height="409" />
+					</a>
+					<div class="post-classic-title">
+						<h5><a href="{{path('promotion_detail',{'id':data.id,'slug':data.getTitle|slug})}}">{{data.getTitle}}</a></h5>
+					</div>
+				</article>
+			</div>
+			{% else %}
+				<div class="col-md-12 text-center">No Promotion</div>
+			{% endfor %}
+
+		</div>
+
+    </div>
+</section>
+<!-- Divider-->
+<div class="container">
+	<div class="divider"></div>
+</div>
+
+
+{% if paginated.havetopaginate %}
+<section class="section-sm text-center">
+	<div class="container">
+		<!-- Classic Pagination-->
+		<nav>
+			{{pagerfanta(paginated,'twitter_bootstrap3_translated_lazboy')}}
+		</nav>
+	</div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "ProjectBundle:Lazboy:layout_email.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block head_title %}
+    {{ subject|raw|nl2br }}
+    {#{{ 'registration.confirmed'|trans({'%username%': user.username,'%name%': user.firstName,'%name%': user.firstName}) }}#}
+{% endblock %}
+
+{% block content %}
+    {{ body|raw|nl2br }}
+    {#{{ 'registration.welcome_email.message'|trans({'%username%': user.username, '%name%': user.firstName})|raw|nl2br }}#}
+{% endblock %}

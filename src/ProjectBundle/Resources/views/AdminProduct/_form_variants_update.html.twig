@@ -1,0 +1,53 @@
+<td>
+	<input type='hidden' name='variant_sku[id][{{'{{$index}}'}}]' value='{{'{{n.id}}'}}'>
+	<input type='hidden' name='variant_sku[status][{{'{{$index}}'}}]' value='off'><!-- default status -->
+	<input type="checkbox" name="variant_sku[status][{{'{{$index}}'}}]" ng-model="n.status" ng-true-value="'on'" ng-false-value="'off'">
+</td>
+
+<td>
+	<a href="javascript:void(0)" on-drop="handleDrop(index, mode)" dir-select-file-model  index="{{'{{$index}}'}}" datamode="image">
+		<img id="variant_sku_image_thumbnail_{{'{{$index}}'}}" ng-if="n.image_small" ng-src="{{'{{n.image_small}}'}}" width="50px;">
+		<img id="variant_sku_image_thumbnail_{{'{{$index}}'}}" ng-if="!n.image_small" src="https://placehold.it/50x50?text=1000x1000" width="50px;">
+	</a>
+	<input type='text' ng-model="n.image" name='variant_sku[image][{{'{{$index}}'}}]' id="variant_sku_image_{{'{{$index}}'}}" value="{{'{{n.image}}'}}" style="width:1px; visibility:hidden;">
+</td>
+
+<td>
+	<a href="javascript:void(0)" on-drop="handleDrop(index, mode)" dir-select-file-model  index="{{'{{$index}}'}}" datamode="pattern_image">
+		<img id="variant_sku_pattern_image_thumbnail_{{'{{$index}}'}}" ng-if="n.pattern_image_s" ng-src="{{'{{n.pattern_image_s}}'}}" width="50px;">
+		<img id="variant_sku_pattern_image_thumbnail_{{'{{$index}}'}}" ng-if="!n.pattern_image_s" src="https://placehold.it/50x50?text=120x120" width="50px;">
+	</a>
+	<input type='text' ng-model="n.pattern_image" name='variant_sku[pattern_image][{{'{{$index}}'}}]' id="variant_sku_pattern_image_{{'{{$index}}'}}" value="{{'{{n.pattern_image}}'}}" style="width:1px; visibility:hidden;">
+</td>
+
+<td>
+	{{"{{n.option | join:' · '}}"}}
+	<span ng-if="n.default_option" class="label label-default">DEFAULT</span>
+	<br/><small ng-if="n.is_only_gallery">Only Gallery </small>
+	<input type="hidden" name="variant_sku[option][{{'{{$index}}'}}]" value="{{'{{n.option}}'}}">
+	<input type="hidden" name="variant_sku[default_option][{{'{{$index}}'}}]" value="{{'{{n.default_option}}'}}">
+	<input type="hidden" name="variant_sku[title][{{'{{$index}}'}}]" value="{{'{{n.title}}'}}">
+</td>
+<td ng-if="glob_inventory_policy_status=='1' || variant_is_inventory">
+	<input style="width: 80px;" name="variant_sku[inventory_quantity][{{'{{$index}}'}}]" ng-model="n.inventory_quantity" class="form-control" type="number">
+</td>
+<td>
+	<input style="width: 80px;" name="variant_sku[price][{{'{{$index}}'}}]" ng-model="n.price" class="form-control" type="number" step="any" required>
+</td>
+<td>
+	<input style="width: 80px;" name="variant_sku[compare_at_price][{{'{{$index}}'}}]" ng-model="n.compare_at_price" class="form-control" type="number" step="any">
+</td>
+<td>
+	<input style="width: 155px;" name="variant_sku[sku][{{'{{$index}}'}}]" ng-model="n.sku" class="form-control" type="text">
+</td>
+{#<td>
+	<input style="width: 80px;" name="variant_sku[title][{{'{{$index}}'}}]" ng-model="n.title" class="form-control" type="text">
+</td>
+<td>
+	<div class="input-group clearfix">
+		<input id="variant_sku_image_{{'{{$index}}'}}" name="variant_sku[images][{{'{{$index}}'}}]" ng-model="n.image" class="form-control" type="text">
+		<span class="input-group-btn">
+			<button ng-click="ngSelectFileWithCKFinder('variant_sku_image_'+$index);" class="btn btn-default" name="image_btn" type="button"><i class="fa fa-image"></i></button>
+		</span>
+	</div>
+</td>#}

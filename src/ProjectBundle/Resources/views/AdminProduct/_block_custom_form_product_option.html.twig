@@ -1,0 +1,37 @@
+{% set tmp_category_name = '' %}
+<div>
+    {% for field in form %}
+        <div>
+            {% set label = field.vars.label|split('%&%') %}
+            {% if tmp_category_name != label[2] %}
+                <h4 style="background-color:#f7f7f7; font-size: 14px; text-align: left; padding: 7px 10px; margin-top: 0;">{{label[2]}}</h4>
+                {# {% if label[3] %}
+                    <img src="{{label[3]}}" height="35" class="pull-left"/>
+                {% endif %} #}
+            {% endif %}
+            {% set tmp_category_name = label[2] %}
+
+            <div class="checkbox clearfix" style="min-height:35px;">
+                <label for="{{field.vars.id}}" style="display:block;">
+                    <input type="checkbox" id="{{field.vars.id}}" name="{{field.vars.full_name}}" class="product_option_check_item checkbox-inline" value="{{field.vars.value}}" {% if field.vars.checked == true %}checked{% endif %}>
+
+                    &nbsp;
+                    <img src="{{label[1]}}" height="35" class="pull-right" />
+                    <span>{{label[0]}}</span>
+
+                    &nbsp;
+                    {% if label[4] %}
+                        <small><span class="label label-default ">Default</span></small>
+                    {% endif %}
+
+                    {#<span class="label label-default">{{label[2]}}</span>#}
+                </label>
+            </div>
+
+            {#{{ form_widget(field) }}#}
+            {#{{ form_label(field) }}#}
+            {# {{dump(field)}}
+            {{dump(field.parent.vars.choices)}}#}
+        </div>
+    {% endfor %}
+</div>

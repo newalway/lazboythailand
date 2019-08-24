@@ -1,0 +1,143 @@
+{% extends "ProjectBundle:"~ view_layout ~":layout.html.twig" %}
+
+{% block title %}{{data.getTitle}} | {% trans %}menu.news{% endtrans %} | {{ parent() }}{% endblock %}
+{% block news_active %}active{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}menu.news{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li><a href="{{path('news')}}">{% trans %}menu.news{% endtrans %}</a></li>
+	<li class="active">{{data.getTitle}}</li>
+{% endblock %}
+
+{% block content %}
+<div class="pt-4 pb-5">
+	<div class="container">
+		<div class="row row-60 justify-content-sm-center">
+			<div class="col-lg-8 section-divided__main">
+				<section class="section-sm post-single-body">
+					<h3>{{data.getTitle}}</h3>
+					<div class="post-meta">
+						<div class="group">
+							<a>
+								<time datetime="{{ data.publicDate|date("Y") }}">{{ data.publicDate|date("m/d/Y") }}</time>
+							</a>
+
+							{% if data.author %}
+								<a class="meta-author">by {{data.author}}</a>
+							{% endif %}
+						</div>
+					</div>
+
+					{% if data.embed %}
+						<div class="entry-video embed-responsive embed-responsive-16by9 mb-4">
+	                  		{{data.embed|raw}}
+	                	</div>
+					{% else %}
+						{% if data.image %}
+							<img src="{{asset(data.image) | imagine_filter('img_1000x620')}}" alt="{{data.getTitle}}"/>
+						{% endif %}
+					{% endif %}
+
+					{% if data.getDescription %}
+						{{data.getDescription|raw}}
+					{% endif %}
+
+				</section>
+
+				{% if data_image %}
+					<section class="section-sm">
+						<div class="row row-30" data-photo-swipe-gallery="gallery">
+							{% for img in data_image %}
+								<div class="col-md-4 text-center">
+									<a class="img-thumbnail-variant-1" href="{{asset(img.image)}}" data-photo-swipe-item="" data-size="1000x620">
+										<figure>
+											<img src="{{asset(img.image) | imagine_filter('img_450x279')}}" alt="{{data.getTitle}}"/>
+										</figure>
+										<div class="caption"><span class="icon icon-lg linear-icon-magnifier"></span></div>
+									</a>
+								</div>
+							{% endfor %}
+						</div>
+					</section>
+				{% endif %}
+
+				<section class="section-sm">
+					<div class="row row-60 justify-content-md-between">
+						<div class="col-md-5 text-center text-md-left">
+							<a class="unit flex-row unit-spacing-md align-items-center row-xs-center row-sm-left" href="{{path('news')}}">
+								<div class="unit__left">
+									<span class="icon icon-md linear-icon-arrow-left"></span>
+								</div>
+								<div class="unit__body">
+									<p class="small">{% trans %}back{% endtrans %}</p>
+								</div>
+							</a>
+						</div>
+						<div class="col-md-5 text-center text-md-right">
+							<ul class="list-inline-sm">
+								<li><h6>{% trans %}share{% endtrans %}</h6></li>
+								<li><a class="icon-sm fa-facebook icon" href="#"></a></li>
+								<li><a class="icon-sm fa-twitter icon" href="#"></a></li>
+								<li><a class="icon-sm fa-google-plus icon" href="#"></a></li>
+							</ul>
+						</div>
+					</div>
+              	</section>
+
+				{% if latest_news|length > 0 %}
+				<section class="section-sm">
+					<h5>{% trans %}news.latest{% endtrans %}</h5>
+					<div class="row row-60">
+						{% for news_latest in latest_news %}
+						<div class="col-md-6">
+							<!-- Post classic-->
+							{% if news_latest.image %}
+							<article class="post-classic post-minimal">
+								<a href="{{path('news_detail',{'id':news_latest.id,'slug':news_latest.getTitle|slug})}}">
+									<img src="{{asset(news_latest.image) | imagine_filter('img_450x279')}}" alt="{{news_latest.getTitle}}"/>
+								</a>
+								<div class="post-classic-title">
+									<h5><a href="{{path('news_detail',{'id':news_latest.id,'slug':news_latest.getTitle|slug})}}">{{news_latest.getTitle}}</a></h5>
+								</div>
+								<div class="post-meta">
+									<div class="group">
+										<a href="{{path('news_detail',{'id':news_latest.id,'slug':news_latest.getTitle|slug})}}">
+											<time datetime="{{ news_latest.publicDate|date("Y") }}">{{ news_latest.publicDate|date("d/m/Y") }}</time>
+										</a>
+										{% if news_latest.author %}
+											<a href="{{path('news_detail',{'id':news_latest.id,'slug':news_latest.getTitle|slug})}}" class="meta-author">by {{news_latest.author}}</a>
+										{% endif %}
+									</div>
+								</div>
+							</article>
+							{% else %}
+							<article class="post-quote post-minimal">
+								<!-- Quote default-->
+								<a class="quote-default" href="{{path('news_detail',{'id':news_latest.id,'slug':news_latest.getTitle|slug})}}">
+									<svg class="quote-default__mark" version="1.1" baseprofile="tiny" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30.234px" height="23.484px" viewbox="0 0 30.234 23.484" xml:space="preserve">
+										<g>
+										<path d="M12.129,0v1.723c-2.438,0.891-4.348,2.291-5.73,4.201c-1.383,1.911-2.074,3.897-2.074,5.959              c0,0.445,0.07,0.773,0.211,0.984c0.093,0.141,0.199,0.211,0.316,0.211c0.117,0,0.293-0.082,0.527-0.246              c0.75-0.539,1.699-0.809,2.848-0.809c1.336,0,2.519,0.545,3.551,1.635c1.031,1.09,1.547,2.385,1.547,3.885              c0,1.57-0.592,2.953-1.775,4.148c-1.184,1.195-2.619,1.793-4.307,1.793c-1.969,0-3.668-0.809-5.098-2.426              C0.715,19.441,0,17.274,0,14.555c0-3.164,0.972-6,2.918-8.508C4.863,3.539,7.933,1.524,12.129,0z M29.039,0v1.723              c-2.438,0.891-4.348,2.291-5.73,4.201c-1.383,1.911-2.074,3.897-2.074,5.959c0,0.445,0.07,0.773,0.211,0.984              c0.094,0.141,0.199,0.211,0.316,0.211s0.293-0.082,0.527-0.246c0.75-0.539,1.699-0.809,2.848-0.809c1.336,0,2.52,0.545,3.551,1.635              s1.547,2.385,1.547,3.885c0,1.57-0.592,2.953-1.775,4.148s-2.619,1.793-4.307,1.793c-1.969,0-3.668-0.809-5.098-2.426              s-2.145-3.785-2.145-6.504c0-3.164,0.973-6,2.918-8.508C21.773,3.539,24.844,1.524,29.039,0z"></path>
+										</g>
+									</svg>
+									<div class="quote-default__text">
+										<p class="q heading-4">{{news_latest.getTitle}}</p>
+									</div>
+									<div class="post-meta">
+										<div class="group">
+											<time datetime="{{ news_latest.publicDate|date("Y") }}">{{ news_latest.publicDate|date("d/m/Y") }}</time>
+											<span class="meta-author">by La-Z-Boy Thailand</span>
+										</div>
+									</div>
+								</a>
+							</article>
+							{% endif %}
+						</div>
+						{% endfor %}
+					</div>
+				</section>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

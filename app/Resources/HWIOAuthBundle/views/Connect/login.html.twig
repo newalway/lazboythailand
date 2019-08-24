@@ -1,0 +1,34 @@
+{% extends '@HWIOAuth/layout.html.twig' %}
+
+{% block title %}{% trans %}menu.login{% endtrans %} | {{ parent() }}{% endblock %}
+
+{% block body_class %}{{ parent() }}{% endblock %}
+
+{% block breadcrumbs_title %}{% trans %}login.title{% endtrans %}{% endblock %}
+{% block breadcrumbs_custom %}
+	<li class="active">{% trans %}login.title{% endtrans %}</li>
+{% endblock %}
+
+{% block hwi_oauth_content %}
+<section class="bg-default section-md">
+    <div class="container hwi-login">
+
+	    {% if error is defined and error %}
+        <div class="mb-4">{{ error }}</div>
+	    {% endif %}
+
+		<div class="login-social">
+	    	{% for owner in hwi_oauth_resource_owners() %}
+	        <a class="{{owner}}" href="{{ hwi_oauth_login_url(owner) }}">
+	            <i class="fa fa-{{owner}}"></i> {{('login.with.' ~ owner) | trans}}
+	        </a>
+	    	{% endfor %}
+		</div>
+
+	    {#{% for owner in hwi_oauth_resource_owners() %}{{dump(owner)}}
+	        <a href="{{ hwi_oauth_login_url(owner) }}">{{ owner | trans({}, 'HWIOAuthBundle') }}</a> <br />
+	    {% endfor %}#}
+
+    </div>
+</section>
+{% endblock hwi_oauth_content %}
